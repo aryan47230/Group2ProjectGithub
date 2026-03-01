@@ -27,7 +27,9 @@ async function callGemini() {
       contents: [
         {
           parts: [
-            { text: "Explain how AI works in a few words" }
+            { text: `Generate a fishing skill tree. Respond with ONLY this exact JSON, no extra text, no other keys:
+              {"nodes": [{"name": "skill name"}]}`}
+
           ]
         }
       ]
@@ -41,6 +43,15 @@ async function callGemini() {
 
   const data = await response.json();
   console.log(JSON.stringify(data, null, 2));
+
+  // Testing Stuff
+
+  const rawText = data.candidates[0].content.parts[0].text;
+  const cleaned = rawText.replace(/```json|```/g, "").trim();
+  const skillTree = JSON.parse(cleaned);
+
+  console.log(skillTree.nodes.length);
+  skillTree.nodes.forEach(node => console.log(node.name));
 }
 
 callGemini();
