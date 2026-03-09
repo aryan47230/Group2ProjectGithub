@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Tree Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Prompt screen -->
+  <div id="prompt-view">
+    <h1>Skill Tree Generator</h1>
+    <form id="form">
+      <input id="topic" type="text" placeholder="Enter a topic (e.g. cooking, archery...)" required />
+      <button type="submit">Generate</button>
+    </form>
+    <div id="statusEl"></div>
+
+    <div id="saved-section" hidden>
+      <h2 id="saved-heading">Saved Trees</h2>
+      <ul id="saved-list"></ul>
+    </div>
+  </div>
+
+  <!-- Tree screen -->
+  <div id="tree-view" hidden>
+    <div id="tree-header">
+      <button id="back-btn">&#8592; Back</button>
+      <h2 id="tree-title"></h2>
+    </div>
+    <div id="tree-body">
+      <div id="graph-container">
+        <svg id="graph"></svg>
+      </div>
+
+      <!-- Skill detail panel -->
+      <div id="detail-panel" hidden>
+        <div id="detail-header">
+          <h3 id="detail-name"></h3>
+          <button id="detail-close">&#10005;</button>
+        </div>
+        <div id="detail-level"></div>
+        <div id="detail-requires-section">
+          <p class="detail-label">Requires</p>
+          <ul id="detail-requires"></ul>
+        </div>
+        <p class="detail-label">How to develop</p>
+        <p id="detail-description"></p>
+        <p class="detail-label">Practice tips</p>
+        <ul id="detail-tips"></ul>
+        <button id="detail-complete-btn">Mark as Complete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
