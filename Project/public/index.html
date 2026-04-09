@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Tree Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- App header -->
+  <header id="app-header">
+    <span id="app-logo">Skill Tree Generator</span>
+    <div id="auth-controls">
+      <span id="user-greeting" hidden></span>
+      <button id="logout-btn" class="btn-ghost" hidden>Logout</button>
+      <button id="signin-btn">Sign In</button>
+      <button id="signup-btn" class="btn-outline">Sign Up</button>
+    </div>
+  </header>
+
+  <!-- Auth modal -->
+  <div id="auth-overlay" hidden>
+    <div id="auth-modal">
+      <div id="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab" data-tab="register">Sign Up</button>
+      </div>
+      <form id="auth-form">
+        <label for="auth-username">Username</label>
+        <input id="auth-username" type="text" autocomplete="username" required />
+        <label for="auth-password">Password</label>
+        <input id="auth-password" type="password" autocomplete="current-password" required />
+        <p id="auth-error" hidden></p>
+        <button type="submit" id="auth-submit">Sign In</button>
+      </form>
+      <button id="auth-close" class="btn-ghost">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Import banner (shown after login if local trees exist) -->
+  <div id="import-banner" hidden>
+    <p id="import-msg"></p>
+    <div>
+      <button id="import-yes">Import</button>
+      <button id="import-no" class="btn-ghost">No thanks</button>
+    </div>
+  </div>
+
+  <!-- Prompt screen -->
+  <div id="prompt-view">
+    <h1>What do you want to learn?</h1>
+    <form id="form">
+      <input id="topic" type="text" placeholder="e.g. cooking, archery, guitar..." required />
+      <button type="submit">Generate</button>
+    </form>
+    <div id="statusEl"></div>
+
+    <div id="saved-section" hidden>
+      <h2 id="saved-heading">Your Trees</h2>
+      <ul id="saved-list"></ul>
+    </div>
+  </div>
+
+  <!-- Tree screen -->
+  <div id="tree-view" hidden>
+    <div id="tree-header">
+      <button id="back-btn">&#8592; Back</button>
+      <h2 id="tree-title"></h2>
+    </div>
+    <div id="tree-body">
+      <div id="graph-container">
+        <svg id="graph"></svg>
+      </div>
+
+      <!-- Skill detail panel -->
+      <div id="detail-panel" hidden>
+        <div id="detail-header">
+          <h3 id="detail-name"></h3>
+          <button id="detail-close" class="btn-ghost">&#10005;</button>
+        </div>
+        <div id="detail-level"></div>
+        <div id="detail-requires-section">
+          <p class="detail-label">Requires</p>
+          <ul id="detail-requires"></ul>
+        </div>
+        <p class="detail-label">How to develop</p>
+        <p id="detail-description"></p>
+        <p class="detail-label">Practice tips</p>
+        <ul id="detail-tips"></ul>
+        <button id="detail-complete-btn">Mark as Complete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
