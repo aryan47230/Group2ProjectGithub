@@ -11,6 +11,7 @@
   <!-- App header -->
   <header id="app-header">
     <span id="app-logo">Skill Tree Generator</span>
+    <a href="/explore/" id="explore-link">Explore Wikipedia</a>
     <div id="auth-controls">
       <span id="user-greeting" hidden></span>
       <button id="logout-btn" class="btn-ghost" hidden>Logout</button>
@@ -67,6 +68,10 @@
     <div id="tree-header">
       <button id="back-btn">&#8592; Back</button>
       <h2 id="tree-title"></h2>
+      <div id="progress-wrap">
+        <span id="progress-label">0 / 0</span>
+        <div id="progress-track"><div id="progress-fill"></div></div>
+      </div>
     </div>
     <div id="tree-body">
       <div id="graph-container">
@@ -77,17 +82,52 @@
       <div id="detail-panel" hidden>
         <div id="detail-header">
           <h3 id="detail-name"></h3>
-          <button id="detail-close" class="btn-ghost">&#10005;</button>
+          <button id="detail-close">&#10005;</button>
         </div>
         <div id="detail-level"></div>
-        <div id="detail-requires-section">
-          <p class="detail-label">Requires</p>
-          <ul id="detail-requires"></ul>
+
+        <div id="detail-tab-bar">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="learn">Learn</button>
+          <button class="tab-btn" data-tab="resources">Resources</button>
         </div>
-        <p class="detail-label">How to develop</p>
-        <p id="detail-description"></p>
-        <p class="detail-label">Practice tips</p>
-        <ul id="detail-tips"></ul>
+
+        <!-- Overview tab -->
+        <div class="tab-pane active" id="tab-overview">
+          <div id="detail-requires-section">
+            <p class="detail-label">Requires</p>
+            <ul id="detail-requires"></ul>
+          </div>
+          <p class="detail-label">How to develop</p>
+          <p id="detail-description"></p>
+          <p class="detail-label">Practice tips</p>
+          <ul id="detail-tips"></ul>
+          <div id="detail-outcomes-section">
+            <p class="detail-label">What you'll be able to do</p>
+            <ul id="detail-outcomes"></ul>
+          </div>
+        </div>
+
+        <!-- Learn tab -->
+        <div class="tab-pane" id="tab-learn">
+          <div id="detail-concepts-section">
+            <p class="detail-label">Key concepts</p>
+            <ul id="detail-concepts"></ul>
+          </div>
+          <div id="detail-mistakes-section">
+            <p class="detail-label">Common mistakes</p>
+            <ul id="detail-mistakes"></ul>
+          </div>
+        </div>
+
+        <!-- Resources tab -->
+        <div class="tab-pane" id="tab-resources">
+          <div id="detail-resources-section">
+            <p class="detail-label">Resources</p>
+            <ul id="detail-resources"></ul>
+          </div>
+        </div>
+
         <button id="detail-complete-btn">Mark as Complete</button>
       </div>
     </div>

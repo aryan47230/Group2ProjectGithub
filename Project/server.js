@@ -3,6 +3,7 @@ import express from "express";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import { db } from "./db.js";
+import { createConceptsRouter } from "./routes/concepts.js";
 
 const app = express();
 app.use(express.json());
@@ -14,7 +15,7 @@ app.use(session({
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 7 days
 }));
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 // ── Auth ───────────────────────────────────────────────────────────────────────
 
@@ -103,31 +104,71 @@ app.post("/api/skill-tree", async (req, res) => {
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `Generate a ${topic} skill tree with 3-5 levels from basic to advanced. Respond with ONLY this exact JSON, no extra text, no other keys:
-            {"nodes": [{"name": "skill name", "emoji": "🎯", "level": 1, "requires": [], "description": "1-2 sentences on how to develop this skill", "tips": ["tip 1", "tip 2", "tip 3"]}]}
-            Rules: level 1 = most basic skills with no requirements, higher levels = more advanced, requires = array of skill names from lower levels that must be learned first, description = practical advice on developing this skill, tips = 3 short actionable practice tips, emoji = a single emoji that best represents this specific skill. Generate 10-16 total skills.`
+            text: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".
+
+First, classify "${topic}" as exactly one of these scales, then follow the counts strictly:
+  - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3 levels
+  - small   (focused skill, e.g. "React Hooks")        → 8-12 nodes, 4 levels
+  - medium  (library/tool, e.g. "React", "Docker")     → 13-18 nodes, 6 levels
+  - large   (broad subject, e.g. "Calculus 3")          → 19-26 nodes, 8 levels
+  - massive (full discipline, e.g. "Machine Learning")  → 27-36 nodes, 10 levels
+
+Rules:
+- level 1 = most basic foundation skills with no requirements
+- Higher levels = more advanced; "${topic}" itself should be the highest-level node
+- requires = array of skill names from lower levels that must be learned first
+- Every node except level-1 nodes MUST have at least one prerequisite
+- Nodes at the same level should be independent of each other
+- description = practical 1-2 sentence advice on developing this specific skill
+- tips = exactly 3 short actionable practice tips
+- emoji = a single emoji that best represents this specific skill
+- keyConcepts = 3-5 objects, each with:
+    - term: the concept name (short phrase)
+    - explanation: 1-sentence plain-English definition of what the term means and why it matters
+- outcomes = 2-3 strings describing concrete things the learner will be able to do after mastering this skill (start each with a verb)
+- commonMistakes = 2-3 strings describing typical errors beginners make on this skill and why they happen
+- resources = 4-5 real, well-known learning resources for this skill. Each resource has:
+    - name: descriptive title including creator/site (e.g. "NUSensei: Bow Grip Explained", "MDN: CSS Flexbox")
+    - type: one of "video", "article", "course", "book", "docs", "tool"
+    - url: use the real URL if it is a stable, well-known page (official docs, MDN, etc.); otherwise use a Google search URL like "https://www.google.com/search?q=..."
+    - description: 1 sentence explaining what this resource covers and who it is best for
+
+Respond with ONLY valid JSON in this exact shape:
+{"nodes": [{"name": "skill name", "emoji": "🎯", "level": 1, "requires": [], "description": "...", "tips": ["tip 1", "tip 2", "tip 3"], "keyConcepts": [{"term": "term name", "explanation": "what it means"}], "outcomes": ["outcome 1", "outcome 2"], "commonMistakes": ["mistake 1", "mistake 2"], "resources": [{"name": "Resource Title", "type": "video", "url": "https://...", "description": "What this covers."}]}]}`
           }]
-        }]
+        }],
+        generationConfig: { responseMimeType: "application/json" }
       })
     });
 
     if (!response.ok) {
       const errText = await response.text();
+      console.error("Gemini error:", response.status, errText);
       return res.status(500).json({ error: `Gemini API error ${response.status}: ${errText}` });
     }
 
     const data = await response.json();
     const rawText = data.candidates[0].content.parts[0].text;
-    const cleaned = rawText.replace(/```json[\s\S]*?```|```[\s\S]*?```/g, m =>
-      m.replace(/```json|```/g, "")
-    ).trim();
-
-    const skillTree = JSON.parse(cleaned);
+    const skillTree = JSON.parse(rawText);
     res.json(skillTree);
   } catch (err) {
     console.error("Handler error:", err);
     res.status(500).json({ error: err.message });
   }
+});
+
+// ── Wiki Loop (concept explorer) ──────────────────────────────────────────────
+
+app.use("/api/concepts", createConceptsRouter());
+
+// Serve the built explore SPA for /explore routes
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+app.use("/explore", express.static(join(__dirname, "public", "explore")));
+app.get("/explore/*", (req, res) => {
+  res.sendFile(join(__dirname, "public", "explore", "index.html"));
 });
 
 app.listen(3000, () => console.log("Server running at http://localhost:3000"));
