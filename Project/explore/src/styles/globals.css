@@ -37,7 +37,8 @@
   --text-muted: #2a3040;
 
   /* Sizing */
-  --topbar-height: 52px;
+  --app-nav-height: 52px;
+  --topbar-height: 46px;
 
   /* Fonts */
   --font-display: 'Outfit', system-ui, sans-serif;

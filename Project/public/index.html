@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skill Tree Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,7 +14,10 @@
   <!-- App header -->
   <header id="app-header">
     <span id="app-logo">Skill Tree Generator</span>
-    <a href="/explore/" id="explore-link">Explore Wikipedia</a>
+    <nav id="mode-tabs">
+      <a href="/" class="mode-tab active">Skill Tree</a>
+      <a href="/explore/" class="mode-tab">Explore</a>
+    </nav>
     <div id="auth-controls">
       <span id="user-greeting" hidden></span>
       <button id="logout-btn" class="btn-ghost" hidden>Logout</button>
@@ -56,6 +62,14 @@
       <button type="submit">Generate</button>
     </form>
     <div id="statusEl"></div>
+
+    <div id="explore-cta">
+      <span class="cta-divider">or explore a Wikipedia concept</span>
+      <form id="explore-form">
+        <input id="explore-topic" type="text" placeholder="e.g. quantum mechanics, stoicism..." />
+        <button type="submit">Explore</button>
+      </form>
+    </div>
 
     <div id="saved-section" hidden>
       <h2 id="saved-heading">Your Trees</h2>

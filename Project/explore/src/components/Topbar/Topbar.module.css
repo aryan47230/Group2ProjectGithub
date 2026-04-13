@@ -1,3 +1,97 @@
+/* ── Shared app nav bar ── */
+.appNav {
+  height: 52px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6, 9, 15, 0.95);
+  border-bottom: 1px solid var(--border-dim);
+  backdrop-filter: blur(12px);
+  position: relative;
+  z-index: 101;
+}
+
+.appNav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a78bfa, #4d9fff, transparent);
+  opacity: 0.2;
+}
+
+.appLogo {
+  font-size: 14px;
+  font-weight: 800;
+  color: #a78bfa;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.modeTabs {
+  display: flex;
+  gap: 4px;
+}
+
+.modeTab {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(208, 214, 224, 0.35);
+  text-decoration: none;
+  padding: 6px 16px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+}
+
+.modeTab:hover {
+  color: #c4b5fd;
+  border-color: rgba(167, 139, 250, 0.15);
+}
+
+.modeTabActive {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.25);
+  background: rgba(167, 139, 250, 0.06);
+}
+
+.authArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.userGreeting {
+  font-size: 13px;
+  color: rgba(208, 214, 224, 0.5);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+}
+
+.authLink {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(208, 214, 224, 0.35);
+  text-decoration: none;
+  padding: 5px 12px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 6px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+}
+
+.authLink:hover {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.4);
+}
+
+/* ── WikiLoop-specific toolbar ── */
 .topbar {
   height: var(--topbar-height);
   padding: 0 24px;
@@ -9,32 +103,6 @@
   z-index: 100;
   position: relative;
   backdrop-filter: blur(12px);
-}
-
-.topbar::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #00fff2, #8b5cf6, #ffaa40, transparent);
-  opacity: 0.25;
-}
-
-.logo {
-  font-size: 15px;
-  font-weight: 800;
-  color: rgba(0, 255, 242, 0.65);
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  letter-spacing: 0.2em;
-  flex-shrink: 0;
-  text-shadow: 0 0 10px rgba(0, 255, 242, 0.15);
-}
-
-.logo span {
-  color: rgba(226, 232, 240, 0.4);
-  font-weight: 400;
 }
 
 .searchArea {

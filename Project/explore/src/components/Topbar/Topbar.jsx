@@ -3,7 +3,7 @@ import { useExplorer } from '../../context/ExplorerContext';
 import { searchConcepts } from '../../utils/api';
 import styles from './Topbar.module.css';
 
-export default function Topbar() {
+export default function Topbar({ user }) {
   const { trail, trailIndex, toggleTrail, toggleJourney, trailOpen, pickCuriosity, currentConcept } = useExplorer();
   const { jumpTo } = useExplorer();
   const [query, setQuery] = useState('');
@@ -62,51 +62,71 @@ export default function Topbar() {
   const jumpCount = trailIndex + 1;
 
   return (
-    <div className={styles.topbar}>
-      <span className={styles.logo}>WIKI<span>LOOP</span></span>
-
-      <div className={styles.searchArea} ref={searchRef}>
-        <div className={`${styles.searchBar} ${scanning ? styles.scanning : ''}`}>
-          <span className={styles.searchIcon}>/</span>
-          <input
-            value={query}
-            onChange={(e) => handleInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="explore a concept..."
-            className={styles.searchInput}
-          />
+    <>
+      {/* Shared app nav bar */}
+      <div className={styles.appNav}>
+        <span className={styles.appLogo}>Skill Tree Generator</span>
+        <nav className={styles.modeTabs}>
+          <a href="/" className={styles.modeTab}>Skill Tree</a>
+          <a href="/explore/" className={`${styles.modeTab} ${styles.modeTabActive}`}>Explore</a>
+        </nav>
+        <div className={styles.authArea}>
+          {user ? (
+            <>
+              <span className={styles.userGreeting}>Hi, {user.username}</span>
+              <a href="/" className={styles.authLink}>Logout</a>
+            </>
+          ) : (
+            <a href="/" className={styles.authLink}>Sign In</a>
+          )}
         </div>
-        {showResults && results.length > 0 && (
-          <div className={styles.dropdown}>
-            {results.map((r) => (
-              <div key={r.title} className={styles.dropdownItem} onClick={() => handleSelect(r.title)}>
-                <div className={styles.dropdownTitle}>{r.title}</div>
-                <div className={styles.dropdownSnippet}>{r.snippet}</div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
-      <div className={styles.right}>
-        {jumpCount > 0 && (
-          <div className={styles.jumpCount}>
-            <span>{jumpCount}</span>
-            <span className={styles.jumpCountLabel}>hops</span>
+      {/* WikiLoop-specific toolbar */}
+      <div className={styles.topbar}>
+        <div className={styles.searchArea} ref={searchRef}>
+          <div className={`${styles.searchBar} ${scanning ? styles.scanning : ''}`}>
+            <span className={styles.searchIcon}>/</span>
+            <input
+              value={query}
+              onChange={(e) => handleInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="explore a concept..."
+              className={styles.searchInput}
+            />
           </div>
-        )}
-        {currentConcept && (
-          <button className={`${styles.btn} ${styles.btnCuriosity}`} onClick={pickCuriosity} title="Jump to a random unexplored node">
-            RANDOM
+          {showResults && results.length > 0 && (
+            <div className={styles.dropdown}>
+              {results.map((r) => (
+                <div key={r.title} className={styles.dropdownItem} onClick={() => handleSelect(r.title)}>
+                  <div className={styles.dropdownTitle}>{r.title}</div>
+                  <div className={styles.dropdownSnippet}>{r.snippet}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.right}>
+          {jumpCount > 0 && (
+            <div className={styles.jumpCount}>
+              <span>{jumpCount}</span>
+              <span className={styles.jumpCountLabel}>hops</span>
+            </div>
+          )}
+          {currentConcept && (
+            <button className={`${styles.btn} ${styles.btnCuriosity}`} onClick={pickCuriosity} title="Jump to a random unexplored node">
+              RANDOM
+            </button>
+          )}
+          <button className={`${styles.btn} ${styles.btnTrail} ${trailOpen ? styles.active : ''}`} onClick={toggleTrail}>
+            TRAIL
           </button>
-        )}
-        <button className={`${styles.btn} ${styles.btnTrail} ${trailOpen ? styles.active : ''}`} onClick={toggleTrail}>
-          TRAIL
-        </button>
-        <button className={`${styles.btn} ${styles.btnJourney}`} onClick={toggleJourney}>
-          MAP
-        </button>
+          <button className={`${styles.btn} ${styles.btnJourney}`} onClick={toggleJourney}>
+            MAP
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

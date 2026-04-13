@@ -79,6 +79,15 @@ export default function ConceptPanel() {
           )}
         </button>
 
+        {/* Cross-link: generate a skill tree for this concept */}
+        <a
+          href={`/?generate=${encodeURIComponent(c.title)}`}
+          className={styles.enrichBtn}
+          style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}
+        >
+          Generate Skill Tree
+        </a>
+
         {c.sections?.length > 0 && (
           <Layer title="Deep Dive" hint="Full Wikipedia sections">
             <DeepDive sections={c.sections} wikiUrl={c.wikiUrl} />

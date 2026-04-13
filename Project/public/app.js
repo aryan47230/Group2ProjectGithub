@@ -680,8 +680,18 @@ function showDetail(node) {
           ${r.description ? `<p class="resource-desc">${r.description}</p>` : ""}
         </li>`
       ).join("");
+      detailResources.innerHTML += `<li class="explore-wiki-link">
+        <a href="/explore/?q=${encodeURIComponent(node.name)}">Explore "${node.name}" on Wikipedia</a>
+        <span class="resource-type">[wiki]</span>
+        <p class="resource-desc">Dive deeper with the interactive knowledge graph explorer.</p>
+      </li>`;
     } else {
-      detailResourcesSection.hidden = true;
+      detailResourcesSection.hidden = false;
+      detailResources.innerHTML = `<li class="explore-wiki-link">
+        <a href="/explore/?q=${encodeURIComponent(node.name)}">Explore "${node.name}" on Wikipedia</a>
+        <span class="resource-type">[wiki]</span>
+        <p class="resource-desc">Dive deeper with the interactive knowledge graph explorer.</p>
+      </li>`;
     }
 
     detailCompleteBtn.hidden = false;
@@ -778,6 +788,25 @@ form.addEventListener("submit", async e => {
     btn.disabled = false;
   }
 });
+
+// ── Explore form ──────────────────────────────────────────────────────────────
+const exploreForm = document.getElementById("explore-form");
+const exploreTopic = document.getElementById("explore-topic");
+
+exploreForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const q = exploreTopic.value.trim();
+  if (q) window.location.href = "/explore/?q=" + encodeURIComponent(q);
+});
+
+// ── Auto-generate from URL param ──────────────────────────────────────────────
+const urlParams = new URLSearchParams(window.location.search);
+const autoGenerate = urlParams.get("generate");
+if (autoGenerate) {
+  topicInput.value = autoGenerate;
+  window.history.replaceState({}, "", "/");
+  form.dispatchEvent(new Event("submit", { cancelable: true }));
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 initAuth();
