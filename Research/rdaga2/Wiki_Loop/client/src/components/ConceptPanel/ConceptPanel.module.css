@@ -1,0 +1,187 @@
+.panel {
+  padding: 18px;
+  height: 100%;
+  overflow-y: auto;
+  background: rgba(6, 9, 15, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-dim);
+  position: relative;
+}
+
+.panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(0,255,242,0.15), rgba(139,92,246,0.1), rgba(255,170,64,0.08), transparent);
+  opacity: 0.6;
+}
+
+.cornerTL, .cornerTR, .cornerBL, .cornerBR {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cornerTL { top: 6px; left: 6px; border-top: 1.5px solid rgba(0, 255, 242, 0.15); border-left: 1.5px solid rgba(0, 255, 242, 0.15); }
+.cornerTR { top: 6px; right: 6px; border-top: 1.5px solid rgba(0, 255, 242, 0.15); border-right: 1.5px solid rgba(0, 255, 242, 0.15); }
+.cornerBL { bottom: 6px; left: 6px; border-bottom: 1.5px solid rgba(0, 255, 242, 0.15); border-left: 1.5px solid rgba(0, 255, 242, 0.15); }
+.cornerBR { bottom: 6px; right: 6px; border-bottom: 1.5px solid rgba(0, 255, 242, 0.15); border-right: 1.5px solid rgba(0, 255, 242, 0.15); }
+
+/* Glitch removed — clean transitions */
+.panelGlitch {
+  animation: fadeSlide 0.3s ease-out;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0.8; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.staggerIn > *:nth-child(1) { animation: slideUp 0.4s ease-out 0.05s both; }
+.staggerIn > *:nth-child(2) { animation: slideUp 0.4s ease-out 0.12s both; }
+.staggerIn > *:nth-child(3) { animation: slideUp 0.4s ease-out 0.19s both; }
+.staggerIn > *:nth-child(4) { animation: slideUp 0.4s ease-out 0.26s both; }
+.staggerIn > *:nth-child(5) { animation: slideUp 0.4s ease-out 0.33s both; }
+.staggerIn > *:nth-child(6) { animation: slideUp 0.4s ease-out 0.40s both; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  gap: 10px;
+}
+
+.emptyIcon { font-size: 36px; opacity: 0.25; }
+
+.empty h2 {
+  font-size: 15px;
+  color: rgba(200, 210, 225, 0.4);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.empty p {
+  font-size: 12px;
+  color: rgba(200, 210, 225, 0.2);
+}
+
+.error { color: var(--accent-red); font-size: 13px; }
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(0, 212, 255, 0.1);
+  border-top-color: rgba(0, 212, 255, 0.6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 14px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Enrich button ─── */
+.enrichBtn {
+  width: 100%;
+  padding: 11px 18px;
+  margin: 12px 0;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.04), rgba(160, 124, 255, 0.03));
+  color: rgba(0, 212, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s;
+}
+
+.enrichBtn:hover:not(:disabled) {
+  border-color: rgba(0, 212, 255, 0.45);
+  color: rgba(0, 212, 255, 0.95);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(160, 124, 255, 0.05));
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.08), inset 0 0 12px rgba(0, 212, 255, 0.03);
+}
+
+.enrichBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.enrichBtn:not(:disabled) {
+  animation: enrichPulse 3s ease-in-out infinite;
+}
+
+@keyframes enrichPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(0, 212, 255, 0); }
+  50% { box-shadow: 0 0 15px rgba(0, 212, 255, 0.15), inset 0 0 10px rgba(0, 212, 255, 0.05); }
+}
+
+.enrichComplete {
+  background: linear-gradient(135deg, rgba(92, 255, 160, 0.08), rgba(92, 255, 160, 0.02)) !important;
+  border-color: rgba(92, 255, 160, 0.3) !important;
+  color: rgba(92, 255, 160, 0.7) !important;
+  animation: none !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.enrichComplete::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(92, 255, 160, 0.12), transparent);
+  animation: scanBeam 1.5s ease forwards;
+}
+
+@keyframes scanBeam {
+  to { left: 100%; }
+}
+
+.enrichIcon { font-size: 14px; }
+
+.enrichSpinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(0, 212, 255, 0.12);
+  border-top-color: rgba(0, 212, 255, 0.6);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ─── Path insight ─── */
+.pathInsight {
+  margin: 8px 0 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-left: 3px solid rgba(0, 212, 255, 0.3);
+  font-size: 12px;
+  color: rgba(0, 212, 255, 0.6);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pathInsightIcon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }

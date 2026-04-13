@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WIKI_LOOP::TERMINAL//79</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0600;
+    --bg-2:#140a00;
+    --amber:#ffb000;
+    --amber-dim:#7a5400;
+    --amber-faint:#3a2700;
+    --green:#33ff88;
+    --red:#ff3b2d;
+    --white:#ffe8c0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    background:#000;
+    color:var(--amber);
+    overflow:hidden;
+  }
+  /* outer CRT bezel */
+  .bezel{
+    position:fixed; inset:14px;
+    border-radius:22px;
+    background: linear-gradient(160deg,#1c1a18,#0a0908 60%,#1c1a18);
+    box-shadow:
+      inset 0 0 0 2px #2a2520,
+      inset 0 0 40px rgba(0,0,0,.9),
+      0 20px 80px rgba(0,0,0,.7);
+    padding:18px;
+  }
+  .bezel .screws{position:absolute; inset:0; pointer-events:none}
+  .bezel .screws i{
+    position:absolute; width:10px; height:10px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #5a5048, #100e0c 70%);
+    box-shadow:0 0 0 1px #000;
+  }
+  .bezel .screws i:nth-child(1){top:10px;left:10px}
+  .bezel .screws i:nth-child(2){top:10px;right:10px}
+  .bezel .screws i:nth-child(3){bottom:10px;left:10px}
+  .bezel .screws i:nth-child(4){bottom:10px;right:10px}
+
+  /* CRT screen */
+  .crt{
+    position:relative;
+    height:100%;
+    border-radius:14px;
+    background:
+      radial-gradient(ellipse at center, #140a00 0%, #0a0500 70%, #050200 100%);
+    box-shadow:
+      inset 0 0 120px rgba(0,0,0,.9),
+      inset 0 0 30px rgba(255,176,0,.08);
+    overflow:hidden;
+    padding:18px 26px;
+  }
+  /* scanlines */
+  .crt::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(to bottom,
+      rgba(255,176,0,.06) 0 1px,
+      transparent 1px 3px);
+    z-index:9;
+  }
+  /* flicker + vignette */
+  .crt::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.8) 100%);
+    animation: flick 6s infinite steps(60);
+    z-index:10;
+  }
+  @keyframes flick{
+    0%,97%,100%{opacity:.75}
+    98%{opacity:.55}
+    99%{opacity:.85}
+  }
+  .glow{text-shadow:0 0 2px rgba(255,176,0,.9), 0 0 8px rgba(255,176,0,.45)}
+  .glow-dim{text-shadow:0 0 1px rgba(255,176,0,.6), 0 0 6px rgba(255,176,0,.25)}
+  .green{color:var(--green); text-shadow:0 0 2px rgba(51,255,136,.8), 0 0 8px rgba(51,255,136,.35)}
+  .red{color:var(--red); text-shadow:0 0 2px rgba(255,59,45,.8), 0 0 8px rgba(255,59,45,.35)}
+  .white{color:var(--white); text-shadow:0 0 2px rgba(255,232,192,.8)}
+  .dim{color:var(--amber-dim)}
+
+  /* layout */
+  .term{
+    position:relative; z-index:5;
+    height:100%;
+    display:grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap:10px;
+    font-size:15px;
+    line-height:1.35;
+  }
+  .vt{font-family:"VT323",monospace; font-size:22px; letter-spacing:.02em}
+
+  /* header */
+  .hdr{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-bottom:6px;
+    border-bottom:1px dashed var(--amber-dim);
+  }
+  .hdr .lg{font-family:"VT323",monospace; font-size:26px}
+  .hdr .lg b{color:var(--white)}
+  .hdr .stats{display:flex; gap:18px; font-size:13px}
+  .hdr .stats span b{color:var(--white)}
+  .blink::after{content:"_"; animation: bl 1s steps(1) infinite}
+  @keyframes bl{50%{opacity:0}}
+
+  /* prompt */
+  .prompt{
+    font-family:"VT323",monospace; font-size:22px;
+    padding:6px 0;
+    border-bottom:1px dashed var(--amber-dim);
+  }
+  .prompt .ps{color:var(--green)}
+  .prompt .cmd{color:var(--white)}
+
+  /* main 3 col */
+  main{
+    display:grid;
+    grid-template-columns: 260px 1fr 460px;
+    gap:18px;
+    min-height:0;
+  }
+  .pane{
+    border:1px solid var(--amber-dim);
+    padding:10px 12px;
+    overflow:auto;
+    position:relative;
+  }
+  .pane::-webkit-scrollbar{width:6px; height:6px}
+  .pane::-webkit-scrollbar-thumb{background:var(--amber-dim)}
+  .pane > h3{
+    font-family:"VT323",monospace; font-size:20px;
+    color:var(--white);
+    letter-spacing:.05em;
+    margin-bottom:6px;
+    padding-bottom:4px;
+    border-bottom:1px dashed var(--amber-dim);
+  }
+  .pane > h3::before{content:"[ "} .pane > h3::after{content:" ]"}
+
+  /* left: trail */
+  .trail ol{list-style:none; counter-reset:t; font-size:14px}
+  .trail li{
+    counter-increment:t;
+    padding:3px 0;
+    display:flex; gap:8px;
+  }
+  .trail li::before{
+    content:"[" counter(t,decimal-leading-zero) "]";
+    color:var(--amber-dim);
+  }
+  .trail li.cur{color:var(--white)}
+  .trail li.cur::before{color:var(--green); content:"[*]"}
+  .asci{
+    margin-top:12px;
+    font-family:"VT323",monospace; font-size:17px; line-height:1;
+    color:var(--amber-dim);
+    white-space:pre;
+  }
+
+  /* center: article */
+  .article .tag{
+    font-size:12px; letter-spacing:.25em; color:var(--green);
+    margin-bottom:4px;
+  }
+  .article h1{
+    font-family:"VT323",monospace;
+    font-size:56px;
+    line-height:.95;
+    color:var(--white);
+    letter-spacing:.01em;
+    margin-bottom:6px;
+  }
+  .article h1 .cursor{color:var(--amber); animation:bl 1s steps(1) infinite}
+  .article .meta{
+    display:flex; gap:14px; font-size:12px;
+    padding:4px 0;
+    border-top:1px dashed var(--amber-dim);
+    border-bottom:1px dashed var(--amber-dim);
+    margin-bottom:10px;
+  }
+  .article .meta b{color:var(--white)}
+  .article p{font-size:14px; margin-bottom:10px; max-width:70ch}
+  .article p .hi{color:var(--white)}
+
+  .table{
+    margin-top:10px; width:100%;
+    font-size:13px;
+    border-collapse:collapse;
+  }
+  .table th, .table td{
+    text-align:left; padding:4px 8px;
+    border-bottom:1px dashed var(--amber-faint);
+  }
+  .table th{color:var(--green); font-weight:400; letter-spacing:.12em; font-size:11px}
+  .table td:first-child{color:var(--white)}
+  .table td.rel{color:var(--amber-dim)}
+  .table td.k{color:var(--green)}
+
+  /* right: graph (ascii) */
+  .graph{display:flex; flex-direction:column}
+  .graph pre{
+    flex:1;
+    font-family:"VT323",monospace;
+    font-size:17px;
+    line-height:1;
+    white-space:pre;
+    color:var(--amber);
+    text-shadow:0 0 2px rgba(255,176,0,.9), 0 0 10px rgba(255,176,0,.35);
+    overflow:auto;
+  }
+  .graph pre .c{color:var(--white)}
+  .graph pre .g{color:var(--green)}
+  .graph pre .r{color:var(--red)}
+  .graph pre .d{color:var(--amber-dim)}
+  .graph .legend{
+    display:flex; gap:14px; font-size:11px;
+    padding-top:6px; border-top:1px dashed var(--amber-dim);
+    margin-top:6px;
+  }
+
+  /* footer */
+  .foot{
+    display:flex; justify-content:space-between;
+    font-size:12px;
+    padding-top:6px;
+    border-top:1px dashed var(--amber-dim);
+  }
+  .foot .bar{
+    display:inline-block; width:120px; height:8px;
+    border:1px solid var(--amber-dim);
+    position:relative; vertical-align:middle; margin-left:6px;
+  }
+  .foot .bar i{
+    position:absolute; top:0; left:0; bottom:0;
+    background:var(--amber); box-shadow:0 0 8px var(--amber);
+  }
+</style>
+</head>
+<body>
+<div class="bezel">
+  <div class="screws"><i></i><i></i><i></i><i></i></div>
+  <div class="crt">
+    <div class="term">
+
+      <!-- HEADER -->
+      <div class="hdr">
+        <div class="lg glow">WIKI_LOOP <span class="dim">//</span> <b>TERMINAL.79</b> <span class="dim">v0.4.2</span></div>
+        <div class="stats vt">
+          <span class="glow-dim">NODE <b class="white glow">042</b></span>
+          <span class="glow-dim">HOP <b class="white glow">07</b></span>
+          <span class="glow-dim">UPLINK <b class="green">WIKI_OK</b></span>
+          <span class="glow-dim">GEMINI <b class="red">QUOTA_LOW</b></span>
+          <span class="glow-dim">04:21:07</span>
+        </div>
+      </div>
+
+      <!-- PROMPT -->
+      <div class="prompt glow">
+        <span class="ps">root@wikiloop</span><span class="dim">:</span><span class="white">~/trail/07</span><span class="dim">$</span>
+        <span class="cmd glow">query</span> <span class="green">"quantum mechanics"</span> <span class="dim">--depth=2 --enrich=off</span><span class="blink"></span>
+      </div>
+
+      <!-- MAIN -->
+      <main>
+
+        <!-- TRAIL -->
+        <section class="pane trail">
+          <h3>TRAIL.LOG</h3>
+          <ol class="glow-dim">
+            <li>observable_universe</li>
+            <li>cosmology</li>
+            <li>general_relativity</li>
+            <li>spacetime</li>
+            <li>lorentz_transformation</li>
+            <li>wave_particle_duality</li>
+            <li class="cur">quantum_mechanics</li>
+          </ol>
+          <div class="asci">
++---------+
+|  TRAIL  |
++---------+
+  ■
+  |
+  ■
+  |
+  ■
+  |
+  ■
+  |
+  ■
+  |
+  ■
+  |
+  ● &lt;-- HERE
+          </div>
+          <div class="glow-dim" style="font-size:12px;margin-top:10px">&gt; 7 hops logged</div>
+          <div class="glow-dim" style="font-size:12px">&gt; drift = 0.42</div>
+        </section>
+
+        <!-- ARTICLE -->
+        <section class="pane article">
+          <h3>ARTICLE.READ</h3>
+          <div class="tag">// FILE: quantum_mechanics.txt | 50 REFS | 12 SECTIONS</div>
+          <h1>QUANTUM_MECHANICS<span class="cursor">█</span></h1>
+          <div class="meta glow-dim">
+            <span>CAT: <b>PHYSICS</b></span>
+            <span>ORIGIN: <b>1900-1925</b></span>
+            <span>REFS: <b>50</b></span>
+            <span>DEPTH: <b>LVL.3</b></span>
+          </div>
+
+          <p class="glow-dim">
+            &gt; <span class="hi glow">quantum mechanics</span> is the fundamental physical theory that
+            describes the behaviour of nature at <span class="hi glow">atomic</span> and
+            <span class="hi glow">subatomic</span> scales. it departs from classical mechanics
+            in positing that energy, momentum and other physical quantities
+            are often restricted to <span class="hi glow">discrete values</span>.
+          </p>
+          <p class="glow-dim">
+            &gt; objects exhibit characteristics of both particles and waves
+            (<span class="green">wave-particle duality</span>); there exist limits to the accuracy with
+            which quantities can be predicted prior to measurement, given a
+            complete set of initial conditions (<span class="green">uncertainty principle</span>).
+          </p>
+
+          <table class="table">
+            <thead><tr><th>NODE</th><th>REL</th><th>STR</th><th>DESC</th></tr></thead>
+            <tbody class="glow-dim">
+              <tr><td>wave_function</td>          <td class="k">core</td>       <td>3</td><td class="rel">state vector in hilbert space</td></tr>
+              <tr><td>uncertainty_principle</td>  <td class="k">core</td>       <td>3</td><td class="rel">δx·δp ≥ ℏ/2</td></tr>
+              <tr><td>schrodinger_equation</td>   <td class="k">core</td>       <td>3</td><td class="rel">iℏ∂ψ/∂t = Ĥψ</td></tr>
+              <tr><td>quantum_entanglement</td>   <td class="rel">related</td>  <td>2</td><td class="rel">non-local correlations</td></tr>
+              <tr><td>planck_constant</td>        <td class="rel">foundation</td><td>2</td><td class="rel">h = 6.626e-34 J·s</td></tr>
+              <tr><td>particle_physics</td>       <td class="rel">application</td><td>2</td><td class="rel">standard model, etc.</td></tr>
+              <tr><td>general_relativity</td>     <td class="rel">contrast</td> <td>2</td><td class="rel">gravity &amp; spacetime</td></tr>
+              <tr><td>quantum_field_theory</td>   <td class="rel">extension</td><td>3</td><td class="rel">qm + special relativity</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- GRAPH -->
+        <section class="pane graph">
+          <h3>GRAPH.MAP</h3>
+<pre class="glow-dim">
+                 <span class="d">. . . . . . . . . . .</span>
+            <span class="d">.</span>                       <span class="d">.</span>
+         <span class="d">.</span>    <span class="g">[wave_func]</span>            <span class="d">.</span>
+       <span class="d">.</span>           \                  <span class="d">.</span>
+      <span class="d">.</span>  <span class="g">[planck_const]</span> \                <span class="d">.</span>
+     <span class="d">.</span>          \     \                 <span class="d">.</span>
+     <span class="d">.</span>           \     \    <span class="g">[uncert.]</span>    <span class="d">.</span>
+    <span class="d">.</span>             \     \   /            <span class="d">.</span>
+    <span class="d">.</span>              \     \ /             <span class="d">.</span>
+    <span class="d">.</span>   <span class="g">[QFT]</span>------o o o<span class="r">((QM))</span>o o o-<span class="g">[schrodinger]</span>
+    <span class="d">.</span>              /     / \             <span class="d">.</span>
+    <span class="d">.</span>             /     /   \            <span class="d">.</span>
+     <span class="d">.</span>           /     /     \           <span class="d">.</span>
+     <span class="d">.</span>  <span class="g">[gen.relat]</span>/       \                <span class="d">.</span>
+      <span class="d">.</span>        /         \               <span class="d">.</span>
+       <span class="d">.</span>      /           <span class="g">[entanglement]</span> <span class="d">.</span>
+         <span class="d">.</span>  <span class="g">[particle_phys]</span>              <span class="d">.</span>
+            <span class="d">.</span>                       <span class="d">.</span>
+                 <span class="d">. . . . . . . . . . .</span>
+
+  <span class="c">LEGEND</span>
+  ((X))    center node         <span class="r">■</span> active
+   [X]    primary connection   <span class="g">■</span> core
+    o     edge particle        <span class="d">■</span> dormant
+    .     orbit ring
+</pre>
+          <div class="legend glow-dim">
+            <span>NODES: <b class="white">09</b></span>
+            <span>EDGES: <b class="white">12</b></span>
+            <span>TICK: <b class="green">60HZ</b></span>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- FOOTER -->
+      <div class="foot glow-dim">
+        <span>[F1] HELP &nbsp; [F2] TRAIL &nbsp; [F3] RANDOM &nbsp; [F4] ENRICH &nbsp; [ESC] BACK</span>
+        <span>MEM <span class="bar"><i style="width:64%"></i></span> &nbsp; CACHE <span class="bar"><i style="width:82%"></i></span></span>
+        <span class="green">&gt;&gt; READY</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

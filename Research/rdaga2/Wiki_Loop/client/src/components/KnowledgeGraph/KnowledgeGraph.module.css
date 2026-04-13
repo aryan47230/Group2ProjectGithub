@@ -1,0 +1,295 @@
+/* ─── Container ─── */
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #050810;
+  outline: none;
+}
+
+/* ─── Vignette for depth ─── */
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 25%,
+    rgba(4, 6, 12, 0.45) 75%,
+    rgba(4, 6, 12, 0.85) 100%
+  );
+}
+
+/* ─── Empty state ─── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+}
+
+.emptyHex {
+  font-size: 40px;
+  color: rgba(0, 255, 242, 0.08);
+  animation: emptyPulse 3s ease-in-out infinite;
+}
+
+@keyframes emptyPulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+.emptyText {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: rgba(200, 210, 225, 0.2);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Nebula ambient glow ─── */
+.nebula {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  animation: nebPulse 15s ease-in-out infinite alternate;
+}
+
+.blob1 {
+  width: 500px;
+  height: 400px;
+  top: 10%;
+  left: 15%;
+  background: rgba(0, 255, 242, 1);
+  opacity: 0.018;
+}
+
+.blob2 {
+  width: 400px;
+  height: 450px;
+  bottom: 15%;
+  right: 10%;
+  background: rgba(139, 92, 246, 1);
+  opacity: 0.015;
+  animation-delay: 5s;
+}
+
+.blob3 {
+  width: 350px;
+  height: 300px;
+  top: 50%;
+  left: 55%;
+  background: rgba(255, 170, 64, 1);
+  opacity: 0.01;
+  animation-delay: 8s;
+}
+
+@keyframes nebPulse {
+  0% { opacity: 0.01; transform: scale(1); }
+  100% { opacity: 0.03; transform: scale(1.15); }
+}
+
+/* ─── Floating particles ─── */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(200, 220, 240, 0.5);
+  border-radius: 50%;
+  animation: drift linear infinite;
+  opacity: 0;
+}
+
+@keyframes drift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  8% { opacity: 0.25; }
+  92% { opacity: 0.25; }
+  100% { transform: translateY(-100px) translateX(25px); opacity: 0; }
+}
+
+/* ─── Corner labels ─── */
+.label {
+  position: absolute;
+  top: 16px;
+  left: 22px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: rgba(0, 255, 242, 0.15);
+  font-weight: 700;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hint {
+  position: absolute;
+  top: 40px;
+  right: 22px;
+  font-size: 10px;
+  color: rgba(200, 210, 225, 0.12);
+  font-family: var(--font-mono, monospace);
+  z-index: 10;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+
+/* ─── Canvas ─── */
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible; /* edges must not be clipped at the canvas boundary */
+}
+
+/* ─── Edge interactions ─── */
+.edgeGroup {
+  pointer-events: stroke;
+  cursor: default;
+}
+
+.edgeGroup:hover path {
+  stroke-opacity: 0.6;
+  filter: url(#edgeGlow);
+}
+
+.edgeGroup:hover circle {
+  r: 3;
+}
+
+.edgePath {
+  transition: stroke-opacity 0.3s ease;
+}
+
+/* ─── Starfield ─── */
+.starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background: rgba(220, 230, 245, 0.8);
+  border-radius: 50%;
+  animation: twinkle var(--dur, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: var(--min-op, 0.05); }
+  50% { opacity: var(--max-op, 0.4); }
+}
+
+/* ─── Shooting stars ─── */
+.shootingStar {
+  position: absolute;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(200, 220, 255, 0.6), transparent);
+  animation: shoot var(--dur, 1.5s) linear forwards;
+  transform-origin: left center;
+  opacity: 0;
+}
+
+@keyframes shoot {
+  0% { transform: translateX(0) rotate(var(--angle, -30deg)); opacity: 0; }
+  10% { opacity: 0.7; }
+  100% { transform: translateX(600px) rotate(var(--angle, -30deg)); opacity: 0; }
+}
+
+/* ─── Jump pulse ring ─── */
+.jumpPulse {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 2px solid var(--neon-cyan, #00fff2);
+  transform: translate(-50%, -50%);
+  animation: jumpRing 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow: 0 0 15px rgba(0, 255, 242, 0.2);
+}
+
+@keyframes jumpRing {
+  0% { width: 0; height: 0; opacity: 0.7; border-width: 2px; box-shadow: 0 0 20px rgba(0, 255, 242, 0.3); }
+  100% { width: 500px; height: 500px; opacity: 0; border-width: 1px; box-shadow: 0 0 0 rgba(0, 255, 242, 0); }
+}
+
+/* ─── Focus mode toggle ─── */
+.focusBtn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 30;
+  padding: 6px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.12em;
+  color: rgba(0, 255, 242, 0.5);
+  background: rgba(0, 255, 242, 0.03);
+  border: 1px solid rgba(0, 255, 242, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.focusBtn:hover {
+  background: rgba(0, 255, 242, 0.08);
+  border-color: rgba(0, 255, 242, 0.3);
+  color: rgba(0, 255, 242, 0.9);
+  box-shadow: 0 0 12px rgba(0, 255, 242, 0.08);
+}
+
+/* ─── Hover tooltip ─── */
+.hoverTooltip {
+  position: absolute;
+  max-width: 220px;
+  padding: 8px 12px;
+  background: rgba(8, 12, 24, 0.95);
+  border: 1px solid rgba(0, 255, 242, 0.12);
+  border-radius: 6px;
+  font-size: 11px;
+  color: rgba(200, 215, 230, 0.65);
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  line-height: 1.5;
+  pointer-events: none;
+  z-index: 15;
+  white-space: normal;
+  animation: tooltipFadeIn 0.15s ease;
+  box-shadow: 0 0 15px rgba(0, 255, 242, 0.04);
+}
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(-46%); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+/* ─── Removed: .grid, .scanlineOverlay, .dataStream — clean starfield only ─── */

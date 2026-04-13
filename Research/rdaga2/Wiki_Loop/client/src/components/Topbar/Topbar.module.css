@@ -1,0 +1,219 @@
+.topbar {
+  height: var(--topbar-height);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6, 9, 15, 0.95);
+  border-bottom: 1px solid var(--border-dim);
+  z-index: 100;
+  position: relative;
+  backdrop-filter: blur(12px);
+}
+
+.topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00fff2, #8b5cf6, #ffaa40, transparent);
+  opacity: 0.25;
+}
+
+.logo {
+  font-size: 15px;
+  font-weight: 800;
+  color: rgba(0, 255, 242, 0.65);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.2em;
+  flex-shrink: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 242, 0.15);
+}
+
+.logo span {
+  color: rgba(226, 232, 240, 0.4);
+  font-weight: 400;
+}
+
+.searchArea {
+  position: relative;
+  flex: 1;
+  max-width: 440px;
+  margin: 0 36px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 8px 18px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.searchBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.06), transparent);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.scanning::after {
+  display: none;
+}
+
+.searchBar:focus-within {
+  border-color: rgba(0, 255, 242, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 242, 0.04);
+}
+
+.searchIcon {
+  color: rgba(0, 212, 255, 0.25);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  background: none;
+  border: none;
+  color: rgba(226, 232, 240, 0.75);
+  font-size: 13px;
+  width: 100%;
+  outline: none;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.searchInput::placeholder {
+  color: rgba(200, 210, 225, 0.18);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  z-index: 200;
+}
+
+.dropdownItem {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-dim);
+  transition: background 0.15s ease, border-color 0.15s ease;
+  position: relative;
+  border-left: 2px solid transparent;
+}
+
+.dropdownItem:last-child { border-bottom: none; }
+
+.dropdownItem:hover {
+  background: rgba(0, 212, 255, 0.04);
+  border-left-color: var(--accent-cyan);
+}
+
+.dropdownTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.dropdownSnippet {
+  font-size: 11px;
+  color: rgba(200, 210, 225, 0.25);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.jumpCount {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: rgba(0, 212, 255, 0.7);
+  padding: 4px 14px;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+  background: rgba(0, 212, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.jumpCountLabel {
+  font-size: 8px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn {
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.06em;
+  background: transparent;
+}
+
+.btnCuriosity {
+  border-color: rgba(240, 192, 96, 0.15);
+  color: rgba(240, 192, 96, 0.5);
+}
+
+.btnCuriosity:hover {
+  border-color: rgba(240, 192, 96, 0.35);
+  color: rgba(240, 192, 96, 0.85);
+  background: rgba(240, 192, 96, 0.04);
+}
+
+.btnTrail {
+  border-color: rgba(0, 212, 255, 0.12);
+  color: rgba(0, 212, 255, 0.45);
+}
+
+.btnTrail:hover, .btnTrail.active {
+  border-color: rgba(0, 212, 255, 0.35);
+  color: rgba(0, 212, 255, 0.85);
+  background: rgba(0, 212, 255, 0.04);
+}
+
+.btnJourney {
+  border-color: rgba(160, 124, 255, 0.12);
+  color: rgba(160, 124, 255, 0.4);
+}
+
+.btnJourney:hover {
+  border-color: rgba(160, 124, 255, 0.3);
+  color: rgba(160, 124, 255, 0.75);
+  background: rgba(160, 124, 255, 0.04);
+}
