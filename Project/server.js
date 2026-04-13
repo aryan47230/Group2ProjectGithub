@@ -19,9 +19,9 @@ const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 // ── Auth ───────────────────────────────────────────────────────────────────────
 
-app.get("/api/me", (req, res) => {
+app.get("/api/me", async (req, res) => {
   if (req.session.userId) {
-    const user = db.getUserById(req.session.userId);
+    const user = await db.getUserById(req.session.userId);
     if (user) return res.json({ user: { id: user.id, username: user.username } });
   }
   res.json({ user: null });
@@ -34,7 +34,7 @@ app.post("/api/register", async (req, res) => {
   if (password.length < 6) return res.status(400).json({ error: "Password must be at least 6 characters" });
 
   const hash = await bcrypt.hash(password, 10);
-  const user = db.createUser(username, hash);
+  const user = await db.createUser(username, hash);
   if (!user) return res.status(409).json({ error: "Username already taken" });
 
   req.session.userId = user.id;
@@ -45,10 +45,10 @@ app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: "Username and password required" });
 
-  const user = db.getUserByUsername(username);
+  const user = await db.getUserByUsername(username);
   if (!user) return res.status(401).json({ error: "Invalid username or password" });
 
-  const ok = await bcrypt.compare(password, user.passwordHash);
+  const ok = await bcrypt.compare(password, user.password_hash);
   if (!ok) return res.status(401).json({ error: "Invalid username or password" });
 
   req.session.userId = user.id;
@@ -66,8 +66,8 @@ function requireAuth(req, res, next) {
   next();
 }
 
-app.get("/api/trees", requireAuth, (req, res) => {
-  const trees = db.getTreesByUserId(req.session.userId);
+app.get("/api/trees", requireAuth, async (req, res) => {
+  const trees = await db.getTreesByUserId(req.session.userId);
   res.json(trees.map(t => ({
     topic: t.topic,
     nodes: t.nodes,
@@ -76,15 +76,15 @@ app.get("/api/trees", requireAuth, (req, res) => {
   })));
 });
 
-app.post("/api/trees", requireAuth, (req, res) => {
+app.post("/api/trees", requireAuth, async (req, res) => {
   const { topic, nodes, completed } = req.body;
   if (!topic || !nodes) return res.status(400).json({ error: "Missing topic or nodes" });
-  db.upsertTree(req.session.userId, topic, nodes, completed || []);
+  await db.upsertTree(req.session.userId, topic, nodes, completed || []);
   res.json({ ok: true });
 });
 
-app.delete("/api/trees/:topic", requireAuth, (req, res) => {
-  db.deleteTree(req.session.userId, decodeURIComponent(req.params.topic));
+app.delete("/api/trees/:topic", requireAuth, async (req, res) => {
+  await db.deleteTree(req.session.userId, decodeURIComponent(req.params.topic));
   res.json({ ok: true });
 });
 
