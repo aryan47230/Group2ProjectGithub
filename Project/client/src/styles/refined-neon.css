@@ -1,0 +1,65 @@
+/* Refined Neon — design tokens
+ * Source of truth for the Skill Tree Generator UI.
+ * Do not hardcode colors elsewhere. Reference these vars by name. */
+
+:root {
+  /* ─── Surfaces ─── */
+  --rn-void:    #03060f;                 /* canvas base */
+  --rn-ink:     #070b18;                 /* cards, panels */
+  --rn-paper:   #0a0f1a;                 /* topbar, toolbars */
+  --rn-card:    rgba(10, 16, 32, 0.85);  /* translucent cards over graph */
+  --rn-card-h:  rgba(14, 22, 42, 0.92);  /* hover */
+
+  /* ─── Hairlines (blue-tinted, never grey) ─── */
+  --rn-hair:    rgba(130, 170, 220, 0.08);
+  --rn-hair-2:  rgba(130, 170, 220, 0.16);
+  --rn-hair-3:  rgba(130, 170, 220, 0.28);
+
+  /* ─── Text ─── */
+  --rn-txt-0: #eef2fb;  /* headlines */
+  --rn-txt-1: #9aa7c0;  /* body */
+  --rn-txt-2: #556278;  /* meta / labels */
+  --rn-txt-3: #35353c;  /* disabled */
+
+  /* ─── Neon accents ─── */
+  --rn-gold:        #ffaa40;
+  --rn-gold-h:      #ffc266;
+  --rn-gold-glow:   rgba(255, 170, 64, 0.22);
+  --rn-gold-glow-2: rgba(255, 170, 64, 0.45);
+
+  --rn-blue:        #4d9fff;
+  --rn-blue-h:      #7ab7ff;
+  --rn-blue-glow:   rgba(77, 159, 255, 0.32);
+
+  --rn-cyan:        #00fff2;
+  --rn-cyan-h:      #66fff6;
+  --rn-cyan-glow:   rgba(0, 255, 242, 0.28);
+
+  --rn-violet:       #a78bfa;
+  --rn-violet-h:     #c4b5fd;
+  --rn-violet-glow:  rgba(167, 139, 250, 0.28);
+
+  --rn-green:       #34d399;
+  --rn-red:         #ff4466;
+  --rn-grey:        #5a6a85;
+
+  /* ─── Typography ─── */
+  --rn-font-display: 'Outfit', system-ui, sans-serif;
+  --rn-font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --rn-font-serif:   'Instrument Serif', Georgia, serif;
+
+  --rn-tracked-1: 0.04em;
+  --rn-tracked-2: 0.08em;
+  --rn-tracked-3: 0.14em;
+  --rn-tracked-4: 0.18em;
+  --rn-tracked-5: 0.22em;
+
+  /* ─── Sizing ─── */
+  --rn-topbar-height:   56px;
+  --rn-subtopbar-height: 46px;
+  --rn-panel-width:     480px;
+  --rn-radius-sm: 6px;
+  --rn-radius-md: 10px;
+  --rn-radius-lg: 14px;
+  --rn-radius-pill: 999px;
+}

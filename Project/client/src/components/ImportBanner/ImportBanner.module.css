@@ -1,43 +1,95 @@
+/* ── ImportBanner — Refined Neon ───────────────────────── */
+
 .banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.65rem 1.5rem;
-  font-size: 0.88rem;
-  color: #ccc;
+  gap: 16px;
+  height: 36px;
+  padding: 0 24px;
+  background: var(--rn-ink);
+  border-bottom: 1px solid var(--rn-hair-2);
+  animation: rn-banner-in 0.18s ease-out;
+}
+
+@keyframes rn-banner-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.tag {
+  font-family: var(--rn-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--rn-tracked-3);
+  color: var(--rn-cyan);
+  padding: 2px 7px;
+  border: 1px solid var(--rn-cyan);
+  border-radius: var(--rn-radius-sm);
+  background: var(--rn-cyan-glow);
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.message {
+  font-family: var(--rn-font-display);
+  font-size: 12.5px;
+  color: var(--rn-txt-1);
+  letter-spacing: var(--rn-tracked-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .yes {
-  padding: 0.35rem 0.9rem;
-  font-size: 0.8rem;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent-purple);
-  color: var(--bg-primary);
-  font-weight: 700;
+  padding: 5px 14px;
+  font-family: var(--rn-font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--rn-tracked-2);
+  text-transform: uppercase;
+  border-radius: var(--rn-radius-pill);
+  border: 1px solid var(--rn-cyan);
+  background: transparent;
+  color: var(--rn-cyan);
   cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-.yes:hover { background: var(--accent-purple-light); }
+.yes:hover {
+  background: var(--rn-cyan-glow);
+  color: var(--rn-cyan-h);
+  box-shadow: 0 0 16px -4px var(--rn-cyan-glow);
+}
 
 .no {
-  padding: 0.35rem 0.9rem;
-  font-size: 0.8rem;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  color: #888;
+  padding: 5px 12px;
+  font-family: var(--rn-font-display);
+  font-size: 11px;
   font-weight: 500;
+  letter-spacing: var(--rn-tracked-2);
+  text-transform: uppercase;
+  border-radius: var(--rn-radius-pill);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--rn-txt-2);
   cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
 }
 
-.no:hover { color: #e0e0e0; }
+.no:hover {
+  color: var(--rn-txt-0);
+  border-color: var(--rn-hair-3);
+}

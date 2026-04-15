@@ -70,11 +70,11 @@
   position: absolute;
   width: 2px;
   height: 2px;
-  background: #ffaa40;
+  background: var(--rn-gold);
   border-radius: 50%;
   top: 50%;
   left: 50%;
-  box-shadow: 0 0 4px #ffaa40;
+  box-shadow: 0 0 4px var(--rn-gold);
   animation: particleEmit 3s ease-out infinite;
 }
 
@@ -118,7 +118,7 @@
 .centerLabel {
   font-size: 12px;
   font-weight: 700;
-  color: #e2e8f0;
+  color: var(--rn-txt-0);
   text-align: center;
   font-family: var(--font-display, 'Outfit', sans-serif);
   letter-spacing: 0.04em;
@@ -201,12 +201,26 @@
   background: var(--node-fill, rgba(77, 159, 255, 0.04));
   border: 1.5px solid var(--node-border, #4d9fff);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   position: relative;
   transition: box-shadow 0.3s, border-color 0.3s;
   box-shadow: 0 0 10px var(--node-glow, rgba(77,159,255,0.12)),
               inset 0 0 8px var(--node-glow, rgba(77,159,255,0.06));
+}
+
+/* Icon character — upper symbol inside node (mirrors skill tree layout) */
+.nodeIconChar {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--node-text, #4d9fff);
+  text-shadow: 0 0 6px var(--node-glow, rgba(77,159,255,0.25));
+  line-height: 1;
+  letter-spacing: 0.05em;
+  pointer-events: none;
 }
 
 .circleNode:hover .circle {
@@ -215,15 +229,15 @@
 }
 
 .circleLabel {
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 9px;
+  font-weight: 500;
   color: var(--node-text, #4d9fff);
   text-align: center;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   line-height: 1.25;
   padding: 0 4px;
-  opacity: 0.9;
+  opacity: 0.70;
   text-shadow: 0 0 6px var(--node-glow, rgba(77,159,255,0.2));
 }
 
@@ -238,7 +252,7 @@
   position: absolute;
   inset: -2px;
   clip-path: polygon(50% 0%, 95% 24%, 95% 76%, 50% 100%, 5% 76%, 5% 24%);
-  border: 1.5px solid var(--node-border, #8b5cf6);
+  border: 1.5px solid var(--rn-violet);
   background: transparent;
   opacity: 0.35;
   z-index: -1;
@@ -303,7 +317,7 @@
 .hexLabel {
   font-size: 8px;
   font-weight: 600;
-  color: var(--node-text, #8b5cf6);
+  color: var(--rn-violet);
   text-align: center;
   font-family: var(--font-display, 'Outfit', sans-serif);
   letter-spacing: 0.03em;

@@ -1,26 +1,28 @@
 .app {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .main {
-  display: flex;
   flex: 1;
+  display: flex;
+  min-height: 0;
   overflow: hidden;
 }
 
 .leftPanel {
-  width: 500px;
-  min-width: 500px;
-  border-right: 1px solid var(--border-dim);
-  background: var(--bg-secondary);
+  width: var(--rn-panel-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--rn-hair-2);
   overflow-y: auto;
-  padding: 20px;
+  background: var(--rn-ink);
 }
 
 .rightPanel {
   flex: 1;
   position: relative;
-  background: #080818;
+  min-width: 0;
+  background: var(--rn-void);
 }

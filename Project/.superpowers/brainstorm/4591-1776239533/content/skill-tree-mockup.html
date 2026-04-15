@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Tree — Redesign Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --void:    #03060f;
+  --ink:     #070b18;
+  --paper:   #0a0f1a;
+  --gold:    #ffaa40;
+  --gold-h:  #ffc266;
+  --gold-glow: rgba(255,170,64,0.22);
+  --gold-glow-strong: rgba(255,170,64,0.55);
+  --cyan:    #00fff2;
+  --cyan-glow: rgba(0,255,242,0.28);
+  --cyan-glow-strong: rgba(0,255,242,0.55);
+  --blue:    #4d9fff;
+  --blue-glow: rgba(77,159,255,0.2);
+  --violet:  #a78bfa;
+  --violet-glow: rgba(167,139,250,0.25);
+  --grey:    #5a6a85;
+  --hair:    rgba(130,170,220,0.08);
+  --hair-2:  rgba(130,170,220,0.16);
+  --hair-3:  rgba(130,170,220,0.28);
+  --txt-0:   #eef2fb;
+  --txt-1:   #9aa7c0;
+  --txt-2:   #556278;
+}
+
+html, body {
+  background: var(--void);
+  color: var(--txt-0);
+  font-family: 'Outfit', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Page header ── */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--hair-2);
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--txt-1);
+  border: 1px solid var(--hair-2);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.back-btn:hover { color: var(--cyan); border-color: var(--cyan); background: var(--cyan-glow); }
+
+.page-title-wrap { text-align: center; }
+.page-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--txt-2);
+  letter-spacing: 0.18em;
+}
+.page-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.progress-wrap { display: flex; align-items: center; gap: 10px; }
+.progress-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+}
+.progress-track {
+  width: 140px; height: 3px;
+  background: var(--hair-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan-glow);
+  width: 42%;
+}
+
+/* ── Layout note ── */
+.layout-note {
+  text-align: center;
+  padding: 18px 24px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt-2);
+  letter-spacing: 0.12em;
+}
+.layout-note span { color: var(--blue); }
+
+/* ── Tree canvas ── */
+.tree-canvas {
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 60px;
+  overflow-x: auto;
+}
+
+/* ── SVG graph ── */
+.skill-svg {
+  display: block;
+  user-select: none;
+  overflow: visible;
+}
+
+/* ── Node groups ── */
+.node-group {
+  cursor: pointer;
+  transition: filter 0.18s;
+}
+.node-group:hover .node-bg {
+  filter: url(#glow-strong);
+}
+.node-group:hover .node-icon { font-size: 22px; }
+
+/* locked */
+.node-locked { opacity: 0.38; cursor: default; }
+.node-locked .node-bg { filter: none !important; }
+
+/* completed */
+.node-completed .node-bg { filter: url(#glow-done); }
+
+/* apex */
+.node-apex .node-bg { filter: url(#glow-apex); }
+
+/* dimmed on hover-of-other */
+.node-dimmed { opacity: 0.15; transition: opacity 0.2s; }
+
+/* ── Edges ── */
+.edge {
+  fill: none;
+  stroke: rgba(77,159,255,0.22);
+  stroke-width: 1.5;
+  transition: stroke 0.2s, stroke-width 0.2s, opacity 0.2s;
+}
+.edge-completed {
+  stroke: rgba(0,255,242,0.70);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(0,255,242,0.5));
+}
+.edge-locked {
+  stroke: rgba(90,106,133,0.25);
+  stroke-width: 1;
+}
+
+/* ── Hover panel ── */
+.hover-panel {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.hover-panel.visible { opacity: 1; }
+.hover-panel-inner {
+  background: var(--ink);
+  border: 1px solid var(--hair-3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 20px rgba(77,159,255,0.08);
+}
+.hp-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--txt-0);
+  margin-bottom: 4px;
+}
+.hp-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+.hp-status.completed { color: var(--cyan); }
+.hp-status.unlocked  { color: var(--blue); }
+.hp-status.locked    { color: var(--grey); }
+.hp-status.apex      { color: var(--gold); }
+.hp-desc {
+  font-size: 12px;
+  color: var(--txt-1);
+  line-height: 1.6;
+}
+.hp-requires {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt-2);
+  letter-spacing: 0.06em;
+}
+.hp-requires span { color: var(--gold); }
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 24px 48px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt-2);
+  letter-spacing: 0.1em;
+}
+.legend-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+.legend-edge {
+  width: 28px; height: 2px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Annotation callout ── */
+.annotation {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.annotation::before {
+  content: '← ';
+}
+
+/* ── Background grid ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(130,170,220,0.09) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Page Header -->
+<header class="page-header" style="position:relative;z-index:10;">
+  <button class="back-btn">← Back</button>
+  <div class="page-title-wrap">
+    <div class="page-eyebrow">TOPIC</div>
+    <div class="page-title">Machine Learning</div>
+  </div>
+  <div class="progress-wrap">
+    <span class="progress-label">06/14 · 42%</span>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+</header>
+
+<div class="layout-note">
+  Vertical flow · <span>top-to-bottom</span> · no level labels · nodes filled with icon + name · continuous neon edges
+</div>
+
+<!-- Tree Canvas -->
+<div class="tree-canvas" style="position:relative;z-index:1;">
+  <svg class="skill-svg" id="skillSvg" width="780" height="920"></svg>
+</div>
+
+<!-- Hover Panel -->
+<div class="hover-panel" id="hoverPanel">
+  <div class="hover-panel-inner">
+    <div class="hp-name" id="hpName"></div>
+    <div class="hp-status" id="hpStatus"></div>
+    <div class="hp-desc" id="hpDesc"></div>
+    <div class="hp-requires" id="hpReq"></div>
+  </div>
+</div>
+
+<!-- Legend -->
+<div class="legend" style="position:relative;z-index:1;">
+  <div class="legend-item">
+    <div class="legend-dot" style="border-color:#ffaa40;background:rgba(255,170,64,0.12);box-shadow:0 0 8px rgba(255,170,64,0.4);"></div>
+    FINAL NODE (GOLD)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="border-color:#00fff2;background:rgba(0,255,242,0.08);box-shadow:0 0 6px rgba(0,255,242,0.3);"></div>
+    COMPLETED
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="border-color:#4d9fff;background:rgba(77,159,255,0.08);"></div>
+    UNLOCKED
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="border-color:#5a6a85;background:transparent;opacity:0.5;"></div>
+    LOCKED
+  </div>
+  <div class="legend-item">
+    <div class="legend-edge" style="background:rgba(0,255,242,0.7);box-shadow:0 0 6px rgba(0,255,242,0.5);"></div>
+    COMPLETED PATH
+  </div>
+  <div class="legend-item">
+    <div class="legend-edge" style="background:rgba(77,159,255,0.22);"></div>
+    FUTURE PATH
+  </div>
+</div>
+
+<script>
+// ─── Data ──────────────────────────────────────────
+const skills = [
+  // APEX (level 5) — gold final node
+  { name: "ML Expert", level: 5, requires: ["Deep Learning", "Applied ML"], icon: "★", desc: "Master of machine learning — capable of designing, training, and deploying state-of-the-art models." },
+
+  // Level 4 (2 nodes)
+  { name: "Deep Learning", level: 4, requires: ["Neural Networks", "Math Foundations"], icon: "🧠", desc: "Design and train deep neural architectures including CNNs, RNNs, and Transformers." },
+  { name: "Applied ML", level: 4, requires: ["Feature Engineering", "Model Evaluation"], icon: "⚙️", desc: "Build end-to-end ML pipelines: data ingestion, feature selection, model training, and serving." },
+
+  // Level 3 (3 nodes — demonstrates 3+ per layer)
+  { name: "Neural Networks", level: 3, requires: ["Linear Algebra", "Python"], icon: "◈", desc: "Understand forward/backpropagation, activation functions, and network architectures." },
+  { name: "Feature Engineering", level: 3, requires: ["Statistics", "Python"], icon: "⚗", desc: "Transform raw data into meaningful features that improve model performance." },
+  { name: "Model Evaluation", level: 3, requires: ["Statistics", "Python"], icon: "📊", desc: "Metrics, cross-validation, bias-variance tradeoff, and calibration." },
+
+  // Level 2 (4 nodes — demonstrates more than 3)
+  { name: "Linear Algebra", level: 2, requires: ["Calculus"], icon: "∑", desc: "Vectors, matrices, eigenvalues, and linear transformations." },
+  { name: "Math Foundations", level: 2, requires: ["Calculus", "Probability"], icon: "∫", desc: "Optimization, gradients, and the mathematical underpinnings of ML." },
+  { name: "Statistics", level: 2, requires: ["Probability"], icon: "μσ", desc: "Distributions, hypothesis testing, and statistical inference." },
+  { name: "Python", level: 2, requires: ["CS Basics"], icon: "{ }", desc: "Python for data science: NumPy, Pandas, scikit-learn, PyTorch." },
+
+  // Level 1 — foundations (4 nodes)
+  { name: "Calculus", level: 1, requires: [], icon: "d/dx", desc: "Derivatives, integrals, and multivariable calculus for optimization." },
+  { name: "Probability", level: 1, requires: [], icon: "P(x)", desc: "Probability theory, Bayes' theorem, random variables, and distributions." },
+  { name: "CS Basics", level: 1, requires: [], icon: "01", desc: "Programming fundamentals, data structures, and algorithms." },
+  { name: "Logic", level: 1, requires: [], icon: "∧∨", desc: "Boolean algebra, formal logic, and propositional reasoning." },
+];
+
+// Completed nodes
+const completed = new Set(["Calculus", "Probability", "CS Basics", "Logic", "Python", "Statistics", "Linear Algebra"]);
+
+// ─── Layout ────────────────────────────────────────
+const W = 780;
+const padTop = 64, padBot = 40;
+const levelGap = 155;
+const maxLevel = 5;
+const totalH = padTop + (maxLevel - 1) * levelGap + padBot + 60;
+
+const levels = {};
+for (const s of skills) (levels[s.level] ||= []).push(s);
+
+const pos = {};
+for (let lvl = 1; lvl <= maxLevel; lvl++) {
+  const row = levels[lvl] || [];
+  const y = padTop + (maxLevel - lvl) * levelGap;
+  row.forEach((s, i) => {
+    pos[s.name] = { x: (W / (row.length + 1)) * (i + 1), y };
+  });
+}
+
+const isUnlocked = (name) => {
+  const s = skills.find(x => x.name === name);
+  if (!s || s.requires.length === 0) return true;
+  return s.requires.every(r => completed.has(r));
+};
+
+// ─── SVG setup ─────────────────────────────────────
+const svg = document.getElementById('skillSvg');
+svg.setAttribute('height', totalH);
+
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs) => {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+};
+
+// Defs
+const defs = mk('defs', {});
+
+// Dot pattern
+const pat = mk('pattern', { id:'dotpat', x:'0', y:'0', width:'36', height:'36', patternUnits:'userSpaceOnUse' });
+pat.appendChild(mk('circle', { cx:'0.5', cy:'0.5', r:'0.7', fill:'rgba(130,170,220,0.09)' }));
+defs.appendChild(pat);
+
+// Radial gradient for apex node fill
+const apexGrad = mk('radialGradient', { id:'apexGrad', cx:'50%', cy:'35%', r:'60%' });
+apexGrad.appendChild(mk('stop', { offset:'0%', 'stop-color':'rgba(255,180,80,0.28)' }));
+apexGrad.appendChild(mk('stop', { offset:'100%', 'stop-color':'rgba(255,130,20,0.04)' }));
+defs.appendChild(apexGrad);
+
+// Radial gradient for completed node fill
+const doneGrad = mk('radialGradient', { id:'doneGrad', cx:'50%', cy:'35%', r:'60%' });
+doneGrad.appendChild(mk('stop', { offset:'0%', 'stop-color':'rgba(0,255,242,0.18)' }));
+doneGrad.appendChild(mk('stop', { offset:'100%', 'stop-color':'rgba(0,255,242,0.02)' }));
+defs.appendChild(doneGrad);
+
+// Glow filters
+const mkGlow = (id, std, col) => {
+  const f = mk('filter', { id, x:'-80%', y:'-80%', width:'260%', height:'260%' });
+  const blur = mk('feGaussianBlur', { in:'SourceGraphic', stdDeviation: String(std), result:'blur' });
+  const flood = mk('feFlood', { 'flood-color': col, 'flood-opacity':'1', result:'color' });
+  const comp = mk('feComposite', { in:'color', in2:'blur', operator:'in', result:'glow' });
+  const merge = mk('feMerge', {});
+  merge.appendChild(mk('feMergeNode', { in:'glow' }));
+  merge.appendChild(mk('feMergeNode', { in:'SourceGraphic' }));
+  f.appendChild(blur); f.appendChild(flood); f.appendChild(comp); f.appendChild(merge);
+  return f;
+};
+
+defs.appendChild(mkGlow('glow-node',  3,   '#4d9fff'));
+defs.appendChild(mkGlow('glow-strong',6,   '#00fff2'));
+defs.appendChild(mkGlow('glow-done',  4,   '#00fff2'));
+defs.appendChild(mkGlow('glow-apex',  8,   '#ffaa40'));
+svg.appendChild(defs);
+
+// Background
+svg.appendChild(mk('rect', { x:'0', y:'0', width: String(W), height: String(totalH), fill:'url(#dotpat)' }));
+
+// ─── Edges ─────────────────────────────────────────
+const edgeGroup = mk('g', { class: 'edges' });
+const edgeEls = [];
+
+for (const skill of skills) {
+  const from = pos[skill.name];
+  if (!from) continue;
+  for (const req of skill.requires) {
+    const to = pos[req];
+    if (!to) continue;
+
+    const x1 = from.x, y1 = from.y + 34;
+    const x2 = to.x,   y2 = to.y - 34;
+    const cp = Math.min(60, Math.abs(y2 - y1) * 0.4);
+    const d = `M ${x1},${y1} C ${x1},${y1+cp} ${x2},${y2-cp} ${x2},${y2}`;
+
+    const isCompleted = completed.has(skill.name) && completed.has(req);
+    const isLocked = !isUnlocked(skill.name);
+
+    const e = mk('path', { d, fill:'none' });
+    e.classList.add('edge');
+    if (isCompleted) e.classList.add('edge-completed');
+    else if (isLocked) e.classList.add('edge-locked');
+    edgeEls.push({ el: e, from: skill.name, to: req });
+    edgeGroup.appendChild(e);
+  }
+}
+svg.appendChild(edgeGroup);
+
+// ─── Nodes ─────────────────────────────────────────
+const nodeGroup = mk('g', { class: 'nodes' });
+const nodeGroups = new Map(); // name -> g element
+
+for (const skill of skills) {
+  const p = pos[skill.name];
+  if (!p) continue;
+
+  const isApex = skill.level === maxLevel;
+  const isDone = completed.has(skill.name);
+  const isLock = !isUnlocked(skill.name);
+
+  // Sizing
+  const r = isApex ? 46 : isDone ? 38 : 36;
+
+  // Colors
+  let stroke, fillBase, textCol;
+  if (isApex)    { stroke = '#ffaa40'; fillBase = 'url(#apexGrad)'; textCol = '#ffaa40'; }
+  else if (isDone) { stroke = '#00fff2'; fillBase = 'url(#doneGrad)'; textCol = '#00fff2'; }
+  else if (isLock) { stroke = '#5a6a85'; fillBase = 'rgba(10,15,26,0.9)'; textCol = '#5a6a85'; }
+  else            { stroke = '#4d9fff'; fillBase = 'rgba(7,11,24,0.92)'; textCol = '#4d9fff'; }
+
+  const g = mk('g', { transform: `translate(${p.x},${p.y})` });
+  g.classList.add('node-group');
+  if (isApex) g.classList.add('node-apex');
+  else if (isDone) g.classList.add('node-completed');
+  else if (isLock) g.classList.add('node-locked');
+
+  // Ambient outer ring (non-locked only)
+  if (!isLock) {
+    const ring = mk('circle', {
+      r: String(r + 12), fill: 'none',
+      stroke, 'stroke-width': '1',
+      opacity: isApex ? '0.30' : '0.18',
+    });
+    ring.style.animation = 'pulse 3.5s ease-in-out infinite';
+    g.appendChild(ring);
+
+    if (isApex) {
+      // Second outer ring for apex
+      const ring2 = mk('circle', {
+        r: String(r + 22), fill: 'none',
+        stroke, 'stroke-width': '0.6',
+        opacity: '0.12',
+      });
+      ring2.style.animation = 'pulse 4.5s ease-in-out infinite 0.5s';
+      g.appendChild(ring2);
+    }
+  }
+
+  // Main circle
+  const circle = mk('circle', {
+    r: String(r),
+    fill: fillBase,
+    stroke,
+    'stroke-width': isApex ? '2' : '1.5',
+    class: 'node-bg',
+  });
+  g.appendChild(circle);
+
+  // Apex: inner decorative ring
+  if (isApex) {
+    g.appendChild(mk('circle', {
+      r: String(r - 8), fill: 'none',
+      stroke, 'stroke-width': '0.8', opacity: '0.4',
+      'stroke-dasharray': '4 8',
+    }));
+  }
+
+  // Icon (inside circle, upper half)
+  const iconEl = mk('text', {
+    x: '0', y: isApex ? '-8' : '-5',
+    'text-anchor': 'middle',
+    'dominant-baseline': 'middle',
+    fill: textCol,
+    'font-family': "'JetBrains Mono', monospace",
+    'font-size': isApex ? '18' : skill.icon.length > 2 ? '11' : '15',
+    'font-weight': '500',
+    'pointer-events': 'none',
+    class: 'node-icon',
+  });
+  iconEl.textContent = skill.icon;
+  g.appendChild(iconEl);
+
+  // Short name (inside circle, lower half)
+  const shortName = skill.name.length > 10 ? skill.name.slice(0, 9) + '…' : skill.name;
+  const nameEl = mk('text', {
+    x: '0', y: isApex ? '12' : '11',
+    'text-anchor': 'middle',
+    'dominant-baseline': 'middle',
+    fill: textCol,
+    'font-family': "'Outfit', sans-serif",
+    'font-size': isApex ? '9.5' : '8.5',
+    'font-weight': '500',
+    'letter-spacing': '0.04em',
+    'pointer-events': 'none',
+  });
+  nameEl.textContent = shortName;
+  g.appendChild(nameEl);
+
+  // Full name label below the node
+  const labelEl = mk('text', {
+    x: '0', y: String(r + 16),
+    'text-anchor': 'middle',
+    fill: isLock ? '#556278' : isDone ? '#9aa7c0' : isApex ? '#ffaa40' : '#9aa7c0',
+    'font-family': "'Outfit', sans-serif",
+    'font-size': '11',
+    'font-weight': isDone ? '500' : '400',
+    'pointer-events': 'none',
+  });
+  labelEl.textContent = skill.name;
+  g.appendChild(labelEl);
+
+  // Completed check badge
+  if (isDone && !isApex) {
+    const bx = r * 0.65, by = -r * 0.65;
+    g.appendChild(mk('circle', { cx: String(bx), cy: String(by), r: '8', fill: '#070b18', stroke:'#00fff2', 'stroke-width':'1.2' }));
+    const ck = mk('text', { x: String(bx), y: String(by + 1), 'text-anchor':'middle', 'dominant-baseline':'middle', fill:'#00fff2', 'font-size':'9', 'font-weight':'700', 'pointer-events':'none' });
+    ck.textContent = '✓';
+    g.appendChild(ck);
+  }
+
+  // Hover interactions
+  const panel = document.getElementById('hoverPanel');
+
+  g.addEventListener('mouseenter', (e) => {
+    if (isLock) return;
+
+    // Dim other nodes
+    for (const [name, ng] of nodeGroups) {
+      if (name !== skill.name) ng.classList.add('node-dimmed');
+    }
+    // Highlight related edges
+    for (const ed of edgeEls) {
+      const related = ed.from === skill.name || ed.to === skill.name;
+      ed.el.style.opacity = related ? '1' : '0.06';
+      if (related) ed.el.style.stroke = '#00fff2';
+    }
+
+    // Show hover panel
+    document.getElementById('hpName').textContent = skill.name;
+    const statusEl = document.getElementById('hpStatus');
+    if (isApex)      { statusEl.textContent = '★ FINAL NODE'; statusEl.className = 'hp-status apex'; }
+    else if (isDone) { statusEl.textContent = '✓ COMPLETED';  statusEl.className = 'hp-status completed'; }
+    else             { statusEl.textContent = '◉ UNLOCKED';   statusEl.className = 'hp-status unlocked'; }
+    document.getElementById('hpDesc').textContent = skill.desc;
+    const reqEl = document.getElementById('hpReq');
+    if (skill.requires.length > 0) {
+      reqEl.innerHTML = 'REQUIRES: ' + skill.requires.map(r => `<span>${r}</span>`).join(', ');
+    } else {
+      reqEl.textContent = 'FOUNDATION — no prerequisites';
+    }
+
+    panel.classList.add('visible');
+    movePanelTo(e);
+  });
+
+  g.addEventListener('mousemove', movePanelTo);
+
+  g.addEventListener('mouseleave', () => {
+    for (const [, ng] of nodeGroups) ng.classList.remove('node-dimmed');
+    for (const ed of edgeEls) {
+      ed.el.style.opacity = '';
+      ed.el.style.stroke = '';
+    }
+    panel.classList.remove('visible');
+  });
+
+  nodeGroups.set(skill.name, g);
+  nodeGroup.appendChild(g);
+}
+svg.appendChild(nodeGroup);
+
+function movePanelTo(e) {
+  const panel = document.getElementById('hoverPanel');
+  const inner = panel.querySelector('.hover-panel-inner');
+  const pw = inner.offsetWidth || 240;
+  const ph = inner.offsetHeight || 120;
+  let x = e.clientX + 18;
+  let y = e.clientY - ph / 2;
+  if (x + pw > window.innerWidth - 10) x = e.clientX - pw - 18;
+  if (y < 10) y = 10;
+  if (y + ph > window.innerHeight - 10) y = window.innerHeight - ph - 10;
+  panel.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+// ─── Pulse animation ───────────────────────────────
+const styleEl = document.createElement('style');
+styleEl.textContent = `
+  @keyframes pulse {
+    0%, 100% { opacity: 0.18; }
+    50%       { opacity: 0.45; }
+  }
+  .node-apex circle:first-child { animation: pulse 3.5s ease-in-out infinite; }
+`;
+document.head.appendChild(styleEl);
+
+// ─── Annotation callouts ───────────────────────────
+const annotations = [
+  { x: 580, y: 67,  text: 'GOLDEN FINAL NODE' },
+  { x: 540, y: 240, text: 'UNLOCKED NODE' },
+  { x: 580, y: 400, text: '3+ NODES IN ONE LAYER' },
+  { x: 560, y: 560, text: '4 NODES IN ONE LAYER' },
+  { x: 560, y: 700, text: 'FOUNDATION NODES' },
+  { x: 200, y: 145, text: 'COMPLETED EDGE →' },
+];
+
+// Callout for the completed edge
+const calloutG = mk('g', {});
+const calloutLine = mk('line', { x1:'330', y1:'145', x2:'250', y2:'145', stroke:'rgba(255,170,64,0.5)', 'stroke-width':'1', 'stroke-dasharray':'3 4' });
+calloutG.appendChild(calloutLine);
+const calloutTxt = mk('text', { x:'220', y:'148', 'text-anchor':'end', fill:'rgba(255,170,64,0.7)', 'font-family':"'JetBrains Mono', monospace", 'font-size':'9', 'letter-spacing':'0.1em' });
+calloutTxt.textContent = 'COMPLETED PATH';
+calloutG.appendChild(calloutTxt);
+svg.appendChild(calloutG);
+
+</script>
+</body>
+</html>

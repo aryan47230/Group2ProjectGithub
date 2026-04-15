@@ -116,7 +116,7 @@
   background: rgba(0, 212, 255, 0.12);
   border-color: rgba(0, 212, 255, 0.5);
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-  color: #fff;
+  color: var(--rn-txt-0);
 }
 
 .closeBtn {

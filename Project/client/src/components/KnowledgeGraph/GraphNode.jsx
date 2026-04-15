@@ -85,6 +85,8 @@ function GraphNode({ node, x, y, onClick, focused, highlighted }) {
 
   const shortLabel = abbreviate(node.label);
   const { displayed: typedLabel, isTyping } = useTypingAnimation(shortLabel, isCenter || (!isDormant && !isTrail));
+  // Icon character: first letter of label, uppercased — mirrors skill tree's icon/label layout
+  const iconChar = (node.label?.[0] || '◆').toUpperCase();
 
   if (isCenter) {
     return (
@@ -163,7 +165,10 @@ function GraphNode({ node, x, y, onClick, focused, highlighted }) {
       data-node-id={node.id}
     >
       <div className={shapeClass}>
-        <span className={labelClass} style={{ fontSize: isSecondary ? 8 : 10 }}>
+        {!isSecondary && (
+          <span className={styles.nodeIconChar}>{iconChar}</span>
+        )}
+        <span className={labelClass} style={{ fontSize: isSecondary ? 8 : 9 }}>
           {typedLabel}
           {isTyping && <span className={styles.cursor} />}
         </span>

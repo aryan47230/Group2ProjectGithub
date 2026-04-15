@@ -1,62 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap');
+@import './refined-neon.css';
+
 :root {
-  /* === Skill Tree palette (app default) === */
-  --bg-primary: #0a0e18;
-  --bg-secondary: #0c1020;
-  --bg-card: #111828;
-  --accent-purple: #a78bfa;
-  --accent-purple-light: #c4b5fd;
-  --accent-blue: #4d9fff;
-  --accent-green: hsl(142, 60%, 40%);
-  --text-primary: #d0d6e0;
-  --text-secondary: #888;
-  --border-color: rgba(80, 160, 255, 0.10);
-  --border-bright: rgba(80, 160, 255, 0.22);
+  /* Legacy background aliases → refined neon */
+  --bg-primary:    var(--rn-void);
+  --bg-secondary:  var(--rn-ink);
+  --bg-tertiary:   var(--rn-paper);
+  --bg-card:       var(--rn-card);
+  --bg-card-hover: var(--rn-card-h);
 
-  /* === Explore (WikiLoop) palette — active on /explore route, scoped via .exploreScope in App.module.css === */
-  --bg-tertiary: #0a0f1a;
-  --bg-card-hover: rgba(12, 18, 35, 0.85);
-  --border-dim: rgba(80, 160, 255, 0.06);
-  --border-medium: rgba(80, 160, 255, 0.12);
+  /* Legacy border aliases */
+  --border-color:   var(--rn-hair-2);
+  --border-dim:     var(--rn-hair);
+  --border-medium:  var(--rn-hair-2);
+  --border-bright:  var(--rn-hair-3);
 
-  --neon-cyan: #00fff2;
-  --neon-blue: #4d9fff;
-  --neon-amber: #ffaa40;
-  --neon-purple: #8b5cf6;
+  /* Legacy neon aliases */
+  --neon-cyan:    var(--rn-cyan);
+  --neon-blue:    var(--rn-blue);
+  --neon-amber:   var(--rn-gold);
+  --neon-purple:  var(--rn-violet);
+  --neon-green:   var(--rn-green);
+  --neon-red:     var(--rn-red);
   --neon-magenta: #f472b6;
-  --neon-green: #34d399;
-  --neon-red: #ff4466;
 
-  --accent-cyan: var(--neon-cyan);
-  --accent-amber: var(--neon-amber);
-  --accent-gold: var(--neon-amber);
-  --accent-red: var(--neon-red);
-  --accent-white: #e2e8f0;
+  /* Legacy "accent-*" aliases — deliberately repoint the purple brand to gold.
+     This single line is what flips the Skill Tree palette from purple to
+     Refined Neon without touching any component file. */
+  --accent-purple:       var(--rn-gold);
+  --accent-purple-light: var(--rn-gold-h);
+  --accent-cyan:  var(--rn-cyan);
+  --accent-blue:  var(--rn-blue);
+  --accent-green: var(--rn-green);
+  --accent-amber: var(--rn-gold);
+  --accent-gold:  var(--rn-gold);
+  --accent-red:   var(--rn-red);
+  --accent-white: var(--rn-txt-0);
 
-  --text-dim: #4a5468;
-  --text-muted: #2a3040;
+  /* Legacy text aliases */
+  --text-primary:   var(--rn-txt-0);
+  --text-secondary: var(--rn-txt-1);
+  --text-dim:       var(--rn-txt-2);
+  --text-muted:     var(--rn-txt-3);
 
-  --app-nav-height: 52px;
-  --topbar-height: 46px;
+  /* Sizing aliases */
+  --app-nav-height: var(--rn-topbar-height);
+  --topbar-height:  var(--rn-subtopbar-height);
 
-  --font-display: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-main: 'Outfit', system-ui, sans-serif;
-}
-
-/* When on /explore, we override palette vars to the deep-space look */
-.exploreScope {
-  --bg-primary: #050810;
-  --bg-secondary: #080c16;
-  --bg-card: rgba(8, 12, 24, 0.8);
-  --accent-blue: var(--neon-blue);
-  --accent-green: var(--neon-green);
-  --accent-purple: var(--neon-purple);
-  --text-secondary: #7a8599;
-  --border-color: var(--border-dim);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  height: 100vh;
-  overflow: hidden;
+  /* Font aliases */
+  --font-display: var(--rn-font-display);
+  --font-mono:    var(--rn-font-mono);
+  --font-main:    var(--rn-font-display);
 }
 
 * {
@@ -65,25 +59,64 @@
   box-sizing: border-box;
 }
 
-/* Ensure hidden attribute always wins regardless of CSS specificity */
+/* hidden attribute always wins */
 [hidden] { display: none !important; }
 
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-main);
+html, body {
+  background: var(--rn-void);
+  color: var(--rn-txt-0);
+  font-family: var(--rn-font-display);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  /* Subtle background atmospherics — faint radial glow from top-left */
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(77, 159, 255, 0.04), transparent 60%),
+    radial-gradient(900px 700px at 85% 100%, rgba(255, 170, 64, 0.03), transparent 55%),
+    var(--rn-void);
+  background-attachment: fixed;
 }
 
 a {
-  color: var(--accent-purple);
+  color: var(--rn-cyan);
   text-decoration: none;
+  transition: color 0.15s;
 }
+a:hover { color: var(--rn-cyan-h); }
 
 button {
   font-family: inherit;
 }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(0, 255, 242, 0.1); border-radius: 4px; }
+/* Selection */
+::selection {
+  background: var(--rn-cyan-glow);
+  color: var(--rn-txt-0);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb {
+  background: var(--rn-hair-2);
+  border-radius: var(--rn-radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--rn-hair-3); }
 ::-webkit-scrollbar-track { background: transparent; }
+
+/* Utility: mono data label */
+.rn-mono-label {
+  font-family: var(--rn-font-mono);
+  font-size: 0.72rem;
+  color: var(--rn-txt-2);
+  letter-spacing: var(--rn-tracked-3);
+  text-transform: uppercase;
+}
+
+/* Utility: hairline rule */
+.rn-hair {
+  height: 1px;
+  background: var(--rn-hair-2);
+}

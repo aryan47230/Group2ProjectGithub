@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Skill Tree — v4 Final</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#03060f;--ink:#070b18;--paper:#0a0f1a;
+  --gold:#ffaa40;--cyan:#00fff2;--blue:#4d9fff;--grey:#5a6a85;
+  --hair:rgba(130,170,220,.07);--hair2:rgba(130,170,220,.14);--hair3:rgba(130,170,220,.26);
+  --t0:#eef2fb;--t1:#9aa7c0;--t2:#556278;--t3:#2e3a4a;
+}
+html,body{min-height:100vh;background:var(--void);color:var(--t0);font-family:'Outfit',system-ui,sans-serif;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba(130,170,220,.077) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 85% 75% at 50% 50%,transparent 45%,rgba(3,6,15,.80) 100%);pointer-events:none;z-index:0}
+
+/* ── Header ── */
+.hdr{position:sticky;top:0;z-index:200;height:52px;background:rgba(10,15,26,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--hair2);display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:20px}
+.hdr-back{display:inline-flex;align-items:center;gap:7px;padding:5px 14px 5px 10px;font:500 11px/1 'Outfit',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);background:transparent;border:1px solid var(--hair2);border-radius:999px;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.hdr-back:hover{color:var(--cyan);border-color:rgba(0,255,242,.32);background:rgba(0,255,242,.06)}
+.hdr-center{text-align:center}
+.hdr-eyebrow{font:500 9px/1 'JetBrains Mono',monospace;color:var(--t2);letter-spacing:.18em;margin-bottom:2px}
+.hdr-title{font-size:14px;font-weight:500;color:var(--gold);letter-spacing:.04em}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.hdr-prog-label{font:500 11px/1 'JetBrains Mono',monospace;color:var(--cyan);letter-spacing:.08em;white-space:nowrap}
+.hdr-track{width:130px;height:2px;background:var(--hair2);border-radius:2px;overflow:hidden}
+.hdr-fill{height:100%;background:linear-gradient(90deg,var(--cyan),rgba(77,159,255,.85));box-shadow:0 0 8px rgba(0,255,242,.28);width:50%}
+
+/* ── Canvas ── */
+.canvas{position:relative;z-index:1;display:flex;justify-content:flex-start;align-items:flex-start;padding:44px 48px 64px;overflow-x:auto}
+#tree{display:block;overflow:visible;user-select:none}
+
+/* ── Node CSS hover ── */
+.nd{transition:opacity .18s ease}
+.nd.dim{opacity:.15}
+
+/* ── Panel ── */
+#panel{position:fixed;top:0;left:0;pointer-events:none;z-index:500;opacity:0;transition:opacity .12s ease;will-change:transform}
+#panel.on{opacity:1}
+.pbox{background:rgba(7,11,24,.97);border:1px solid var(--hair3);border-radius:10px;padding:14px 17px;min-width:205px;max-width:268px;box-shadow:0 6px 36px rgba(0,0,0,.72),inset 0 0 0 1px rgba(130,170,220,.04);backdrop-filter:blur(10px)}
+.ptop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
+.pname{font-size:13px;font-weight:600;color:var(--t0);letter-spacing:.02em;line-height:1.3}
+.pbadge{font:500 9px/1 'JetBrains Mono',monospace;letter-spacing:.12em;padding:3px 7px;border-radius:999px;border:1px solid;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.b-apex{color:#ffaa40;border-color:rgba(255,170,64,.35);background:rgba(255,170,64,.07)}
+.b-done{color:#00fff2;border-color:rgba(0,255,242,.35);background:rgba(0,255,242,.07)}
+.b-open{color:#4d9fff;border-color:rgba(77,159,255,.35);background:rgba(77,159,255,.07)}
+.b-lock{color:#5a6a85;border-color:rgba(90,106,133,.35);background:rgba(90,106,133,.07)}
+.pdiv{height:1px;background:var(--hair2);margin:8px 0}
+.pdesc{font-size:11.5px;color:var(--t1);line-height:1.65;letter-spacing:.01em;margin-bottom:8px}
+.pmeta{font:400 9.5px/1.75 'JetBrains Mono',monospace;letter-spacing:.06em;color:var(--t2)}
+.pmeta .met{color:#00fff2}
+.pmeta .miss{color:rgba(255,68,102,.75)}
+.pmeta .lbl{color:var(--t3);letter-spacing:.12em}
+.pmeta .tip{color:#4a5a6a}
+
+@keyframes amb{0%,100%{opacity:.12}50%{opacity:.30}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <button class="hdr-back">← Back</button>
+  <div class="hdr-center"><div class="hdr-eyebrow">TOPIC</div><div class="hdr-title">Machine Learning</div></div>
+  <div class="hdr-right"><span class="hdr-prog-label">07/14 · 50%</span><div class="hdr-track"><div class="hdr-fill"></div></div></div>
+</header>
+
+<div class="canvas"><svg id="tree"></svg></div>
+
+<div id="panel"><div class="pbox" id="pbox">
+  <div class="ptop"><div class="pname" id="pName"></div><div class="pbadge" id="pBadge"></div></div>
+  <div class="pdiv"></div>
+  <div class="pdesc" id="pDesc"></div>
+  <div class="pmeta" id="pMeta"></div>
+</div></div>
+
+<script>
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const SKILLS = [
+  {name:"ML Expert",           lv:5, req:[],                                         icon:"✦", desc:"Master of machine learning — design, train, and deploy state-of-the-art systems end-to-end.",tip:"This is your final goal."},
+  {name:"Deep Learning",       lv:4, req:["Neural Networks","Math Foundations"],     icon:"∂", desc:"Deep architectures: CNNs, RNNs, Transformers, and diffusion models.",tip:"Understand backprop and gradient flow deeply."},
+  {name:"Applied ML",          lv:4, req:["Feature Engineering","Model Evaluation"], icon:"λ", desc:"End-to-end ML pipelines: ingestion, preprocessing, model selection, serving, monitoring.",tip:"Learn MLflow and deployment patterns."},
+  {name:"Neural Networks",     lv:3, req:["Linear Algebra","Python"],                icon:"◈", desc:"Forward/backpropagation, activation functions, loss landscapes, and network architectures.",tip:"Implement a net from scratch at least once."},
+  {name:"Feature Engineering", lv:3, req:["Statistics","Python"],                   icon:"∇", desc:"Transform raw data: encoding, scaling, dimensionality reduction, and feature selection.",tip:"Feature quality beats model complexity."},
+  {name:"Model Evaluation",    lv:3, req:["Statistics","Python"],                   icon:"μ", desc:"Metrics, cross-validation, bias–variance tradeoff, calibration, and A/B testing.",tip:"Never trust a single metric."},
+  {name:"Linear Algebra",      lv:2, req:["Calculus"],                              icon:"∑", desc:"Vectors, matrices, eigendecomposition, SVD, and linear transformations.",tip:"3Blue1Brown's series is the best entry point."},
+  {name:"Math Foundations",    lv:2, req:["Calculus","Probability"],                icon:"∫", desc:"Optimization, Lagrange multipliers, information theory, and gradient descent math.",tip:"Understanding loss surfaces changes everything."},
+  {name:"Statistics",          lv:2, req:["Probability"],                           icon:"σ", desc:"Distributions, MLE, hypothesis testing, confidence intervals, Bayesian inference.",tip:"Stats is the foundation of model evaluation."},
+  {name:"Python",              lv:2, req:["CS Basics"],                             icon:"ƒ", desc:"NumPy, Pandas, Matplotlib, scikit-learn, PyTorch — vectorised, idiomatic code.",tip:"Write clean vectorised code from the start."},
+  {name:"Calculus",            lv:1, req:[],                                        icon:"∂", desc:"Derivatives, chain rule, multivariable calculus, and gradient computation.",tip:"The chain rule is literally backpropagation."},
+  {name:"Probability",         lv:1, req:[],                                        icon:"π", desc:"Probability theory, Bayes' theorem, random variables, expectations, and distributions.",tip:"Think in distributions, not point estimates."},
+  {name:"CS Basics",           lv:1, req:[],                                        icon:"01",desc:"Programming fundamentals, complexity analysis, data structures, and algorithms.",tip:"Efficient code matters at scale."},
+  {name:"Logic",               lv:1, req:[],                                        icon:"∧∨",desc:"Boolean algebra, propositional logic, set theory, and formal reasoning.",tip:"Underpins everything from code to proofs."},
+];
+
+const DONE = new Set(["Calculus","Probability","CS Basics","Logic","Python","Statistics","Linear Algebra"]);
+
+// ─── Connectivity algorithm ───────────────────────────────────────────────────
+// For every non-apex node that no higher-level node requires, connect it to the
+// positionally-nearest node in the level above. Pure positional maths — no AI.
+const augReq = {};
+for (const s of SKILLS) augReq[s.name] = new Set(s.req);
+
+const byLv = {};
+for (const s of SKILLS) (byLv[s.lv]||=[]).push(s);
+const maxLv = Math.max(...SKILLS.map(s=>s.lv));
+
+for (let lv=1; lv<maxLv; lv++){
+  const col=byLv[lv]||[], next=byLv[lv+1]||[];
+  if(!next.length) continue;
+  col.forEach((node,i)=>{
+    const hasOut=next.some(n=>augReq[n.name].has(node.name));
+    if(!hasOut){
+      const t=col.length>1?i/(col.length-1):0.5;
+      const ti=Math.round(t*(next.length-1));
+      augReq[next[Math.min(ti,next.length-1)].name].add(node.name);
+    }
+  });
+}
+
+const unlocked=name=>{const r=[...augReq[name]||[]];return r.length===0||r.every(x=>DONE.has(x));};
+
+// ─── Jitter ───────────────────────────────────────────────────────────────────
+// FNV-1a hash of the edge key → deterministic vertical offset for control points.
+// Keeps edges stable across re-renders while feeling non-mechanical.
+function jitter(from,to,range=20){
+  const seed=from+'|'+to;
+  let h=0x811c9dc5;
+  for(let i=0;i<seed.length;i++){h=(h^seed.charCodeAt(i))>>>0;h=Math.imul(h,0x01000193)>>>0;}
+  return ((h%(range*2+1))-range);
+}
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+const COL_GAP=220, NODE_GAP=145, PAD_L=85, PAD_V=75;
+const APEX_R=48, DONE_R=40, OPEN_R=36, LOCK_R=30;
+
+const maxPerCol=Math.max(...Object.values(byLv).map(a=>a.length));
+const SVG_H=(maxPerCol-1)*NODE_GAP+PAD_V*2;
+const SVG_W=PAD_L+(maxLv-1)*COL_GAP+PAD_L+130;
+
+const pos={};
+for(let lv=1;lv<=maxLv;lv++){
+  const col=byLv[lv]||[];
+  const x=PAD_L+(lv-1)*COL_GAP;
+  const colH=(col.length-1)*NODE_GAP;
+  const startY=SVG_H/2-colH/2;
+  col.forEach((s,i)=>{pos[s.name]={x,y:startY+i*NODE_GAP};});
+}
+
+// ─── SVG ──────────────────────────────────────────────────────────────────────
+const NS='http://www.w3.org/2000/svg';
+const mk=(tag,attrs={})=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);return e;};
+const svg=document.getElementById('tree');
+svg.setAttribute('width',SVG_W);svg.setAttribute('height',SVG_H);svg.setAttribute('viewBox',`0 0 ${SVG_W} ${SVG_H}`);
+
+// Defs
+const defs=mk('defs');
+const pat=mk('pattern',{id:'dots',width:'30',height:'30',patternUnits:'userSpaceOnUse'});
+pat.appendChild(mk('circle',{cx:'0.5',cy:'0.5',r:'.65',fill:'rgba(130,170,220,0.08)'}));
+defs.appendChild(pat);
+
+[['fA','rgba(255,175,70,0.30)','rgba(255,120,10,0.04)'],
+ ['fD','rgba(0,255,242,0.18)', 'rgba(0,255,242,0.02)'],
+ ['fO','rgba(77,159,255,0.12)','rgba(77,159,255,0.01)'],
+ ['fL','rgba(35,48,68,0.45)',  'rgba(10,15,26,0.20)']
+].forEach(([id,c0,c1])=>{
+  const g=mk('radialGradient',{id,cx:'50%',cy:'28%',r:'68%'});
+  g.appendChild(mk('stop',{offset:'0%','stop-color':c0}));
+  g.appendChild(mk('stop',{offset:'100%','stop-color':c1}));
+  defs.appendChild(g);
+});
+
+[['glA',9,'#ffaa40'],['glD',5,'#00fff2'],['glO',4,'#4d9fff'],['glH',10,'#00fff2']
+].forEach(([id,std,col])=>{
+  const f=mk('filter',{id,x:'-80%',y:'-80%',width:'260%',height:'260%'});
+  f.appendChild(mk('feGaussianBlur',{in:'SourceAlpha',stdDeviation:String(std),result:'b'}));
+  f.appendChild(mk('feFlood',{'flood-color':col,result:'c'}));
+  f.appendChild(mk('feComposite',{in:'c',in2:'b',operator:'in',result:'g'}));
+  const m=mk('feMerge');m.appendChild(mk('feMergeNode',{in:'g'}));m.appendChild(mk('feMergeNode',{in:'SourceGraphic'}));
+  f.appendChild(m);defs.appendChild(f);
+});
+
+svg.appendChild(defs);
+svg.appendChild(mk('rect',{width:SVG_W,height:SVG_H,fill:'url(#dots)'}));
+
+// ─── Edges ────────────────────────────────────────────────────────────────────
+const edgeLayer=mk('g');
+const EDGES=[];
+
+for(const skill of SKILLS){
+  const sp=pos[skill.name];if(!sp)continue;
+  const isDoneSk=DONE.has(skill.name);
+  for(const req of [...augReq[skill.name]]){
+    const rp=pos[req];if(!rp)continue;
+    const isDoneReq=DONE.has(req);
+    const bothDone=isDoneSk&&isDoneReq;
+    const isLocked=!unlocked(skill.name);
+
+    const rSrc=isDoneReq?DONE_R:(unlocked(req)?OPEN_R:LOCK_R);
+    const rDst=skill.lv===maxLv?APEX_R:(isDoneSk?DONE_R:(isLocked?LOCK_R:OPEN_R));
+
+    const x1=rp.x+rSrc, y1=rp.y;
+    const x2=sp.x-rDst, y2=sp.y;
+    const cp=(x2-x1)*0.48;
+    // Deterministic natural jitter — offsets the two cubic control points independently
+    const j1=jitter(skill.name,req,18);
+    const j2=jitter(req,skill.name,18);
+    const d=`M ${x1},${y1} C ${x1+cp},${y1+j1} ${x2-cp},${y2+j2} ${x2},${y2}`;
+
+    const e=mk('path',{d,fill:'none','pointer-events':'none'});
+    if(bothDone){e.setAttribute('stroke','rgba(0,255,242,0.58)');e.setAttribute('stroke-width','2');e.style.filter='drop-shadow(0 0 3px rgba(0,255,242,0.44))';}
+    else if(isLocked){e.setAttribute('stroke','rgba(80,95,115,0.14)');e.setAttribute('stroke-width','1');}
+    else{e.setAttribute('stroke','rgba(77,159,255,0.15)');e.setAttribute('stroke-width','1.5');}
+
+    EDGES.push({el:e,from:skill.name,to:req,bothDone,isLocked});
+    edgeLayer.appendChild(e);
+  }
+}
+svg.appendChild(edgeLayer);
+
+// ─── Nodes ────────────────────────────────────────────────────────────────────
+const nodeLayer=mk('g');
+const NM=new Map(); // name → { g, skill, isApex, isDone, isLock }
+
+for(const skill of SKILLS){
+  const p=pos[skill.name];if(!p)continue;
+  const isApex=skill.lv===maxLv;
+  const isDone=DONE.has(skill.name);
+  const isLock=!unlocked(skill.name);
+  const r=isApex?APEX_R:isDone?DONE_R:isLock?LOCK_R:OPEN_R;
+
+  let sc,fi,gi,tc,sw;
+  if(isApex) {sc='#ffaa40';fi='fA';gi='glA';tc='#ffaa40';sw='2.5';}
+  else if(isDone){sc='#00fff2';fi='fD';gi='glD';tc='#00fff2';sw='1.8';}
+  else if(isLock){sc='#3d4e62';fi='fL';gi='';  tc='#3d4e62';sw='1.0';}
+  else          {sc='#4d9fff';fi='fO';gi='glO';tc='#6aacff';sw='1.5';}
+
+  const g=mk('g',{transform:`translate(${p.x},${p.y})`,'data-name':skill.name});
+  g.className='nd';
+
+  // Transparent oversized hit circle — prevents child SVG elements from
+  // swallowing pointer events and causing spurious mouseenter/mouseleave
+  g.appendChild(mk('circle',{r:String(r+16),fill:'transparent',stroke:'none'}));
+
+  // Ambient ring — non-apex, non-locked only
+  if(!isApex&&!isLock){
+    const ring=mk('circle',{r:String(r+12),fill:'none',stroke:sc,'stroke-width':'0.8','pointer-events':'none'});
+    ring.style.animation=`amb ${3+Math.random().toFixed(1)}s ease-in-out infinite ${(Math.random()*2).toFixed(1)}s`;
+    ring.style.opacity='0';
+    g.appendChild(ring);
+  }
+
+  // Main circle
+  const circ=mk('circle',{r:String(r),fill:`url(#${fi})`,stroke:sc,'stroke-width':sw,'pointer-events':'none'});
+  if(gi)circ.setAttribute('filter',`url(#${gi})`);
+  g.appendChild(circ);
+
+  // Apex inner ring — solid bold, no dash, no animation
+  if(isApex)g.appendChild(mk('circle',{r:String(r-9),fill:'none',stroke:'#ffaa40','stroke-width':'1.5',opacity:'.40','pointer-events':'none'}));
+
+  // Icon upper-half
+  const icon=skill.icon||'◆';
+  const iconEl=mk('text',{x:'0',y:isApex?'-10':'-7','text-anchor':'middle','dominant-baseline':'middle',fill:tc,'font-family':"'JetBrains Mono',monospace",'font-size':isApex?'17':icon.length>2?'11.5':'15','font-weight':'600','pointer-events':'none'});
+  iconEl.textContent=icon;g.appendChild(iconEl);
+
+  // Short label lower-half (inside node)
+  const short=skill.name.length>8?skill.name.slice(0,7)+'…':skill.name;
+  const inLbl=mk('text',{x:'0',y:isApex?'12':'10','text-anchor':'middle','dominant-baseline':'middle',fill:tc,'font-family':"'Outfit',sans-serif",'font-size':isApex?'9':'8','font-weight':'500','letter-spacing':'.04em',opacity:'.70','pointer-events':'none'});
+  inLbl.textContent=short;g.appendChild(inLbl);
+
+  // External label
+  if(isApex){
+    const lbl=mk('text',{x:String(r+15),y:'1','text-anchor':'start','dominant-baseline':'middle',fill:'#ffaa40','font-family':"'Outfit',sans-serif",'font-size':'13.5','font-weight':'600','letter-spacing':'.04em','pointer-events':'none'});
+    lbl.textContent=skill.name;g.appendChild(lbl);
+  } else {
+    const lc=isDone?'#aabbd0':isLock?'#252f3c':'#7a94b8';
+    // Simple one-line label below
+    const lbl=mk('text',{x:'0',y:String(r+16),'text-anchor':'middle','dominant-baseline':'hanging',fill:lc,'font-family':"'Outfit',sans-serif",'font-size':'11','font-weight':isDone?'500':'400','letter-spacing':'.025em','pointer-events':'none'});
+    lbl.textContent=skill.name;g.appendChild(lbl);
+  }
+
+  // Completed check badge
+  if(isDone&&!isApex){
+    const bx=r*.62,by=-r*.62;
+    g.appendChild(mk('circle',{cx:String(bx),cy:String(by),r:'7.5',fill:'#070b18',stroke:'#00fff2','stroke-width':'1.1','pointer-events':'none'}));
+    const ck=mk('text',{x:String(bx),y:String(by+.5),'text-anchor':'middle','dominant-baseline':'middle',fill:'#00fff2','font-family':"'JetBrains Mono',monospace",'font-size':'9','font-weight':'700','pointer-events':'none'});
+    ck.textContent='✓';g.appendChild(ck);
+  }
+
+  NM.set(skill.name,{g,skill,isApex,isDone,isLock,r,sc});
+  nodeLayer.appendChild(g);
+}
+svg.appendChild(nodeLayer);
+
+// ─── Hover logic ──────────────────────────────────────────────────────────────
+// collectChain: BFS backward through prerequisites (stopping at completed nodes)
+// AND forward toward apex — giving full context of the skill's place in the tree.
+function collectChain(startName){
+  const result=new Set();
+
+  // Backward — toward prerequisites
+  const qB=[startName],visB=new Set();
+  while(qB.length){
+    const cur=qB.shift();if(visB.has(cur))continue;visB.add(cur);
+    for(const ed of EDGES){
+      if(ed.from===cur){
+        result.add(ed);
+        if(!DONE.has(ed.to)&&!visB.has(ed.to))qB.push(ed.to);
+      }
+    }
+  }
+
+  // Forward — toward apex
+  const qF=[startName],visF=new Set();
+  while(qF.length){
+    const cur=qF.shift();if(visF.has(cur))continue;visF.add(cur);
+    for(const ed of EDGES){
+      if(ed.to===cur&&!visF.has(ed.from)){result.add(ed);qF.push(ed.from);}
+    }
+  }
+  return result;
+}
+
+function resetEdges(){
+  for(const ed of EDGES){
+    if(ed.bothDone){ed.el.setAttribute('stroke','rgba(0,255,242,0.58)');ed.el.setAttribute('stroke-width','2');ed.el.style.filter='drop-shadow(0 0 3px rgba(0,255,242,0.44))';ed.el.style.opacity='';}
+    else if(ed.isLocked){ed.el.setAttribute('stroke','rgba(80,95,115,0.14)');ed.el.setAttribute('stroke-width','1');ed.el.style.filter='';ed.el.style.opacity='';}
+    else{ed.el.setAttribute('stroke','rgba(77,159,255,0.15)');ed.el.setAttribute('stroke-width','1.5');ed.el.style.filter='';ed.el.style.opacity='';}
+  }
+}
+
+const panel=document.getElementById('panel');
+const pbox=document.getElementById('pbox');
+
+function posPanel(cx,cy){
+  const pw=pbox.offsetWidth||230,ph=pbox.offsetHeight||140;
+  const vw=window.innerWidth,vh=window.innerHeight;
+  let x=cx+22,y=cy-ph/2;
+  if(x+pw>vw-8)x=cx-pw-22;
+  if(y<8)y=8;if(y+ph>vh-8)y=vh-ph-8;
+  panel.style.transform=`translate(${x}px,${y}px)`;
+}
+
+for(const[name,{g,skill,isApex,isDone,isLock}]of NM){
+  g.addEventListener('mouseenter',ev=>{
+    // Dim all other nodes
+    for(const[n,{g:og}]of NM)if(n!==name)og.classList.add('dim');
+
+    // Highlight chain
+    const chain=collectChain(name);
+    for(const ed of EDGES){
+      if(chain.has(ed)){
+        ed.el.setAttribute('stroke',ed.bothDone?'rgba(0,255,242,0.95)':'rgba(77,159,255,0.88)');
+        ed.el.setAttribute('stroke-width','2.5');
+        ed.el.style.filter=ed.bothDone?'drop-shadow(0 0 6px rgba(0,255,242,0.62))':'drop-shadow(0 0 5px rgba(77,159,255,0.48))';
+        ed.el.style.opacity='1';
+      } else {
+        ed.el.style.opacity='0.04';
+      }
+    }
+
+    // Panel
+    document.getElementById('pName').textContent=skill.name;
+    const b=document.getElementById('pBadge');
+    if(isApex){b.textContent='★ FINAL';b.className='pbadge b-apex';}
+    else if(isDone){b.textContent='✓ DONE';b.className='pbadge b-done';}
+    else if(isLock){b.textContent='⊘ LOCKED';b.className='pbadge b-lock';}
+    else{b.textContent='◉ READY';b.className='pbadge b-open';}
+
+    pbox.style.borderColor=isApex?'rgba(255,170,64,.28)':isDone?'rgba(0,255,242,.22)':isLock?'rgba(90,106,133,.22)':'rgba(77,159,255,.22)';
+    document.getElementById('pDesc').textContent=skill.desc;
+
+    const lines=[];
+    const reqs=[...augReq[skill.name]];
+    if(reqs.length){
+      lines.push(`<span class="lbl">REQUIRES</span>`);
+      reqs.forEach(r=>{const m=DONE.has(r);lines.push(`<span class="${m?'met':'miss'}">${m?'✓':'×'} ${r}</span>`);});
+    } else lines.push(`<span class="lbl">FOUNDATION — no prerequisites</span>`);
+    if(skill.tip)lines.push(`<br><span class="lbl">TIP</span><br><span class="tip">${skill.tip}</span>`);
+    document.getElementById('pMeta').innerHTML=lines.join('<br>');
+
+    panel.classList.add('on');posPanel(ev.clientX,ev.clientY);
+  });
+
+  g.addEventListener('mousemove',ev=>{if(panel.classList.contains('on'))posPanel(ev.clientX,ev.clientY);});
+
+  g.addEventListener('mouseleave',()=>{
+    for(const[,{g:og}]of NM)og.classList.remove('dim');
+    resetEdges();
+    panel.classList.remove('on');
+  });
+}
+</script>
+</body>
+</html>

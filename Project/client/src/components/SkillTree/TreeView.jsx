@@ -35,10 +35,20 @@ export default function TreeView() {
   return (
     <div className={styles.treeView}>
       <div className={styles.treeHeader}>
-        <button className={styles.backBtn} onClick={closeTree}>← Back</button>
-        <h2 className={styles.treeTitle}>{currentTopic}</h2>
+        <button className={styles.backBtn} onClick={closeTree}>
+          <span className={styles.backArrow}>←</span>
+          <span>Back</span>
+        </button>
+
+        <div className={styles.treeTitleWrap}>
+          <span className={styles.treeEyebrow}>TOPIC</span>
+          <h2 className={styles.treeTitle}>{currentTopic}</h2>
+        </div>
+
         <div className={styles.progressWrap}>
-          <span className={styles.progressLabel}>{done} / {total}</span>
+          <span className={styles.progressLabel}>
+            {done.toString().padStart(2, '0')}/{total.toString().padStart(2, '0')} · {Math.round(pct)}%
+          </span>
           <div className={styles.progressTrack}>
             <div className={styles.progressFill} style={{ width: `${pct}%` }} />
           </div>

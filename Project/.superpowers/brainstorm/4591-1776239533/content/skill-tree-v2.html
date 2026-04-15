@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Tree — v2 Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --void:    #03060f;
+  --ink:     #070b18;
+  --paper:   #0a0f1a;
+  --gold:        #ffaa40;
+  --gold-glow:   rgba(255,170,64,0.20);
+  --gold-strong: rgba(255,170,64,0.50);
+  --cyan:        #00fff2;
+  --cyan-dim:    rgba(0,255,242,0.55);
+  --cyan-glow:   rgba(0,255,242,0.22);
+  --cyan-strong: rgba(0,255,242,0.55);
+  --blue:        #4d9fff;
+  --blue-dim:    rgba(77,159,255,0.18);
+  --grey:        #5a6a85;
+  --red-dim:     rgba(255,68,102,0.55);
+  --hair:    rgba(130,170,220,0.07);
+  --hair-2:  rgba(130,170,220,0.14);
+  --hair-3:  rgba(130,170,220,0.26);
+  --txt-0:   #eef2fb;
+  --txt-1:   #9aa7c0;
+  --txt-2:   #556278;
+  --txt-3:   #2e3a4a;
+}
+
+html, body {
+  background: var(--void);
+  color: var(--txt-0);
+  font-family: 'Outfit', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Dot grid + vignette ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(130,170,220,0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 40%, rgba(3,6,15,0.75) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Page header ── */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,15,26,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hair-2);
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px 5px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--txt-2);
+  border: 1px solid var(--hair-2);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.back-btn:hover { color: var(--cyan); border-color: rgba(0,255,242,0.35); background: var(--cyan-glow); }
+.back-arrow { font-family: 'JetBrains Mono', monospace; }
+
+.page-title-wrap { text-align: center; }
+.page-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--txt-2);
+  letter-spacing: 0.18em;
+  margin-bottom: 1px;
+}
+.page-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+
+.progress-wrap { display: flex; align-items: center; gap: 10px; }
+.progress-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.progress-track {
+  width: 140px; height: 2px;
+  background: var(--hair-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), rgba(77,159,255,0.8));
+  box-shadow: 0 0 10px var(--cyan-glow);
+  width: 50%;
+}
+
+/* ── Tree canvas ── */
+.tree-canvas {
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.skill-svg { display: block; overflow: visible; user-select: none; }
+
+/* ── Hover info panel ── */
+.hover-panel {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  will-change: transform;
+}
+.hover-panel.visible { opacity: 1; }
+
+.hover-panel-inner {
+  background: rgba(7,11,24,0.96);
+  border: 1px solid var(--hair-3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  min-width: 210px;
+  max-width: 270px;
+  box-shadow:
+    0 4px 32px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(130,170,220,0.06) inset;
+  backdrop-filter: blur(8px);
+}
+
+.hp-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.hp-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-0);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+.hp-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 7px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.hp-badge.done     { color: var(--cyan); border-color: rgba(0,255,242,0.35); background: rgba(0,255,242,0.06); }
+.hp-badge.unlocked { color: var(--blue); border-color: rgba(77,159,255,0.35); background: rgba(77,159,255,0.06); }
+.hp-badge.locked   { color: var(--grey); border-color: rgba(90,106,133,0.35); background: rgba(90,106,133,0.06); }
+.hp-badge.apex     { color: var(--gold); border-color: rgba(255,170,64,0.35); background: rgba(255,170,64,0.06); }
+
+.hp-divider {
+  height: 1px;
+  background: var(--hair-2);
+  margin: 8px 0;
+}
+
+.hp-desc {
+  font-size: 11.5px;
+  color: var(--txt-1);
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  margin-bottom: 8px;
+}
+
+.hp-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--txt-2);
+  line-height: 1.7;
+}
+.hp-meta .req-done   { color: var(--cyan); }
+.hp-meta .req-missing { color: rgba(255,68,102,0.7); }
+.hp-meta .meta-label  { color: var(--txt-3); letter-spacing: 0.12em; }
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 24px 52px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--txt-2);
+  letter-spacing: 0.12em;
+}
+.legend-swatch {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+.legend-line {
+  width: 26px; height: 2px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Pulse keyframe (nodes only, subtle) ── */
+@keyframes ambient-pulse {
+  0%, 100% { opacity: 0.14; }
+  50%       { opacity: 0.35; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="page-header">
+  <button class="back-btn"><span class="back-arrow">←</span> Back</button>
+  <div class="page-title-wrap">
+    <div class="page-eyebrow">TOPIC</div>
+    <div class="page-title">Machine Learning</div>
+  </div>
+  <div class="progress-wrap">
+    <span class="progress-label">07/14 · 50%</span>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+</header>
+
+<!-- SVG Tree -->
+<div class="tree-canvas">
+  <svg class="skill-svg" id="skillSvg" width="820" height="920" viewBox="0 0 820 920"></svg>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-swatch" style="border-color:#ffaa40;background:rgba(255,170,64,0.14);box-shadow:0 0 8px rgba(255,170,64,0.5);"></div>
+    FINAL NODE
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="border-color:#00fff2;background:rgba(0,255,242,0.08);box-shadow:0 0 6px rgba(0,255,242,0.35);"></div>
+    COMPLETED
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="border-color:#4d9fff;background:rgba(77,159,255,0.06);"></div>
+    UNLOCKED
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="border-color:#5a6a85;background:transparent;opacity:0.45;"></div>
+    LOCKED
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:rgba(0,255,242,0.65);box-shadow:0 0 5px rgba(0,255,242,0.45);"></div>
+    COMPLETED PATH
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:rgba(77,159,255,0.18);"></div>
+    AVAILABLE PATH
+  </div>
+</div>
+
+<!-- Hover Panel -->
+<div class="hover-panel" id="hoverPanel">
+  <div class="hover-panel-inner" id="hoverInner" style="border-color: var(--hair-3);">
+    <div class="hp-top">
+      <div class="hp-name" id="hpName"></div>
+      <div class="hp-badge" id="hpBadge"></div>
+    </div>
+    <div class="hp-divider"></div>
+    <div class="hp-desc" id="hpDesc"></div>
+    <div class="hp-meta" id="hpMeta"></div>
+  </div>
+</div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs = {}) => {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+};
+
+// ─── Skill data (no emojis — all Unicode math/technical symbols) ─────────────
+// Symbols used: ✦ ◆ ∂ λ ◈ ∇ μ ∑ ∫ σ ƒ ∂ P π 01 ∧∨
+// All render cleanly in JetBrains Mono / system fonts
+const skills = [
+  // ── Apex — level 5 ──
+  { name: "ML Expert", level: 5, requires: ["Deep Learning", "Applied ML"],
+    icon: "✦", desc: "Master of machine learning — capable of designing, training, and deploying state-of-the-art systems end-to-end.",
+    tip: "This is your final goal." },
+
+  // ── Level 4 ──
+  { name: "Deep Learning", level: 4, requires: ["Neural Networks", "Math Foundations"],
+    icon: "∂", desc: "Design and train deep architectures: CNNs, RNNs, Transformers, and diffusion models.",
+    tip: "Focus on backpropagation and gradient flow." },
+  { name: "Applied ML", level: 4, requires: ["Feature Engineering", "Model Evaluation"],
+    icon: "λ", desc: "Build end-to-end ML pipelines: ingestion, preprocessing, model selection, serving, and monitoring.",
+    tip: "Learn MLflow and deployment patterns." },
+
+  // ── Level 3 (3 nodes) ──
+  { name: "Neural Networks", level: 3, requires: ["Linear Algebra", "Python"],
+    icon: "◈", desc: "Understand forward/backpropagation, activation functions, loss landscapes, and network architectures.",
+    tip: "Implement a network from scratch first." },
+  { name: "Feature Engineering", level: 3, requires: ["Statistics", "Python"],
+    icon: "∇", desc: "Transform raw data into meaningful features — encoding, scaling, dimensionality reduction.",
+    tip: "Feature quality beats model complexity." },
+  { name: "Model Evaluation", level: 3, requires: ["Statistics", "Python"],
+    icon: "μ", desc: "Metrics, cross-validation, bias–variance tradeoff, calibration, and A/B testing.",
+    tip: "Never trust a single metric." },
+
+  // ── Level 2 (4 nodes) ──
+  { name: "Linear Algebra", level: 2, requires: ["Calculus"],
+    icon: "∑", desc: "Vectors, matrices, eigendecomposition, SVD, and linear transformations — the language of ML.",
+    tip: "3Blue1Brown's Essence of Linear Algebra is excellent." },
+  { name: "Math Foundations", level: 2, requires: ["Calculus", "Probability"],
+    icon: "∫", desc: "Optimization, Lagrange multipliers, information theory, and the math behind gradient descent.",
+    tip: "Understanding loss surfaces is key." },
+  { name: "Statistics", level: 2, requires: ["Probability"],
+    icon: "σ", desc: "Distributions, MLE, hypothesis testing, confidence intervals, and Bayesian inference.",
+    tip: "Statistics is the foundation of model evaluation." },
+  { name: "Python", level: 2, requires: ["CS Basics"],
+    icon: "ƒ", desc: "Python for data science: NumPy, Pandas, Matplotlib, scikit-learn, PyTorch, and Jupyter.",
+    tip: "Write clean, vectorized code from the start." },
+
+  // ── Level 1 — foundations (4 nodes) ──
+  { name: "Calculus", level: 1, requires: [],
+    icon: "∂", desc: "Derivatives, chain rule, multivariable calculus, and gradient computation.",
+    tip: "The chain rule is literally backpropagation." },
+  { name: "Probability", level: 1, requires: [],
+    icon: "π", desc: "Probability theory, Bayes' theorem, random variables, expectations, and distributions.",
+    tip: "Think in distributions, not point estimates." },
+  { name: "CS Basics", level: 1, requires: [],
+    icon: "01", desc: "Programming fundamentals, complexity analysis, data structures, and algorithms.",
+    tip: "Efficient code matters at scale." },
+  { name: "Logic", level: 1, requires: [],
+    icon: "∧∨", desc: "Boolean algebra, propositional logic, set theory, and formal reasoning.",
+    tip: "Underpins everything from code to proofs." },
+];
+
+// Completed set
+const completed = new Set(["Calculus", "Probability", "CS Basics", "Logic", "Python", "Statistics", "Linear Algebra"]);
+
+const isUnlocked = (name) => {
+  const s = skills.find(x => x.name === name);
+  if (!s || s.requires.length === 0) return true;
+  return s.requires.every(r => completed.has(r));
+};
+
+// ─── Layout ──────────────────────────────────────────────────────────────────
+const W = 820, padTop = 70, levelGap = 155, maxLevel = 5;
+const totalH = padTop + (maxLevel - 1) * levelGap + 80 + 60;
+
+const levels = {};
+for (const s of skills) (levels[s.level] ||= []).push(s);
+
+const pos = {};
+for (let lvl = 1; lvl <= maxLevel; lvl++) {
+  const row = levels[lvl] || [];
+  const y = padTop + (maxLevel - lvl) * levelGap;
+  row.forEach((s, i) => {
+    pos[s.name] = { x: (W / (row.length + 1)) * (i + 1), y };
+  });
+}
+
+// ─── SVG setup ───────────────────────────────────────────────────────────────
+const svg = document.getElementById('skillSvg');
+svg.setAttribute('height', totalH);
+svg.setAttribute('viewBox', `0 0 ${W} ${totalH}`);
+
+// DEFS
+const defs = mk('defs');
+
+// Dot pattern
+const pat = mk('pattern', { id:'dots', x:'0', y:'0', width:'30', height:'30', patternUnits:'userSpaceOnUse' });
+pat.appendChild(mk('circle', { cx:'0.5', cy:'0.5', r:'0.65', fill:'rgba(130,170,220,0.08)' }));
+defs.appendChild(pat);
+
+// Radial fills for each state
+const mkRadial = (id, c1, c2) => {
+  const g = mk('radialGradient', { id, cx:'50%', cy:'30%', r:'65%', gradientUnits:'objectBoundingBox' });
+  g.appendChild(mk('stop', { offset:'0%', 'stop-color': c1 }));
+  g.appendChild(mk('stop', { offset:'100%', 'stop-color': c2 }));
+  return g;
+};
+defs.appendChild(mkRadial('fillApex',    'rgba(255,180,80,0.30)', 'rgba(255,130,20,0.04)'));
+defs.appendChild(mkRadial('fillDone',    'rgba(0,255,242,0.18)',  'rgba(0,255,242,0.02)'));
+defs.appendChild(mkRadial('fillUnlock',  'rgba(77,159,255,0.12)', 'rgba(77,159,255,0.01)'));
+defs.appendChild(mkRadial('fillLocked',  'rgba(40,55,80,0.40)',   'rgba(10,15,26,0.20)'));
+
+// Glow filters
+const mkGlowFilter = (id, std, r, g, b) => {
+  const f = mk('filter', { id, x:'-80%', y:'-80%', width:'260%', height:'260%', 'color-interpolation-filters':'sRGB' });
+  f.appendChild(mk('feGaussianBlur', { in:'SourceAlpha', stdDeviation: String(std), result:'blur' }));
+  f.appendChild(mk('feFlood', { 'flood-color': `rgb(${r},${g},${b})`, 'flood-opacity':'0.8', result:'col' }));
+  f.appendChild(mk('feComposite', { in:'col', in2:'blur', operator:'in', result:'glow' }));
+  const m = mk('feMerge');
+  m.appendChild(mk('feMergeNode', { in:'glow' }));
+  m.appendChild(mk('feMergeNode', { in:'SourceGraphic' }));
+  f.appendChild(m);
+  return f;
+};
+defs.appendChild(mkGlowFilter('gf-apex',   9,  255, 170, 64));
+defs.appendChild(mkGlowFilter('gf-done',   6,  0, 255, 242));
+defs.appendChild(mkGlowFilter('gf-unlock', 4,  77, 159, 255));
+defs.appendChild(mkGlowFilter('gf-hover',  8,  0, 255, 242));
+svg.appendChild(defs);
+
+// Background
+svg.appendChild(mk('rect', { x:'0', y:'0', width:W, height:totalH, fill:'url(#dots)' }));
+// Subtle radial highlight behind the tree
+const bgGlow = mk('radialGradient', { id:'bgRadial', cx:'50%', cy:'40%', r:'55%', gradientUnits:'userSpaceOnUse' });
+bgGlow.setAttribute('gradientUnits', 'userSpaceOnUse');
+bgGlow.setAttribute('x1', '0'); bgGlow.setAttribute('x2', String(W));
+const bg1 = mk('stop', { offset:'0%', 'stop-color':'rgba(40,80,160,0.04)' });
+const bg2 = mk('stop', { offset:'100%', 'stop-color':'rgba(0,0,0,0)' });
+bgGlow.appendChild(bg1); bgGlow.appendChild(bg2);
+defs.appendChild(bgGlow);
+
+// ─── Edges ───────────────────────────────────────────────────────────────────
+const edgeLayer = mk('g');
+const edgeData = []; // { el, from, to, bothDone }
+
+for (const skill of skills) {
+  const fp = pos[skill.name];
+  if (!fp) continue;
+  for (const req of skill.requires) {
+    const tp = pos[req];
+    if (!tp) continue;
+
+    const x1 = fp.x, y1 = fp.y + 36;
+    const x2 = tp.x, y2 = tp.y - 36;
+    const curve = Math.min(55, Math.abs(y2 - y1) * 0.38);
+    const d = `M ${x1},${y1} C ${x1},${y1+curve} ${x2},${y2-curve} ${x2},${y2}`;
+
+    const bothDone = completed.has(skill.name) && completed.has(req);
+    const isLock = !isUnlocked(skill.name) && !completed.has(req);
+
+    const e = mk('path', { d, fill:'none' });
+
+    if (bothDone) {
+      // Bright, glowing cyan — completed path
+      e.setAttribute('stroke', 'rgba(0,255,242,0.65)');
+      e.setAttribute('stroke-width', '2');
+      e.style.filter = 'drop-shadow(0 0 3px rgba(0,255,242,0.50))';
+    } else if (isLock) {
+      e.setAttribute('stroke', 'rgba(90,106,133,0.18)');
+      e.setAttribute('stroke-width', '1');
+    } else {
+      // Dim light blue — future path
+      e.setAttribute('stroke', 'rgba(77,159,255,0.18)');
+      e.setAttribute('stroke-width', '1.5');
+    }
+
+    edgeData.push({ el: e, from: skill.name, to: req, bothDone, path: d });
+    edgeLayer.appendChild(e);
+  }
+}
+svg.appendChild(edgeLayer);
+
+// ─── Nodes ───────────────────────────────────────────────────────────────────
+const nodeLayer = mk('g');
+const nodeMap = new Map(); // name → { g, skill }
+
+for (const skill of skills) {
+  const p = pos[skill.name];
+  if (!p) continue;
+
+  const isApex = skill.level === maxLevel;
+  const isDone = completed.has(skill.name);
+  const isLock = !isUnlocked(skill.name);
+
+  const r = isApex ? 46 : isDone ? 38 : isLock ? 32 : 36;
+
+  // Color scheme
+  let strokeCol, fillId, glowId, textCol, strokeW;
+  if (isApex)    { strokeCol='#ffaa40'; fillId='fillApex'; glowId='gf-apex'; textCol='#ffaa40'; strokeW='2.5'; }
+  else if(isDone){ strokeCol='#00fff2'; fillId='fillDone'; glowId='gf-done'; textCol='#00fff2'; strokeW='1.8'; }
+  else if(isLock){ strokeCol='#404d60'; fillId='fillLocked'; glowId=''; textCol='#556278'; strokeW='1'; }
+  else           { strokeCol='#4d9fff'; fillId='fillUnlock'; glowId='gf-unlock'; textCol='#7ab7ff'; strokeW='1.5'; }
+
+  const g = mk('g', { transform: `translate(${p.x},${p.y})`, style:'cursor:pointer' });
+
+  // Outer ambient ring — NOT for apex (no pulsing on final node), only for unlocked/done
+  if (!isApex && !isLock) {
+    const ring = mk('circle', {
+      r: String(r + 11), fill:'none',
+      stroke: strokeCol, 'stroke-width':'0.8',
+      opacity:'0', // starts invisible, styled per state
+    });
+    ring.style.animation = 'ambient-pulse 4s ease-in-out infinite';
+    ring.style.animationDelay = `${Math.random() * 2}s`;
+    g.appendChild(ring);
+  }
+
+  // Main circle
+  const circle = mk('circle', {
+    r: String(r), fill: `url(#${fillId})`,
+    stroke: strokeCol, 'stroke-width': strokeW,
+  });
+  if (glowId) circle.style.filter = `url(#${glowId})`;
+  g.appendChild(circle);
+
+  // Apex: bold solid inner ring (not dashed, not pulsing)
+  if (isApex) {
+    g.appendChild(mk('circle', {
+      r: String(r - 9), fill:'none',
+      stroke: '#ffaa40', 'stroke-width':'1.2', opacity:'0.50',
+    }));
+  }
+
+  // Icon (upper half of node)
+  const iconSize = isApex ? 17 : (skill.icon.length > 2 ? 11.5 : 15);
+  const iconEl = mk('text', {
+    x:'0', y: isApex ? '-9' : '-6',
+    'text-anchor':'middle', 'dominant-baseline':'middle',
+    fill: textCol, 'font-family':"'JetBrains Mono', monospace",
+    'font-size': String(iconSize), 'font-weight':'600',
+    'pointer-events':'none',
+  });
+  iconEl.textContent = skill.icon;
+  g.appendChild(iconEl);
+
+  // Short label inside node (lower half)
+  const short = skill.name.length > 9 ? skill.name.slice(0,8) + '…' : skill.name;
+  const innerLabel = mk('text', {
+    x:'0', y: isApex ? '11' : '10',
+    'text-anchor':'middle', 'dominant-baseline':'middle',
+    fill: textCol, 'font-family':"'Outfit', sans-serif",
+    'font-size': isApex ? '9' : '8', 'font-weight':'500',
+    'letter-spacing':'0.04em', 'pointer-events':'none',
+    opacity:'0.80',
+  });
+  innerLabel.textContent = short;
+  g.appendChild(innerLabel);
+
+  // Skill name below node (outside)
+  const outerLabelColor = isApex ? '#ffaa40' : isDone ? '#b8c8e0' : isLock ? '#2e3a4a' : '#7a94b8';
+  const outerLabel = mk('text', {
+    x:'0', y: String(r + 17),
+    'text-anchor':'middle', 'dominant-baseline':'hanging',
+    fill: outerLabelColor, 'font-family':"'Outfit', sans-serif",
+    'font-size': isApex ? '12' : '11',
+    'font-weight': isApex ? '600' : isDone ? '500' : '400',
+    'letter-spacing':'0.03em', 'pointer-events':'none',
+  });
+  outerLabel.textContent = skill.name;
+  g.appendChild(outerLabel);
+
+  // Completed checkmark badge (top-right corner)
+  if (isDone && !isApex) {
+    const bx = r * 0.62, by = -r * 0.62;
+    g.appendChild(mk('circle', {
+      cx:String(bx), cy:String(by), r:'7.5',
+      fill:'#070b18', stroke:'#00fff2', 'stroke-width':'1.2',
+    }));
+    const ck = mk('text', {
+      x:String(bx), y:String(by + 0.5),
+      'text-anchor':'middle', 'dominant-baseline':'middle',
+      fill:'#00fff2', 'font-family':"'JetBrains Mono', monospace",
+      'font-size':'8.5', 'font-weight':'700', 'pointer-events':'none',
+    });
+    ck.textContent = '✓';
+    g.appendChild(ck);
+  }
+
+  // Prerequisite progress dots for locked nodes
+  if (isLock && skill.requires.length > 0) {
+    const metCount = skill.requires.filter(r => completed.has(r)).length;
+    const total = skill.requires.length;
+    const dotR = 3, spacing = 9, totalW = (total - 1) * spacing;
+    const startX = -totalW / 2;
+    const dotY = r + 34;
+    for (let di = 0; di < total; di++) {
+      const met = di < metCount;
+      g.appendChild(mk('circle', {
+        cx: String(startX + di * spacing), cy: String(dotY), r: String(dotR),
+        fill: met ? 'rgba(0,255,242,0.6)' : 'rgba(90,106,133,0.3)',
+        stroke: met ? 'rgba(0,255,242,0.4)' : 'rgba(90,106,133,0.2)',
+        'stroke-width':'1',
+      }));
+    }
+  }
+
+  nodeMap.set(skill.name, { g, skill, isApex, isDone, isLock, r, strokeCol });
+  nodeLayer.appendChild(g);
+}
+svg.appendChild(nodeLayer);
+
+// ─── Hover interactions ───────────────────────────────────────────────────────
+const panel = document.getElementById('hoverPanel');
+const inner = document.getElementById('hoverInner');
+
+function showPanel(e, skill, isDone, isApex, isLock) {
+  document.getElementById('hpName').textContent = skill.name;
+
+  const badge = document.getElementById('hpBadge');
+  if (isApex) { badge.textContent = '★ FINAL'; badge.className = 'hp-badge apex'; }
+  else if (isDone) { badge.textContent = '✓ DONE'; badge.className = 'hp-badge done'; }
+  else if (isLock) { badge.textContent = '⊘ LOCKED'; badge.className = 'hp-badge locked'; }
+  else { badge.textContent = '◉ READY'; badge.className = 'hp-badge unlocked'; }
+
+  // Panel border tint
+  if (isApex) inner.style.borderColor = 'rgba(255,170,64,0.30)';
+  else if (isDone) inner.style.borderColor = 'rgba(0,255,242,0.25)';
+  else if (isLock) inner.style.borderColor = 'rgba(90,106,133,0.25)';
+  else inner.style.borderColor = 'rgba(77,159,255,0.25)';
+
+  document.getElementById('hpDesc').textContent = skill.desc;
+
+  const meta = document.getElementById('hpMeta');
+  const lines = [];
+  if (skill.requires.length > 0) {
+    lines.push(`<span class="meta-label">REQUIRES</span>`);
+    for (const req of skill.requires) {
+      const met = completed.has(req);
+      lines.push(`<span class="${met ? 'req-done' : 'req-missing'}">${met ? '✓' : '×'} ${req}</span>`);
+    }
+  } else {
+    lines.push(`<span class="meta-label">FOUNDATION — no prerequisites</span>`);
+  }
+  if (skill.tip) {
+    lines.push(`<br><span class="meta-label">TIP</span>`);
+    lines.push(`<span style="color:#6a7a90;">${skill.tip}</span>`);
+  }
+  meta.innerHTML = lines.join('<br>');
+
+  panel.classList.add('visible');
+  movePanel(e);
+}
+
+function movePanel(e) {
+  const pw = inner.offsetWidth  || 240;
+  const ph = inner.offsetHeight || 130;
+  let x = e.clientX + 20;
+  let y = e.clientY - ph / 2;
+  if (x + pw > window.innerWidth - 8)  x = e.clientX - pw - 20;
+  if (y < 8) y = 8;
+  if (y + ph > window.innerHeight - 8) y = window.innerHeight - ph - 8;
+  panel.style.transform = `translate(${x}px,${y}px)`;
+}
+
+function hidePanel() {
+  panel.classList.remove('visible');
+}
+
+// Attach hover to each node
+for (const [name, { g, skill, isApex, isDone, isLock }] of nodeMap) {
+  g.addEventListener('mouseenter', (e) => {
+    // 1. Dim all other nodes
+    for (const [n, { g: og }] of nodeMap) {
+      if (n !== name) og.style.opacity = '0.18';
+    }
+
+    // 2. Highlight only DOWNWARD edges (from this node to its prerequisites)
+    //    and the prerequisites' own downward edges (chain below)
+    //    — but only one level deep (direct edges from this node)
+    for (const ed of edgeData) {
+      if (ed.from === name) {
+        // This is an edge going DOWN from hovered node → highlight it
+        ed.el.style.stroke = isDone && completed.has(ed.to)
+          ? 'rgba(0,255,242,0.95)'
+          : 'rgba(77,159,255,0.75)';
+        ed.el.style.strokeWidth = '2.2';
+        ed.el.style.filter = `drop-shadow(0 0 5px ${isDone ? 'rgba(0,255,242,0.5)' : 'rgba(77,159,255,0.4)'})`;
+      } else {
+        // Edges not connected below → dim
+        ed.el.style.opacity = '0.06';
+      }
+    }
+
+    // 3. Show hover panel (even for locked nodes)
+    showPanel(e, skill, isDone, isApex, isLock);
+
+    // 4. Scale up hovered node
+    g.style.filter = `url(#gf-hover)`;
+    g.style.transform = 'scale(1.07)';
+    g.style.transformOrigin = 'center';
+    g.style.transition = 'transform 0.18s, filter 0.18s';
+  });
+
+  g.addEventListener('mousemove', movePanel);
+
+  g.addEventListener('mouseleave', () => {
+    // Restore all nodes
+    for (const [, { g: og }] of nodeMap) og.style.opacity = '';
+
+    // Restore all edges
+    for (const ed of edgeData) {
+      ed.el.style.stroke = '';
+      ed.el.style.strokeWidth = '';
+      ed.el.style.filter = '';
+      ed.el.style.opacity = '';
+    }
+
+    g.style.filter = '';
+    g.style.transform = '';
+    hidePanel();
+  });
+}
+
+</script>
+</body>
+</html>

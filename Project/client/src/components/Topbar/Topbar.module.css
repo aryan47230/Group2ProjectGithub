@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(6, 9, 15, 0.95);
-  border-bottom: 1px solid var(--border-dim);
+  background: var(--rn-paper);
+  border-bottom: 1px solid var(--rn-hair-2);
   backdrop-filter: blur(12px);
   position: relative;
   z-index: 101;
@@ -19,14 +19,14 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #a78bfa, #4d9fff, transparent);
+  background: linear-gradient(90deg, transparent, var(--rn-violet), var(--rn-blue), transparent);
   opacity: 0.2;
 }
 
 .appLogo {
   font-size: 14px;
   font-weight: 800;
-  color: #a78bfa;
+  color: var(--rn-violet);
   font-family: var(--font-display, 'Outfit', sans-serif);
   letter-spacing: 0.06em;
   flex-shrink: 0;
@@ -51,12 +51,12 @@
 }
 
 .modeTab:hover {
-  color: #c4b5fd;
+  color: var(--rn-violet);
   border-color: rgba(167, 139, 250, 0.15);
 }
 
 .modeTabActive {
-  color: #a78bfa;
+  color: var(--rn-violet);
   border-color: rgba(167, 139, 250, 0.25);
   background: rgba(167, 139, 250, 0.06);
 }
@@ -87,7 +87,7 @@
 }
 
 .authLink:hover {
-  color: #a78bfa;
+  color: var(--rn-violet);
   border-color: rgba(167, 139, 250, 0.4);
 }
 
@@ -98,8 +98,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(6, 9, 15, 0.95);
-  border-bottom: 1px solid var(--border-dim);
+  background: var(--rn-paper);
+  border-bottom: 1px solid var(--rn-hair-2);
   z-index: 100;
   position: relative;
   backdrop-filter: blur(12px);
@@ -117,7 +117,7 @@
   align-items: center;
   gap: 10px;
   background: var(--bg-card);
-  border: 1px solid var(--border-dim);
+  border: 1px solid var(--rn-hair);
   border-radius: 8px;
   padding: 8px 18px;
   transition: border-color 0.25s, box-shadow 0.25s;
@@ -173,8 +173,8 @@
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-medium);
+  background: var(--rn-ink);
+  border: 1px solid var(--rn-hair-2);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
@@ -184,7 +184,7 @@
 .dropdownItem {
   padding: 10px 16px;
   cursor: pointer;
-  border-bottom: 1px solid var(--border-dim);
+  border-bottom: 1px solid var(--rn-hair);
   transition: background 0.15s ease, border-color 0.15s ease;
   position: relative;
   border-left: 2px solid transparent;
@@ -194,7 +194,7 @@
 
 .dropdownItem:hover {
   background: rgba(0, 212, 255, 0.04);
-  border-left-color: var(--accent-cyan);
+  border-left-color: var(--rn-cyan);
 }
 
 .dropdownTitle {
@@ -225,7 +225,7 @@
   color: rgba(0, 212, 255, 0.7);
   padding: 4px 14px;
   clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
-  background: rgba(0, 212, 255, 0.06);
+  background: var(--rn-hair);
   display: flex;
   align-items: center;
   gap: 4px;

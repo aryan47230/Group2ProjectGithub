@@ -52,9 +52,21 @@ export default function PromptView() {
   const shownStatus = generateError && !status ? `Error: ${generateError}` : status;
 
   return (
-    <div className={styles.promptView}>
-      <h1 className={styles.heading}>What do you want to learn?</h1>
+    <main className={styles.promptView}>
+      <div className={styles.dotGrid} aria-hidden="true" />
+
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>SKILL TREE GENERATOR · v1</span>
+        <h1 className={styles.heading}>
+          What do you want <span className={styles.headingItalic}>to learn</span>?
+        </h1>
+        <p className={styles.subtitle}>
+          Type anything — a hobby, a language, a field. We'll chart a layered skill tree.
+        </p>
+      </header>
+
       <form className={styles.form} onSubmit={handleSubmit}>
+        <span className={styles.formIcon}>▸</span>
         <input
           className={styles.topicInput}
           type="text"
@@ -64,26 +76,30 @@ export default function PromptView() {
           onChange={(e) => setTopic(e.target.value)}
         />
         <button type="submit" className={styles.generateBtn} disabled={generating}>
-          {generating ? 'Generating...' : 'Generate'}
+          {generating ? 'Generating…' : 'Generate'}
         </button>
       </form>
-      <div className={styles.status}>{shownStatus}</div>
 
-      <div className={styles.exploreCta}>
-        <span className={styles.ctaDivider}>or explore a Wikipedia concept</span>
-        <form className={styles.exploreForm} onSubmit={handleExplore}>
-          <input
-            className={styles.exploreInput}
-            type="text"
-            placeholder="e.g. quantum mechanics, stoicism..."
-            value={exploreTopic}
-            onChange={(e) => setExploreTopic(e.target.value)}
-          />
-          <button type="submit" className={styles.exploreBtn}>Explore</button>
-        </form>
+      <div className={styles.status} aria-live="polite">{shownStatus}</div>
+
+      <div className={styles.divider}>
+        <span className={styles.dividerLine} />
+        <span className={styles.dividerLabel}>OR EXPLORE A WIKIPEDIA CONCEPT</span>
+        <span className={styles.dividerLine} />
       </div>
 
+      <form className={styles.exploreForm} onSubmit={handleExplore}>
+        <input
+          className={styles.exploreInput}
+          type="text"
+          placeholder="e.g. quantum mechanics, stoicism..."
+          value={exploreTopic}
+          onChange={(e) => setExploreTopic(e.target.value)}
+        />
+        <button type="submit" className={styles.exploreBtn}>Explore →</button>
+      </form>
+
       <SavedTreesList />
-    </div>
+    </main>
   );
 }

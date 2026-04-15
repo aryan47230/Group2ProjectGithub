@@ -1,3 +1,53 @@
+# 03 — Auth Modal
+
+> **Prerequisites:** Doc 01 merged.
+
+## Goal
+
+Restyle `AuthModal` to match the Refined Neon system: deep-space panel card with hairline borders, segmented pill tabs, mono uppercase labels, cyan-focused inputs, cyan-outlined submit, ghost cancel. No purple fill, no emoji close, no harsh `#666` metal grey.
+
+The JSX stays almost identical — only the close button glyph and a couple of structural tweaks change. The bulk of the work is CSS.
+
+## Files touched
+
+**Modified:**
+- `client/src/components/Auth/AuthModal.jsx` (tiny)
+- `client/src/components/Auth/AuthModal.module.css` (rewrite)
+
+---
+
+## Task 3.1 — Minor `AuthModal.jsx` tweaks
+
+The existing component (see `client/src/components/Auth/AuthModal.jsx`) is fine structurally. Apply these three small edits:
+
+1. **Replace the `✕` close glyph with the word "Cancel"** (already the button label — confirm the JSX uses text, not an emoji; it already does at line 81). **No change needed if the file matches.**
+2. **Add a `data-mode` attribute to the modal** so CSS can tint based on signin vs signup without extra class logic:
+
+   ```jsx
+   <div className={styles.modal} data-mode={mode}>
+   ```
+3. **Wrap the form heading area in an `.modalHeader` div** holding a small mono eyebrow and the tabs. Insert between `<div className={styles.modal}>` and `<div className={styles.tabs}>`:
+
+   ```jsx
+   <div className={styles.modalHeader}>
+     <span className={styles.eyebrow}>
+       {mode === 'login' ? 'ACCESS' : 'JOIN'} · STG
+     </span>
+     <div className={styles.tabs}>
+       {/* existing tab buttons unchanged */}
+     </div>
+   </div>
+   ```
+
+   Remove the now-duplicated outer `.tabs` div so there's only one tabs element inside `.modalHeader`.
+
+Everything else in the file is unchanged.
+
+## Task 3.2 — Rewrite `AuthModal.module.css`
+
+Replace the entire file with:
+
+```css
 /* ── AuthModal — Refined Neon ───────────────────────── */
 
 .overlay {
@@ -225,3 +275,34 @@
   color: var(--rn-gold-h);
   box-shadow: 0 0 28px -6px var(--rn-gold-glow);
 }
+```
+
+### Notes
+
+- Gold corner brackets on the modal are pure decoration and echo the Wiki Loop "tool chrome" feel.
+- Sign In defaults to a cyan submit pill; Sign Up flips to gold via the `[data-mode="register"]` selector — a visual cue that the two paths are distinct.
+- All inputs land on the `--rn-void` surface to push them visually below the card.
+- Error message prefixed with a subtle `!` via `::before` — no icon library.
+
+## Task 3.3 — Smoke test
+
+1. Click **Sign In** in the header → modal opens with cyan submit pill, gold corner brackets, `ACCESS · STG` eyebrow, both tabs pill-style inside a track.
+2. Switch to **Sign Up** tab → `JOIN · STG` eyebrow updates, submit pill flips to gold.
+3. Focus an input → cyan 3 px glow ring appears.
+4. Submit with bad credentials → red hairline error prefixed with `!`.
+5. Click outside / Cancel → modal closes with subtle fade.
+
+## Verification checklist
+
+- [ ] `AuthModal.module.css` matches Task 3.2 verbatim.
+- [ ] `data-mode` attribute is present on `.modal`.
+- [ ] `.modalHeader` wraps eyebrow + tabs.
+- [ ] No purple fill, no `#666`, no `#a78bfa` literals anywhere in the file.
+- [ ] Build succeeds.
+- [ ] Modal visuals match the smoke test above.
+
+## Out of scope
+
+- AuthContext logic, fetch error handling, validation.
+- Social/OAuth (none exists).
+- Keyboard escape handler (existing overlay click-outside stays).

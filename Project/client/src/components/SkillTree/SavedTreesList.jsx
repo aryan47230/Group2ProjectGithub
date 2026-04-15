@@ -7,7 +7,12 @@ export default function SavedTreesList() {
 
   return (
     <section className={styles.savedSection}>
-      <h2 className={styles.savedHeading}>Your Trees</h2>
+      <header className={styles.savedHeader}>
+        <span className={styles.savedTag}>SAVED</span>
+        <h2 className={styles.savedHeading}>Your Trees</h2>
+        <span className={styles.savedCount}>{savedTrees.length.toString().padStart(2, '0')}</span>
+      </header>
+
       <ul className={styles.savedList}>
         {savedTrees.map((tree) => {
           const done = tree.completed?.length || 0;
@@ -17,13 +22,15 @@ export default function SavedTreesList() {
             <li key={tree.topic} className={styles.savedItem}>
               <div className={styles.savedInfo}>
                 <span className={styles.savedTopic}>{tree.topic}</span>
-                <span className={styles.savedProgress}>{done}/{total} complete</span>
+                <span className={styles.savedProgress}>
+                  {done.toString().padStart(2, '0')}/{total.toString().padStart(2, '0')} · {pct}%
+                </span>
               </div>
               <div className={styles.savedBarTrack}>
                 <div className={styles.savedBarFill} style={{ width: `${pct}%` }} />
               </div>
               <div className={styles.savedActions}>
-                <button className={styles.savedOpen} onClick={() => openTree(tree)}>Open</button>
+                <button className={styles.savedOpen} onClick={() => openTree(tree)}>Open →</button>
                 <button className={styles.savedDelete} onClick={() => deleteTree(tree.topic)}>Delete</button>
               </div>
             </li>

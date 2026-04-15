@@ -34,11 +34,6 @@ function AutoJump() {
 export default function ExploreRoute() {
   const [authMode, setAuthMode] = useState(null);
 
-  useEffect(() => {
-    document.documentElement.classList.add('exploreScope');
-    return () => document.documentElement.classList.remove('exploreScope');
-  }, []);
-
   return (
     <ExplorerProvider>
       <div className={styles.app}>

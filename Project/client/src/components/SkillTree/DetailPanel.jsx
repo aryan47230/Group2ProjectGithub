@@ -24,9 +24,15 @@ export default function DetailPanel({ node, open, completedNodes, onClose, onTog
     <aside className={panelClass}>
       <div className={styles.detailHeader}>
         <h3 className={styles.detailName}>{node.name}</h3>
-        <button className={styles.detailClose} onClick={onClose} aria-label="Close details">✕</button>
+        <button className={styles.detailClose} onClick={onClose} aria-label="Close details">
+          <span className={styles.closeIcon} />
+        </button>
       </div>
-      <div className={styles.detailLevel}>Level {node.level}</div>
+      <div className={styles.detailLevelRow}>
+        <span className={styles.detailLevel}>LVL {node.level}</span>
+        {locked && <span className={styles.detailLocked}>LOCKED</span>}
+        {done && <span className={styles.detailDone}>COMPLETE</span>}
+      </div>
 
       {!locked && (
         <div className={styles.tabBar}>
@@ -157,7 +163,7 @@ export default function DetailPanel({ node, open, completedNodes, onClose, onTog
             className={`${styles.completeBtn} ${done ? styles.completeBtnDone : ''}`}
             onClick={() => onToggleComplete(node.name)}
           >
-            {done ? '✓ Completed' : 'Mark as Complete'}
+            {done ? 'COMPLETED' : 'MARK COMPLETE'}
           </button>
         </>
       )}
