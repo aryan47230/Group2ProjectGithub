@@ -1,0 +1,110 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.75rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab {
+  flex: 1;
+  background: transparent;
+  color: #666;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.45rem;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.tab:hover { color: #a78bfa; border-color: #a78bfa; background: transparent; }
+
+.tabActive {
+  background: var(--accent-purple);
+  color: var(--bg-primary);
+  border-color: #a78bfa;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form label {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+.form input {
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.form input:focus { border-color: #a78bfa; }
+
+.error {
+  font-size: 0.82rem;
+  color: #f87171;
+  margin-top: 0.2rem;
+}
+
+.submit {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-purple);
+  color: var(--bg-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit:hover { background: var(--accent-purple-light); }
+.submit:disabled { background: #444; cursor: not-allowed; }
+
+.close {
+  background: transparent;
+  color: #888;
+  border: none;
+  font-weight: 500;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.close:hover { color: #e0e0e0; }

@@ -161,14 +161,13 @@ Respond with ONLY valid JSON in this exact shape:
 
 app.use("/api/concepts", createConceptsRouter());
 
-// Serve the built explore SPA for /explore routes
+// SPA fallback — the unified React app handles client-side routing for / and /explore
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use("/explore", express.static(join(__dirname, "public", "explore")));
-app.get("/explore/*", (req, res) => {
-  res.sendFile(join(__dirname, "public", "explore", "index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(join(__dirname, "public", "index.html"));
 });
 
 app.listen(3000, () => console.log("Server running at http://localhost:3000"));

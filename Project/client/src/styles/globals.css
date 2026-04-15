@@ -1,0 +1,89 @@
+:root {
+  /* === Skill Tree palette (app default) === */
+  --bg-primary: #0a0e18;
+  --bg-secondary: #0c1020;
+  --bg-card: #111828;
+  --accent-purple: #a78bfa;
+  --accent-purple-light: #c4b5fd;
+  --accent-blue: #4d9fff;
+  --accent-green: hsl(142, 60%, 40%);
+  --text-primary: #d0d6e0;
+  --text-secondary: #888;
+  --border-color: rgba(80, 160, 255, 0.10);
+  --border-bright: rgba(80, 160, 255, 0.22);
+
+  /* === Explore (WikiLoop) palette — active on /explore route, scoped via .exploreScope in App.module.css === */
+  --bg-tertiary: #0a0f1a;
+  --bg-card-hover: rgba(12, 18, 35, 0.85);
+  --border-dim: rgba(80, 160, 255, 0.06);
+  --border-medium: rgba(80, 160, 255, 0.12);
+
+  --neon-cyan: #00fff2;
+  --neon-blue: #4d9fff;
+  --neon-amber: #ffaa40;
+  --neon-purple: #8b5cf6;
+  --neon-magenta: #f472b6;
+  --neon-green: #34d399;
+  --neon-red: #ff4466;
+
+  --accent-cyan: var(--neon-cyan);
+  --accent-amber: var(--neon-amber);
+  --accent-gold: var(--neon-amber);
+  --accent-red: var(--neon-red);
+  --accent-white: #e2e8f0;
+
+  --text-dim: #4a5468;
+  --text-muted: #2a3040;
+
+  --app-nav-height: 52px;
+  --topbar-height: 46px;
+
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-main: 'Outfit', system-ui, sans-serif;
+}
+
+/* When on /explore, we override palette vars to the deep-space look */
+.exploreScope {
+  --bg-primary: #050810;
+  --bg-secondary: #080c16;
+  --bg-card: rgba(8, 12, 24, 0.8);
+  --accent-blue: var(--neon-blue);
+  --accent-green: var(--neon-green);
+  --accent-purple: var(--neon-purple);
+  --text-secondary: #7a8599;
+  --border-color: var(--border-dim);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure hidden attribute always wins regardless of CSS specificity */
+[hidden] { display: none !important; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-purple);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(0, 255, 242, 0.1); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

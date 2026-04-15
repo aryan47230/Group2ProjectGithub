@@ -1,0 +1,195 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: WIKILOOP
+    - generic [ref=e7]:
+      - generic [ref=e8]: /
+      - textbox "explore a concept..." [ref=e9]
+    - generic [ref=e10]:
+      - generic [ref=e42]:
+        - generic [ref=e43]: "2"
+        - generic [ref=e44]: hops
+      - button "RANDOM" [ref=e45] [cursor=pointer]
+      - button "TRAIL" [ref=e11] [cursor=pointer]
+      - button "MAP" [ref=e12] [cursor=pointer]
+  - generic [ref=e13]:
+    - generic [ref=e263]:
+      - generic [ref=e264]:
+        - button "← Back" [ref=e265] [cursor=pointer]
+        - generic [ref=e266]:
+          - generic [ref=e268] [cursor=pointer]: Quantum mechanics
+          - generic [ref=e269]:
+            - generic [ref=e270]: ›
+            - generic [ref=e271]: Absolute zero
+      - generic [ref=e272]:
+        - img "Absolute zero" [ref=e274]
+        - generic [ref=e276]:
+          - generic [ref=e277]: Cold
+          - heading "Absolute zero" [level=1] [ref=e278]
+          - paragraph [ref=e279]: Absolute zero is the lowest theoretically possible temperature, a state at which a system's internal energy, and in ideal cases entropy, reach their minimum values. The Kelvin scale is defined so that absolute zero is 0 K, equivalent to −273.15 °C on the Celsius scale, and −459.67 °F on the Fahrenheit scale.
+          - generic [ref=e280]:
+            - generic [ref=e281]:
+              - generic [ref=e282]: Category
+              - generic [ref=e283]: Cold
+            - generic [ref=e284]:
+              - generic [ref=e285]: Also known as
+              - generic [ref=e286]: Cryogenics
+            - generic [ref=e287]:
+              - generic [ref=e288]: Related topics
+              - generic [ref=e289]: 50 connected articles
+            - generic [ref=e290]:
+              - generic [ref=e291]: Sections
+              - generic [ref=e292]: 17 Wikipedia sections
+      - button "Enrich with AI" [ref=e293] [cursor=pointer]
+      - generic [ref=e295] [cursor=pointer]:
+        - generic [ref=e296]:
+          - heading "Deep Dive" [level=3] [ref=e297]
+          - generic [ref=e298]: Full Wikipedia sections
+        - generic [ref=e299]: +
+      - generic [ref=e300]:
+        - generic [ref=e301]:
+          - generic [ref=e302]: On the Graph
+          - generic [ref=e303]: 8 directly connected
+        - generic [ref=e304]:
+          - generic [ref=e305] [cursor=pointer]:
+            - generic [ref=e310]: Related
+            - heading "Absolute Zero (disambiguation)" [level=4] [ref=e311]
+            - paragraph [ref=e312]: Absolute zero is the temperature at which entropy reaches its minimum value.
+            - generic [ref=e313]:
+              - generic [ref=e314]: Jump
+              - generic [ref=e315]: Preview
+          - generic [ref=e316] [cursor=pointer]:
+            - generic [ref=e321]: Related
+            - heading "Bose–Einstein condensate" [level=4] [ref=e322]
+            - paragraph [ref=e323]: In condensed matter physics, a Bose–Einstein condensate (BEC) is a state of matter that is typically formed when a gas of bosons at very low densities is cooled to temperatures very close to absolute zero, i.e. 0 K (−273.15 °C; −459.67 °F).
+            - generic [ref=e324]:
+              - generic [ref=e325]: Jump
+              - generic [ref=e326]: Preview
+          - generic [ref=e327] [cursor=pointer]:
+            - generic [ref=e332]: Related
+            - heading "0K (disambiguation)" [level=4] [ref=e333]
+            - paragraph [ref=e334]: A topic related to Absolute zero.
+            - generic [ref=e335]:
+              - generic [ref=e336]: Jump
+              - generic [ref=e337]: Preview
+          - generic [ref=e338] [cursor=pointer]:
+            - generic [ref=e343]: Related
+            - heading "90377 Sedna" [level=4] [ref=e344]
+            - paragraph [ref=e345]: A topic related to Absolute zero.
+            - generic [ref=e346]:
+              - generic [ref=e347]: Jump
+              - generic [ref=e348]: Preview
+          - generic [ref=e349] [cursor=pointer]:
+            - generic [ref=e354]: Related
+            - heading "Absolute temperature" [level=4] [ref=e355]
+            - paragraph [ref=e356]: A topic related to Absolute zero.
+            - generic [ref=e357]:
+              - generic [ref=e358]: Jump
+              - generic [ref=e359]: Preview
+          - generic [ref=e360] [cursor=pointer]:
+            - generic [ref=e365]: Related
+            - heading "Adiabatic expansion" [level=4] [ref=e366]
+            - paragraph [ref=e367]: A topic related to Absolute zero.
+            - generic [ref=e368]:
+              - generic [ref=e369]: Jump
+              - generic [ref=e370]: Preview
+          - generic [ref=e371] [cursor=pointer]:
+            - generic [ref=e376]: Related
+            - heading "Antoine Lavoisier" [level=4] [ref=e377]
+            - paragraph [ref=e378]: "Antoine-Laurent de Lavoisier ( lə-VWAH-zee-ay; French: [ɑ̃twan lɔʁɑ̃ də lavwazje]; 26 August 1743 – 8 May 1794), also Antoine Lavoisier after the French Revolution, was a French nobleman and chemist who was central to the 18th-century chemical revolution and who had a large influence on both the history of chemistry and the history of biology. It is generally accepted that Lavoisier's great accomplishments in chemistry stem largely from his changing the science from a qualitative to a quantitative one."
+            - generic [ref=e379]:
+              - generic [ref=e380]: Jump
+              - generic [ref=e381]: Preview
+          - generic [ref=e382] [cursor=pointer]:
+            - generic [ref=e387]: Related
+            - heading "ArXiv (identifier)" [level=4] [ref=e388]
+            - paragraph [ref=e389]: A topic related to Absolute zero.
+            - generic [ref=e390]:
+              - generic [ref=e391]: Jump
+              - generic [ref=e392]: Preview
+    - generic [ref=e20]:
+      - generic: KNOWLEDGE GRAPH
+      - button "FOCUS" [ref=e174] [cursor=pointer]
+      - generic: TAB cycle · ENTER preview · DBL-CLICK jump · ESC close · drag to pan
+      - generic [ref=e175]:
+        - img
+        - generic [ref=e218] [cursor=pointer]:
+          - generic [ref=e458]: Quant mecha
+          - generic: Quantum mechanics
+        - generic [ref=e221] [cursor=pointer]:
+          - generic [ref=e223]: Adria Kent
+          - generic: Adrian Kent
+        - generic [ref=e224] [cursor=pointer]:
+          - generic [ref=e226]: Alber Messi
+          - generic: Albert Messiah
+        - generic [ref=e227] [cursor=pointer]:
+          - generic [ref=e229]: Alexa Holev
+          - generic: Alexander Holevo
+        - generic [ref=e230] [cursor=pointer]:
+          - generic [ref=e232]: A. Doug
+          - generic: A. Douglas Stone
+        - generic [ref=e233] [cursor=pointer]:
+          - generic [ref=e235]: Abdus Salam
+          - generic: Abdus Salam
+        - generic [ref=e236] [cursor=pointer]:
+          - generic [ref=e238]: Abrah Pais
+          - generic: Abraham Pais
+        - generic [ref=e239] [cursor=pointer]:
+          - generic [ref=e460]: Absol zero
+          - generic: Absolute zero
+        - generic [ref=e242] [cursor=pointer]:
+          - generic [ref=e244]: Accuracy
+          - generic: Accuracy
+        - generic [ref=e245] [cursor=pointer]:
+          - generic [ref=e247]: ArXiv (iden
+          - generic: ArXiv (identifier)
+        - generic [ref=e248] [cursor=pointer]:
+          - generic [ref=e250]: Bell test
+          - generic: Bell test experiments
+        - generic [ref=e251] [cursor=pointer]:
+          - generic [ref=e253]: Bibco (iden
+          - generic: Bibcode (identifier)
+        - generic [ref=e254] [cursor=pointer]:
+          - generic [ref=e256]: Bit commi
+          - generic: Bit commitment
+        - generic [ref=e257] [cursor=pointer]:
+          - generic [ref=e259]: Cent for
+          - generic: Centre for Quantum Information and Foundations
+        - generic [ref=e260] [cursor=pointer]:
+          - generic [ref=e262]: Cent for
+          - generic: Centre for the Study of Existential Risk
+        - generic [ref=e461] [cursor=pointer]:
+          - generic [ref=e463]: Abso Zero
+          - generic: Absolute Zero (disambiguation)
+        - generic [ref=e464] [cursor=pointer]:
+          - generic [ref=e466]: Bose– conde
+          - generic: Bose–Einstein condensate
+        - generic [ref=e467] [cursor=pointer]:
+          - generic [ref=e469]: 0K (disa
+          - generic: 0K (disambiguation)
+        - generic [ref=e470] [cursor=pointer]:
+          - generic [ref=e472]: 90377 Sedna
+          - generic: 90377 Sedna
+        - generic [ref=e473] [cursor=pointer]:
+          - generic [ref=e475]: Absol tempe
+          - generic: Absolute temperature
+        - generic [ref=e476] [cursor=pointer]:
+          - generic [ref=e478]: Adiab expan
+          - generic: Adiabatic expansion
+        - generic [ref=e479] [cursor=pointer]:
+          - generic [ref=e481]: Antoi Lavoi
+          - generic: Antoine Lavoisier
+        - generic [ref=e482] [cursor=pointer]:
+          - generic [ref=e484]: Abso Zero
+          - generic: Absolute Zero (novel)
+        - generic [ref=e485] [cursor=pointer]:
+          - generic [ref=e487]: Abso Zero
+          - generic: Absolute Zero (video game)
+        - generic [ref=e488] [cursor=pointer]:
+          - generic [ref=e490]: Bruce Horns
+          - generic: Bruce Hornsby
+        - generic [ref=e491] [cursor=pointer]:
+          - generic [ref=e493]: Charrm
+          - generic: Charrm
+        - generic [ref=e494] [cursor=pointer]:
+          - generic [ref=e496]: Fait No
+          - generic: Faith No More

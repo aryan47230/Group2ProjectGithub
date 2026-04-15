@@ -1,0 +1,222 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: WIKILOOP
+    - generic [ref=e7]:
+      - generic [ref=e8]: /
+      - textbox "explore a concept..." [ref=e9]
+    - generic [ref=e10]:
+      - generic [ref=e42]:
+        - generic [ref=e43]: "3"
+        - generic [ref=e44]: hops
+      - button "RANDOM" [ref=e45] [cursor=pointer]
+      - button "TRAIL" [ref=e11] [cursor=pointer]
+      - button "MAP" [ref=e12] [cursor=pointer]
+  - generic [ref=e13]:
+    - generic [ref=e497]:
+      - generic [ref=e498]:
+        - button "← Back" [ref=e499] [cursor=pointer]
+        - generic [ref=e500]:
+          - generic [ref=e502] [cursor=pointer]: Quantum mechanics
+          - generic [ref=e503]:
+            - generic [ref=e504]: ›
+            - generic [ref=e505] [cursor=pointer]: Absolute zero
+          - generic [ref=e506]:
+            - generic [ref=e507]: ›
+            - generic [ref=e508]: Absolute Zero (disambiguation)
+      - generic [ref=e509]:
+        - generic [ref=e511]: No image available
+        - generic [ref=e513]:
+          - generic [ref=e514]: All article disambiguation pages
+          - heading "Absolute Zero (disambiguation)" [level=1] [ref=e515]
+          - paragraph [ref=e516]: "Absolute zero is the temperature at which entropy reaches its minimum value. Absolute Zero may also refer to: Absolute Zero (novel), a 1978 children's novel by Helen Cresswell Absolute Zero (video game), a 1995 computer game for MS-DOS and Macintosh Absolute Zero, a 2000 compilation album released by UK record label Charrm Absolute Zero, a 2013 album by Little Green Cars Absolute Zero, a Japanese bonus track from the Faith No More album King for a Day \"Gone Sovereign\"/\"Absolute Zero\", a song by Stone Sour Absolute Zero, a hero in the card game Sentinels of the Multiverse Absolute Zero, a webcomic prequel to the film Interstellar Absolute Zero, a 2019 album by Bruce Hornsby."
+          - generic [ref=e517]:
+            - generic [ref=e518]:
+              - generic [ref=e519]: Category
+              - generic [ref=e520]: All article disambiguation pages
+            - generic [ref=e521]:
+              - generic [ref=e522]: Also known as
+              - generic [ref=e523]: All disambiguation pages
+            - generic [ref=e524]:
+              - generic [ref=e525]: Related topics
+              - generic [ref=e526]: 11 connected articles
+            - generic [ref=e527]:
+              - generic [ref=e528]: Sections
+              - generic [ref=e529]: 1 Wikipedia sections
+      - button "Enrich with AI" [ref=e530] [cursor=pointer]
+      - generic [ref=e532] [cursor=pointer]:
+        - generic [ref=e533]:
+          - heading "Deep Dive" [level=3] [ref=e534]
+          - generic [ref=e535]: Full Wikipedia sections
+        - generic [ref=e536]: +
+      - generic [ref=e537]:
+        - generic [ref=e538]:
+          - generic [ref=e539]: On the Graph
+          - generic [ref=e540]: 8 directly connected
+        - generic [ref=e541]:
+          - generic [ref=e542] [cursor=pointer]:
+            - generic [ref=e547]: Related
+            - heading "Absolute Zero (novel)" [level=4] [ref=e548]
+            - paragraph [ref=e549]: Absolute Zero is a 1978 children's novel by Helen Cresswell, the second book in the Bagthorpe Saga.
+            - generic [ref=e550]:
+              - generic [ref=e551]: Jump
+              - generic [ref=e552]: Preview
+          - generic [ref=e553] [cursor=pointer]:
+            - generic [ref=e558]: Related
+            - heading "Absolute zero" [level=4] [ref=e559]
+            - paragraph [ref=e560]: Absolute zero is the lowest theoretically possible temperature, a state at which a system's internal energy, and in ideal cases entropy, reach their minimum values. The Kelvin scale is defined so that absolute zero is 0 K, equivalent to −273.15 °C on the Celsius scale, and −459.67 °F on the Fahrenheit scale.
+            - generic [ref=e561]:
+              - generic [ref=e562]: Jump
+              - generic [ref=e563]: Preview
+          - generic [ref=e564] [cursor=pointer]:
+            - generic [ref=e569]: Related
+            - heading "Absolute Zero (video game)" [level=4] [ref=e570]
+            - paragraph [ref=e571]: Absolute Zero is a 1995 science-fiction flight sim first-person shooter, with action taking place over 30 missions in three locations. It was developed and published for MS-DOS and Macintosh by Domark.
+            - generic [ref=e572]:
+              - generic [ref=e573]: Jump
+              - generic [ref=e574]: Preview
+          - generic [ref=e575] [cursor=pointer]:
+            - generic [ref=e580]: Related
+            - heading "Bruce Hornsby" [level=4] [ref=e581]
+            - paragraph [ref=e582]: Bruce Randall Hornsby (born November 23, 1954) is an American singer-songwriter and pianist. His music draws from a wide range of traditions — folk, jazz, modern classical, bluegrass, rock, and jam band styles.
+            - generic [ref=e583]:
+              - generic [ref=e584]: Jump
+              - generic [ref=e585]: Preview
+          - generic [ref=e586] [cursor=pointer]:
+            - generic [ref=e591]: Related
+            - heading "Charrm" [level=4] [ref=e592]
+            - paragraph [ref=e593]: Charrm was a British record label based in Newcastle upon Tyne, UK operated by the company Charrm Limited. It was founded in 1989 and ceased trading in 2002.
+            - generic [ref=e594]:
+              - generic [ref=e595]: Jump
+              - generic [ref=e596]: Preview
+          - generic [ref=e597] [cursor=pointer]:
+            - generic [ref=e602]: Related
+            - heading "Faith No More" [level=4] [ref=e603]
+            - paragraph [ref=e604]: Faith No More is an American rock band from San Francisco, California, formed in 1979. Before September 1983, the band performed under the names Sharp Young Men and later Faith.
+            - generic [ref=e605]:
+              - generic [ref=e606]: Jump
+              - generic [ref=e607]: Preview
+          - generic [ref=e608] [cursor=pointer]:
+            - generic [ref=e613]: Related
+            - heading "Gone Sovereign/Absolute Zero" [level=4] [ref=e614]
+            - paragraph [ref=e615]: "\"Gone Sovereign/Absolute Zero\" is a double-single from American rock band Stone Sour, released as the first single from their fourth album House of Gold & Bones – Part 1. \"Absolute Zero\"'s reprise is featured on the track \"The House of Gold & Bones\" from the second part of the album."
+            - generic [ref=e616]:
+              - generic [ref=e617]: Jump
+              - generic [ref=e618]: Preview
+          - generic [ref=e619] [cursor=pointer]:
+            - generic [ref=e624]: Related
+            - heading "Interstellar (film)" [level=4] [ref=e625]
+            - paragraph [ref=e626]: Interstellar is a 2014 epic science fiction film directed by Christopher Nolan, who co-wrote the screenplay with his brother Jonathan Nolan. It features an ensemble cast led by Matthew McConaughey, Anne Hathaway, Jessica Chastain, Bill Irwin, Ellen Burstyn, and Michael Caine.
+            - generic [ref=e627]:
+              - generic [ref=e628]: Jump
+              - generic [ref=e629]: Preview
+    - generic [ref=e20]:
+      - generic: KNOWLEDGE GRAPH
+      - button "FOCUS" [ref=e174] [cursor=pointer]
+      - generic: TAB cycle · ENTER preview · DBL-CLICK jump · ESC close · drag to pan
+      - generic [ref=e175]:
+        - img
+        - generic [ref=e218] [cursor=pointer]:
+          - generic [ref=e458]: Quant mecha
+          - generic: Quantum mechanics
+        - generic [ref=e221] [cursor=pointer]:
+          - generic [ref=e223]: Adria Kent
+          - generic: Adrian Kent
+        - generic [ref=e224] [cursor=pointer]:
+          - generic [ref=e226]: Alber Messi
+          - generic: Albert Messiah
+        - generic [ref=e227] [cursor=pointer]:
+          - generic [ref=e229]: Alexa Holev
+          - generic: Alexander Holevo
+        - generic [ref=e230] [cursor=pointer]:
+          - generic [ref=e232]: A. Doug
+          - generic: A. Douglas Stone
+        - generic [ref=e233] [cursor=pointer]:
+          - generic [ref=e235]: Abdus Salam
+          - generic: Abdus Salam
+        - generic [ref=e760] [cursor=pointer]:
+          - generic [ref=e762]: Abrah Pais
+          - generic: Abraham Pais
+        - generic [ref=e763] [cursor=pointer]:
+          - generic [ref=e765]: Absol zero
+          - generic: Absolute zero
+        - generic [ref=e766] [cursor=pointer]:
+          - generic [ref=e768]: Accuracy
+          - generic: Accuracy
+        - generic [ref=e245] [cursor=pointer]:
+          - generic [ref=e247]: ArXiv (iden
+          - generic: ArXiv (identifier)
+        - generic [ref=e248] [cursor=pointer]:
+          - generic [ref=e250]: Bell test
+          - generic: Bell test experiments
+        - generic [ref=e251] [cursor=pointer]:
+          - generic [ref=e253]: Bibco (iden
+          - generic: Bibcode (identifier)
+        - generic [ref=e254] [cursor=pointer]:
+          - generic [ref=e256]: Bit commi
+          - generic: Bit commitment
+        - generic [ref=e257] [cursor=pointer]:
+          - generic [ref=e259]: Cent for
+          - generic: Centre for Quantum Information and Foundations
+        - generic [ref=e260] [cursor=pointer]:
+          - generic [ref=e262]: Cent for
+          - generic: Centre for the Study of Existential Risk
+        - generic [ref=e461] [cursor=pointer]:
+          - generic [ref=e699]: Abso Zero
+          - generic: Absolute Zero (disambiguation)
+        - generic [ref=e769] [cursor=pointer]:
+          - generic [ref=e771]: Bose– conde
+          - generic: Bose–Einstein condensate
+        - generic [ref=e772] [cursor=pointer]:
+          - generic [ref=e774]: 0K (disa
+          - generic: 0K (disambiguation)
+        - generic [ref=e775] [cursor=pointer]:
+          - generic [ref=e777]: 90377 Sedna
+          - generic: 90377 Sedna
+        - generic [ref=e778] [cursor=pointer]:
+          - generic [ref=e780]: Absol tempe
+          - generic: Absolute temperature
+        - generic [ref=e781] [cursor=pointer]:
+          - generic [ref=e783]: Adiab expan
+          - generic: Adiabatic expansion
+        - generic [ref=e784] [cursor=pointer]:
+          - generic [ref=e786]: Antoi Lavoi
+          - generic: Antoine Lavoisier
+        - generic [ref=e787] [cursor=pointer]:
+          - generic [ref=e789]: Abso Zero
+          - generic: Absolute Zero (novel)
+        - generic [ref=e790] [cursor=pointer]:
+          - generic [ref=e792]: Abso Zero
+          - generic: Absolute Zero (video game)
+        - generic [ref=e793] [cursor=pointer]:
+          - generic [ref=e795]: Bruce Horns
+          - generic: Bruce Hornsby
+        - generic [ref=e796] [cursor=pointer]:
+          - generic [ref=e798]: Charrm
+          - generic: Charrm
+        - generic [ref=e494] [cursor=pointer]:
+          - generic [ref=e496]: Fait No
+          - generic: Faith No More
+        - generic [ref=e799] [cursor=pointer]:
+          - generic [ref=e801]: Gone Sove
+          - generic: Gone Sovereign/Absolute Zero
+        - generic [ref=e802] [cursor=pointer]:
+          - generic [ref=e804]: Inter (film
+          - generic: Interstellar (film)
+        - generic [ref=e805] [cursor=pointer]:
+          - generic [ref=e807]: 30/30-150
+          - generic: 30/30-150
+        - generic [ref=e808] [cursor=pointer]:
+          - generic [ref=e810]: Alter metal
+          - generic: Alternative metal
+        - generic [ref=e811] [cursor=pointer]:
+          - generic [ref=e813]: Amebix
+          - generic: Amebix
+        - generic [ref=e814] [cursor=pointer]:
+          - generic [ref=e816]: Audio Secre
+          - generic: Audio Secrecy
+        - generic [ref=e817] [cursor=pointer]:
+          - generic [ref=e819]: Aust Reco
+          - generic: Australian Recording Industry Association
+        - generic [ref=e820] [cursor=pointer]:
+          - generic [ref=e822]: Billb (maga
+          - generic: Billboard (magazine)

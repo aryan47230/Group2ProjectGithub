@@ -1,0 +1,43 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.5rem;
+  font-size: 0.88rem;
+  color: #ccc;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.yes {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-purple);
+  color: var(--bg-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.yes:hover { background: var(--accent-purple-light); }
+
+.no {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.no:hover { color: #e0e0e0; }
