@@ -7,7 +7,9 @@
   background: rgba(6, 9, 15, 0.95);
   border-bottom: 1px solid var(--border-dim);
   z-index: 100;
-  position: relative;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
   backdrop-filter: blur(12px);
 }
 

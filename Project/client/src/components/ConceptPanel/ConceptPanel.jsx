@@ -82,9 +82,9 @@ export default function ConceptPanel() {
         {/* Cross-link: generate a skill tree for this concept */}
         <a
           href={`/?generate=${encodeURIComponent(c.title)}`}
-          className={styles.enrichBtn}
-          style={{ textAlign: 'center', textDecoration: 'none', display: 'block' }}
+          className={styles.skillTreeLink}
         >
+          <span className={styles.skillTreeLinkIcon}>⟡</span>
           Generate Skill Tree
         </a>
 

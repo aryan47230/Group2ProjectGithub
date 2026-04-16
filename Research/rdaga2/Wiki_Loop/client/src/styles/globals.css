@@ -51,6 +51,11 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow: hidden;
+  height: 100vh;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);

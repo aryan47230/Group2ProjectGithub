@@ -2,6 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .main {
@@ -23,4 +24,16 @@
   flex: 1;
   position: relative;
   background: #080818;
+}
+
+.appHidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.appVisible {
+  opacity: 1;
+  transition: opacity 600ms ease 200ms;
+  pointer-events: all;
 }

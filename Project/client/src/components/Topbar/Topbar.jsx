@@ -4,7 +4,7 @@ import { searchConcepts } from '../../utils/api';
 import styles from './Topbar.module.css';
 
 export default function Topbar() {
-  const { trailIndex, toggleTrail, toggleJourney, trailOpen, pickCuriosity, currentConcept } = useExplorer();
+  const { trail, trailIndex, toggleTrail, toggleJourney, trailOpen, pickCuriosity, currentConcept, goToIndex } = useExplorer();
   const { jumpTo } = useExplorer();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -12,6 +12,7 @@ export default function Topbar() {
   const [scanning, setScanning] = useState(false);
   const searchRef = useRef(null);
   const debounceRef = useRef(null);
+  const scanTimerRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -20,13 +21,18 @@ export default function Topbar() {
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      clearTimeout(debounceRef.current);
+      clearTimeout(scanTimerRef.current);
+    };
   }, []);
 
   function handleInput(value) {
     setQuery(value);
     setScanning(true);
-    setTimeout(() => setScanning(false), 1500);
+    clearTimeout(scanTimerRef.current);
+    scanTimerRef.current = setTimeout(() => setScanning(false), 1500);
     clearTimeout(debounceRef.current);
     if (value.trim().length < 2) { setResults([]); setShowResults(false); return; }
     debounceRef.current = setTimeout(async () => {
@@ -108,6 +114,27 @@ export default function Topbar() {
           </button>
         </div>
       </div>
+      {trail.length > 1 && (
+        <div className={styles.breadcrumbs}>
+          {trail.length > 5 && <span className={styles.breadcrumbEllipsis}>...</span>}
+          {trail.slice(-5).map((entry, i) => {
+            const realIndex = trail.length - 5 + i;
+            const idx = trail.length <= 5 ? i : realIndex;
+            const isCurrent = idx === trailIndex;
+            return (
+              <span key={`${entry.title}-${idx}`} className={styles.breadcrumbItem}>
+                {i > 0 && <span className={styles.breadcrumbSep}>&gt;</span>}
+                <span
+                  className={`${styles.breadcrumbLabel} ${isCurrent ? styles.breadcrumbActive : ''}`}
+                  onClick={() => !isCurrent && goToIndex(idx)}
+                >
+                  {entry.title}
+                </span>
+              </span>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }

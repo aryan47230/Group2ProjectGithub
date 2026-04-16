@@ -35,7 +35,9 @@
   box-shadow:
     0 0 0 1px var(--rn-hair),
     0 24px 60px -20px rgba(0, 0, 0, 0.75),
-    0 0 80px -20px var(--rn-cyan-glow);
+    0 0 80px -20px var(--rn-cyan-glow),
+    0 0 60px rgba(255,170,64,0.06),
+    0 0 120px rgba(255,170,64,0.025);
 
   animation: rn-modal-in 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -143,7 +145,8 @@
   font-size: 14px;
   font-family: var(--rn-font-display);
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  box-shadow: 0 0 10px rgba(255,170,64,0.04);
+  transition: border-color 0.25s, box-shadow 0.3s, background 0.25s;
 }
 
 .form input::placeholder { color: var(--rn-txt-3); }
@@ -151,7 +154,7 @@
 .form input:focus {
   border-color: var(--rn-cyan);
   background: rgba(0, 255, 242, 0.025);
-  box-shadow: 0 0 0 3px var(--rn-cyan-glow);
+  box-shadow: 0 0 20px rgba(0,255,242,0.12), inset 0 0 10px rgba(0,255,242,0.03);
 }
 
 .error {
@@ -182,13 +185,14 @@
   letter-spacing: var(--rn-tracked-2);
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 15px rgba(0,255,242,0.12);
+  transition: background 0.2s, color 0.2s, box-shadow 0.3s;
 }
 
 .submit:hover {
   background: var(--rn-cyan-glow);
   color: var(--rn-cyan-h);
-  box-shadow: 0 0 28px -6px var(--rn-cyan-glow);
+  box-shadow: 0 0 28px rgba(0,255,242,0.25);
 }
 
 .submit:disabled {
@@ -213,7 +217,7 @@
   transition: color 0.15s;
   align-self: center;
 }
-.close:hover { color: var(--rn-cyan); }
+.close:hover { color: var(--rn-cyan); text-shadow: 0 0 10px rgba(255,255,255,0.2); }
 
 /* Mode-specific tint: signup leans cyan, login leans gold */
 .modal[data-mode="register"] .submit {

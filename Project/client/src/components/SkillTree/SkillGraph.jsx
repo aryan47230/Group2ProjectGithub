@@ -80,9 +80,10 @@ const R_DONE = 40;
 const R_OPEN = 36;
 const R_LOCK = 30;
 
-export default function SkillGraph({ nodes, completedNodes, onNodeClick }) {
+export default function SkillGraph({ nodes, completedNodes, justCompleted, onNodeClick }) {
   const containerRef = useRef(null);
   const svgRef       = useRef(null);
+  const tooltipRef   = useRef(null);
 
   useEffect(() => {
     const svg       = svgRef.current;
@@ -365,7 +366,32 @@ export default function SkillGraph({ nodes, completedNodes, onNodeClick }) {
         g.appendChild(ck);
       }
 
-      g.addEventListener('click', () => onNodeClick(skill));
+      // ── Completion pulse animation ────────────────────────────────────────
+      if (justCompleted === skill.name && isDone) {
+        const pulse = mk('circle', {
+          r: String(r), fill: 'none',
+          stroke: '#00fff2', 'stroke-width': '2', 'pointer-events': 'none',
+          opacity: '0.8',
+        });
+        pulse.style.transformOrigin = 'center';
+        pulse.classList.add(styles.completePulse);
+        g.appendChild(pulse);
+        // Second delayed ring
+        const pulse2 = mk('circle', {
+          r: String(r), fill: 'none',
+          stroke: '#00fff2', 'stroke-width': '1.5', 'pointer-events': 'none',
+          opacity: '0.5',
+        });
+        pulse2.style.transformOrigin = 'center';
+        pulse2.style.animationDelay = '0.15s';
+        pulse2.classList.add(styles.completePulse);
+        g.appendChild(pulse2);
+      }
+
+      g.addEventListener('click', () => {
+        if (tooltipRef.current) tooltipRef.current.style.opacity = '0';
+        onNodeClick(skill);
+      });
 
       nodeGroups.set(skill.name, { g, skill, isApex, isDone, isLock, strokeCol, bloom, px: p.x, py: p.y });
       nodeLayer.appendChild(g);
@@ -420,11 +446,32 @@ export default function SkillGraph({ nodes, completedNodes, onNodeClick }) {
       }
     }
 
-    for (const [name, { g, isApex, bloom, px, py }] of nodeGroups) {
+    for (const [name, { g, skill, isApex, bloom, px, py }] of nodeGroups) {
       g.addEventListener('mouseenter', () => {
         // Scale up and reveal the bloom — radial shine behind the node (wikiloop-style)
         g.setAttribute('transform', `translate(${px},${py}) scale(1.13)`);
         bloom.setAttribute('opacity', isApex ? '0.32' : '0.24');
+
+        // Show tooltip
+        const tip = tooltipRef.current;
+        if (tip) {
+          const reqs = skill.requires?.length ? skill.requires.join(', ') : null;
+          tip.innerHTML = `<div class="${styles.tooltipName}">${skill.name}</div>`
+            + `<div class="${styles.tooltipLevel}">LVL ${skill.level}</div>`
+            + (skill.description ? `<div class="${styles.tooltipDesc}">${skill.description.slice(0, 120)}${skill.description.length > 120 ? '...' : ''}</div>` : '')
+            + (reqs ? `<div class="${styles.tooltipReqs}">Requires: ${reqs}</div>` : '');
+          // Position relative to the container
+          const containerRect = containerRef.current.getBoundingClientRect();
+          const svgRect = svgRef.current.getBoundingClientRect();
+          const scrollLeft = containerRef.current.scrollLeft;
+          const scrollTop = containerRef.current.scrollTop;
+          const tipX = px - scrollLeft + (svgRect.left - containerRect.left);
+          const tipY = py - scrollTop + (svgRect.top - containerRect.top) - 20;
+          tip.style.left = `${tipX}px`;
+          tip.style.top = `${tipY}px`;
+          tip.style.opacity = '1';
+          tip.style.pointerEvents = 'none';
+        }
 
         // Dim every other node (softened — less harsh than before)
         for (const [n, { g: og }] of nodeGroups) {
@@ -455,15 +502,18 @@ export default function SkillGraph({ nodes, completedNodes, onNodeClick }) {
         bloom.setAttribute('opacity', '0');
         for (const [, { g: og }] of nodeGroups) og.style.opacity = '';
         resetEdges();
+        // Hide tooltip
+        if (tooltipRef.current) tooltipRef.current.style.opacity = '0';
       });
     }
 
     return () => { svg.innerHTML = ''; };
-  }, [nodes, completedNodes, onNodeClick]);
+  }, [nodes, completedNodes, justCompleted, onNodeClick]);
 
   return (
     <div ref={containerRef} className={styles.graphContainer}>
       <svg ref={svgRef} className={styles.graph} />
+      <div ref={tooltipRef} className={styles.nodeTooltip} />
     </div>
   );
 }

@@ -6,6 +6,8 @@
   overflow: hidden;
   background: var(--rn-void);
   outline: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* ─── Vignette for depth ─── */

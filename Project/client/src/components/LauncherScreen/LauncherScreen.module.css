@@ -1,0 +1,338 @@
+.launcher {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background: #000000;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 500ms ease;
+  font-family: var(--font-display, 'Outfit'), sans-serif;
+}
+
+.launcher.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 130, 20, 0.05), transparent 55%),
+    #000000;
+  pointer-events: none;
+}
+
+.connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.connector {
+  stroke: rgba(255, 170, 64, 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  opacity: 0;
+  transition: opacity 350ms ease 120ms;
+}
+
+.connector.connectorVisible {
+  opacity: 1;
+}
+
+/* ---------- Node base: transparent button hosting the WebGL blackhole ---------- */
+.node {
+  position: absolute;
+  border: none;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-amber, #ffaa40);
+  overflow: visible;
+  transition:
+    transform 450ms ease,
+    opacity 400ms ease,
+    width 450ms ease,
+    height 450ms ease,
+    left 450ms ease,
+    top 450ms ease;
+}
+
+.node:hover:not(:disabled) {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+/* ---------- Hero node (BRANCHER) — always the largest ---------- */
+.hero {
+  width: 320px;
+  height: 320px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.heroLabel {
+  position: relative;
+  z-index: 3;
+  font-size: 16px;
+  letter-spacing: 6px;
+  color: rgba(255, 220, 140, 0.95);
+  font-weight: 500;
+  pointer-events: none;
+  text-shadow:
+    0 0 10px rgba(255, 170, 64, 0.8),
+    0 0 22px rgba(255, 130, 20, 0.45);
+}
+
+/* During selection phase — stay clearly bigger than children */
+.heroDim {
+  width: 260px;
+  height: 260px;
+  opacity: 0.78;
+  cursor: default;
+}
+
+.heroDim .heroLabel {
+  font-size: 14px;
+  letter-spacing: 5px;
+}
+
+.heroGone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Intensified state while generating — faster spark orbit */
+.heroGenerating {
+  animation: heroPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* In-place loading panel shown after submit */
+.loadingPanel {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 160px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 350ms ease 120ms;
+}
+
+.loadingPanelShown {
+  opacity: 1;
+}
+
+.loadingLabel {
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255, 200, 90, 0.9);
+  text-shadow: 0 0 10px rgba(255, 170, 64, 0.55);
+}
+
+.loadingTopic {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Child nodes (smaller than brancher) ---------- */
+.child {
+  width: 190px;
+  height: 190px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  pointer-events: none;
+}
+
+.childSW {
+  left: calc(50% - 290px);
+  top: calc(50% + 240px);
+}
+
+.childSE {
+  left: calc(50% + 290px);
+  top: calc(50% + 240px);
+}
+
+.childShown {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+  transition:
+    opacity 400ms ease-out 80ms,
+    transform 400ms ease-out 80ms,
+    left 450ms ease,
+    top 450ms ease,
+    width 450ms ease,
+    height 450ms ease,
+    box-shadow 250ms ease;
+}
+
+/* Label now sits INSIDE the node ring */
+.childLabel {
+  position: relative;
+  z-index: 3;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgba(255, 220, 140, 0.95);
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    0 0 10px rgba(255, 170, 64, 0.75),
+    0 0 20px rgba(255, 130, 20, 0.4);
+}
+
+.childFaded {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+/* After a child is chosen — it grows and anchors near the top */
+.childChosen {
+  left: 50%;
+  top: 170px;
+  width: 220px;
+  height: 220px;
+  cursor: default;
+  pointer-events: none;
+}
+
+.childChosen .childLabel {
+  font-size: 14px;
+  letter-spacing: 4px;
+}
+
+/* ---------- Input panel ---------- */
+.panel {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  transform: translate(-50%, 0);
+  width: 420px;
+  max-width: calc(100vw - 40px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 400ms ease 150ms,
+    transform 400ms ease 150ms;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panelShown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -30px);
+}
+
+.panelLabel {
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: rgba(255, 200, 90, 0.6);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.panelHint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  line-height: 1.55;
+}
+
+.textarea {
+  width: 100%;
+  resize: none;
+  background: #000000;
+  border: 1px solid rgba(255, 170, 64, 0.3);
+  border-radius: 4px;
+  padding: 14px 16px;
+  font-family: var(--font-display, 'Outfit'), sans-serif;
+  font-size: 14px;
+  color: #ffd27a;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.textarea::placeholder {
+  color: rgba(255, 170, 64, 0.4);
+}
+
+.textarea:focus {
+  border-color: rgba(255, 170, 64, 0.7);
+  box-shadow: 0 0 20px rgba(255, 170, 64, 0.25);
+}
+
+.generate {
+  position: relative;
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 170, 64, 0.55);
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+}
+
+.generate:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.generate:hover:not(:disabled) {
+  background: rgba(255, 170, 64, 0.08);
+  border-color: rgba(255, 170, 64, 0.9);
+  box-shadow: 0 0 24px rgba(255, 170, 64, 0.3);
+}
+
+.generateText {
+  position: relative;
+  font-family: var(--font-display, 'Outfit'), sans-serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #ffd27a;
+  z-index: 2;
+}
+
+.generateShimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 170, 64, 0.2) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 700ms ease;
+  z-index: 1;
+}
+
+.generate:hover:not(:disabled) .generateShimmer {
+  transform: translateX(100%);
+}

@@ -2,12 +2,19 @@
   padding: 18px;
   height: 100%;
   overflow-y: auto;
-  background: rgba(6, 9, 15, 0.7);
+  background: linear-gradient(180deg, rgba(255,170,64,0.015) 0%, transparent 12%), rgba(6, 9, 15, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid var(--rn-hair);
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,170,64,0.18) transparent;
 }
+
+.panel::-webkit-scrollbar { width: 4px; }
+.panel::-webkit-scrollbar-track { background: transparent; }
+.panel::-webkit-scrollbar-thumb { background: rgba(255,170,64,0.18); border-radius: 2px; }
+.panel::-webkit-scrollbar-thumb:hover { background: rgba(255,170,64,0.35); }
 
 .panel::after {
   content: '';
@@ -119,7 +126,7 @@
   border-color: rgba(0, 212, 255, 0.45);
   color: rgba(0, 212, 255, 0.95);
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(160, 124, 255, 0.05));
-  box-shadow: 0 0 24px rgba(0, 212, 255, 0.08), inset 0 0 12px rgba(0, 212, 255, 0.03);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.15), inset 0 0 12px rgba(0, 212, 255, 0.03);
 }
 
 .enrichBtn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -185,3 +192,36 @@
 }
 
 .pathInsightIcon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+/* ─── Generate Skill Tree link ─── */
+.skillTreeLink {
+  width: 100%;
+  padding: 11px 18px;
+  margin: 8px 0;
+  border: 1px solid rgba(255, 170, 64, 0.2);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 170, 64, 0.04), rgba(255, 170, 64, 0.02));
+  color: rgba(255, 170, 64, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.25s;
+  box-shadow: 0 0 12px rgba(255, 170, 64, 0.08);
+}
+
+.skillTreeLink:hover {
+  border-color: rgba(255, 170, 64, 0.45);
+  color: rgba(255, 170, 64, 0.95);
+  background: linear-gradient(135deg, rgba(255, 170, 64, 0.08), rgba(255, 170, 64, 0.04));
+  box-shadow: 0 0 25px rgba(255, 170, 64, 0.15);
+}
+
+.skillTreeLinkIcon { font-size: 14px; }

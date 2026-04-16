@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useSkillTree } from '../../context/SkillTreeContext';
 import SkillGraph from './SkillGraph';
 import DetailPanel from './DetailPanel';
+import ShareButton from './ShareButton';
 import styles from './SkillTree.module.css';
 
 export default function TreeView() {
@@ -18,9 +19,15 @@ export default function TreeView() {
     setPanelOpen(false);
   }, []);
 
+  const justCompletedRef = useRef(null);
   const handleToggle = useCallback((name) => {
+    if (!completedNodes.has(name)) {
+      justCompletedRef.current = name;
+    } else {
+      justCompletedRef.current = null;
+    }
     toggleComplete(name);
-  }, [toggleComplete]);
+  }, [toggleComplete, completedNodes]);
 
   // Keep selectedNode reference fresh after toggle (so DetailPanel re-renders from new completedNodes)
   // We use a derived node from currentNodes to ensure we have the latest object
@@ -53,11 +60,13 @@ export default function TreeView() {
             <div className={styles.progressFill} style={{ width: `${pct}%` }} />
           </div>
         </div>
+        <ShareButton topic={currentTopic} nodes={currentNodes} completedNodes={completedNodes} />
       </div>
       <div className={styles.treeBody}>
         <SkillGraph
           nodes={currentNodes}
           completedNodes={completedNodes}
+          justCompleted={justCompletedRef.current}
           onNodeClick={handleNodeClick}
         />
         <DetailPanel

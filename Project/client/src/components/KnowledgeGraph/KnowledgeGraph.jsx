@@ -39,9 +39,7 @@ export default function KnowledgeGraph() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const isPanningRef = useRef(false);
   const [isAutoPanning, setIsAutoPanning] = useState(false);
-  const panStart = useRef({ x: 0, y: 0 });
   const panRef = useRef(pan);
   const expandedRef = useRef(new Set());
   const [focusedIdx, setFocusedIdx] = useState(-1);
@@ -183,45 +181,7 @@ export default function KnowledgeGraph() {
     });
   }, [currentConcept?.title]);
 
-  // Manual pan — bypass React state during active panning for smooth 60fps+
-  // On mousemove: apply transform directly to DOM (no re-render)
-  // On mouseup: sync panRef → pan state once (triggers viewport culling update)
-  const handleMouseDown = useCallback((e) => {
-    if (e.target.closest('[data-node]') || e.target.closest('[data-popover]')) return;
-    isPanningRef.current = true;
-    panStart.current = { x: e.clientX - panRef.current.x, y: e.clientY - panRef.current.y };
-    // Direct DOM: no React state, no re-render
-    if (containerRef.current) containerRef.current.style.cursor = 'grabbing';
-    if (canvasRef.current) canvasRef.current.style.transition = 'none';
-  }, []);
-
-  const handleMouseMove = useCallback((e) => {
-    if (!isPanningRef.current) return;
-    const newX = e.clientX - panStart.current.x;
-    const newY = e.clientY - panStart.current.y;
-    panRef.current = { x: newX, y: newY };
-    if (canvasRef.current) {
-      canvasRef.current.style.transform =
-        `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
-    }
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    if (!isPanningRef.current) return;
-    isPanningRef.current = false;
-    if (containerRef.current) containerRef.current.style.cursor = '';
-    if (canvasRef.current) canvasRef.current.style.transition = 'transform 0.08s ease-out';
-    setPan({ ...panRef.current }); // one re-render on release to update viewport culling
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
+  // Manual pan disabled — users should not be able to drag-pan the graph
 
   // Keyboard nav
   const navigableNodes = useMemo(() => {
@@ -411,8 +371,8 @@ export default function KnowledgeGraph() {
     <div
       className={styles.container}
       ref={containerRef}
-      onMouseDown={handleMouseDown}
       tabIndex={0}
+      style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
     >
       {/* Vignette for depth */}
       <div className={styles.vignette} />
@@ -461,7 +421,7 @@ export default function KnowledgeGraph() {
       <button className={styles.focusBtn} onClick={toggleFocus}>
         {focusMode ? 'SHOW ALL' : 'FOCUS'}
       </button>
-      <div className={styles.hint}>TAB cycle &middot; ENTER preview &middot; DBL-CLICK jump &middot; ESC close &middot; drag to pan</div>
+      <div className={styles.hint}>TAB cycle &middot; ENTER preview &middot; DBL-CLICK jump &middot; ESC close</div>
 
       <div
         ref={canvasRef}

@@ -2,12 +2,17 @@
 @import './refined-neon.css';
 
 :root {
-  /* Legacy background aliases → refined neon */
-  --bg-primary:    var(--rn-void);
-  --bg-secondary:  var(--rn-ink);
-  --bg-tertiary:   var(--rn-paper);
-  --bg-card:       var(--rn-card);
-  --bg-card-hover: var(--rn-card-h);
+  /* Force pure black canvas globally (override refined-neon defaults) */
+  --rn-void:   #000000;
+  --rn-ink:    #000000;
+  --rn-paper:  #000000;
+
+  /* Legacy background aliases → pure black */
+  --bg-primary:    #000000;
+  --bg-secondary:  #000000;
+  --bg-tertiary:   #000000;
+  --bg-card:       #000000;
+  --bg-card-hover: #0a0a0a;
 
   /* Legacy border aliases */
   --border-color:   var(--rn-hair-2);
@@ -63,7 +68,7 @@
 [hidden] { display: none !important; }
 
 html, body {
-  background: var(--rn-void);
+  background: #000000;
   color: var(--rn-txt-0);
   font-family: var(--rn-font-display);
   min-height: 100vh;
@@ -72,12 +77,30 @@ html, body {
 }
 
 body {
-  /* Subtle background atmospherics — faint radial glow from top-left */
-  background:
-    radial-gradient(1200px 800px at 15% -10%, rgba(77, 159, 255, 0.04), transparent 60%),
-    radial-gradient(900px 700px at 85% 100%, rgba(255, 170, 64, 0.03), transparent 55%),
-    var(--rn-void);
+  background: #000000;
   background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.12) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.08) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 90%, rgba(255,255,255,0.12) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 15%, rgba(255,255,255,0.08) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 35%, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+#root {
+  background: #000000;
+  min-height: 100vh;
 }
 
 a {
@@ -100,11 +123,17 @@ button {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-thumb {
-  background: var(--rn-hair-2);
-  border-radius: var(--rn-radius-pill);
+  background: rgba(255,170,64,0.18);
+  border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--rn-hair-3); }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,170,64,0.35); }
+::-webkit-scrollbar-track { background: #000000; }
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,170,64,0.18) #000000;
+}
 
 /* Utility: mono data label */
 .rn-mono-label {
@@ -119,4 +148,15 @@ button {
 .rn-hair {
   height: 1px;
   background: var(--rn-hair-2);
+}
+
+/* Route transitions */
+.route-container {
+  transition: opacity 0.2s ease;
+}
+.route-entering {
+  opacity: 0.7;
+}
+.route-visible {
+  opacity: 1;
 }

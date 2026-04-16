@@ -6,6 +6,7 @@ export default function AppHeader({ onSignIn, onSignUp }) {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
   const isExplore = pathname.startsWith('/explore');
+  const isSkillTree = !isExplore;
 
   return (
     <header className={styles.header}>
@@ -19,8 +20,8 @@ export default function AppHeader({ onSignIn, onSignUp }) {
 
       <nav className={styles.tabs} aria-label="Primary">
         <Link
-          to="/"
-          className={`${styles.tab} ${!isExplore ? styles.tabActive : ''}`}
+          to="/skill-tree"
+          className={`${styles.tab} ${isSkillTree ? styles.tabActive : ''}`}
         >
           Skill Tree
         </Link>
@@ -28,7 +29,7 @@ export default function AppHeader({ onSignIn, onSignUp }) {
           to="/explore"
           className={`${styles.tab} ${isExplore ? styles.tabActive : ''}`}
         >
-          Explore
+          Wikihopper
         </Link>
       </nav>
 
