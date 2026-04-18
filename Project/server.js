@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import session from "express-session";
 import bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
 import { db } from "./db.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 
@@ -85,6 +86,39 @@ app.post("/api/trees", requireAuth, async (req, res) => {
 
 app.delete("/api/trees/:topic", requireAuth, async (req, res) => {
   await db.deleteTree(req.session.userId, decodeURIComponent(req.params.topic));
+  res.json({ ok: true });
+});
+
+// ── Sharing ────────────────────────────────────────────────────────────────────
+
+app.post("/api/trees/:topic/share", requireAuth, async (req, res) => {
+  const topic = decodeURIComponent(req.params.topic);
+  const trees = await db.getTreesByUserId(req.session.userId);
+  const tree = trees.find(t => t.topic.toLowerCase() === topic.toLowerCase());
+  if (!tree) return res.status(404).json({ error: "Tree not found" });
+  let shareId = tree.shareId;
+  if (!shareId) {
+    shareId = randomUUID();
+    await db.setShareId(req.session.userId, topic, shareId);
+  }
+  res.json({ shareId });
+});
+
+app.get("/api/shared/:shareId", async (req, res) => {
+  const tree = await db.getTreeByShareId(req.params.shareId);
+  if (!tree) return res.status(404).json({ error: "Shared tree not found" });
+  res.json({ topic: tree.topic, nodes: tree.nodes, completed: tree.completed });
+});
+
+app.post("/api/trees/:topic/send", requireAuth, async (req, res) => {
+  const { targetUsername } = req.body;
+  if (!targetUsername) return res.status(400).json({ error: "Missing targetUsername" });
+  const targetUser = await db.getUserByUsername(targetUsername);
+  if (!targetUser) return res.status(404).json({ error: "User not found" });
+  if (targetUser.id === req.session.userId) return res.status(400).json({ error: "Cannot send to yourself" });
+  const topic = decodeURIComponent(req.params.topic);
+  const ok = await db.sendTree(req.session.userId, topic, targetUser.id);
+  if (!ok) return res.status(404).json({ error: "Tree not found" });
   res.json({ ok: true });
 });
 

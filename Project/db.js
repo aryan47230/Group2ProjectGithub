@@ -46,6 +46,7 @@ export const db = {
       topic: t.topic,
       nodes: t.nodes,
       completed: t.completed,
+      shareId: t.share_id,
       savedAt: t.saved_at,
     }));
   },
@@ -77,5 +78,56 @@ export const db = {
       .delete()
       .eq("user_id", userId)
       .eq("topic", topic);
+  },
+
+  // ── Sharing ────────────────────────────────────────────────────────────────
+  // Requires a nullable `share_id` text column (unique) on the `trees` table.
+
+  async getTreeByShareId(shareId) {
+    const { data } = await supabase
+      .from("trees")
+      .select("*")
+      .eq("share_id", shareId)
+      .single();
+    if (!data) return null;
+    return { id: data.id, userId: data.user_id, topic: data.topic, nodes: data.nodes, completed: data.completed };
+  },
+
+  async setShareId(userId, topic, shareId) {
+    const { error } = await supabase
+      .from("trees")
+      .update({ share_id: shareId })
+      .eq("user_id", userId)
+      .ilike("topic", topic);
+    return !error;
+  },
+
+  async sendTree(sourceUserId, sourceTopic, targetUserId) {
+    const { data: source } = await supabase
+      .from("trees")
+      .select("*")
+      .eq("user_id", sourceUserId)
+      .ilike("topic", sourceTopic)
+      .single();
+    if (!source) return false;
+
+    const { data: existing } = await supabase
+      .from("trees")
+      .select("id")
+      .eq("user_id", targetUserId)
+      .ilike("topic", source.topic)
+      .single();
+
+    if (existing) {
+      await supabase
+        .from("trees")
+        .update({ nodes: source.nodes, completed: [], saved_at: new Date().toISOString() })
+        .eq("id", existing.id);
+    } else {
+      await supabase
+        .from("trees")
+        .insert({ user_id: targetUserId, topic: source.topic, nodes: source.nodes, completed: [], saved_at: new Date().toISOString() });
+    }
+    return true;
   },
 };
