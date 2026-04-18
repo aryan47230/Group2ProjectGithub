@@ -1,0 +1,97 @@
+- generic [ref=e5]:
+  - banner [ref=e82]:
+    - generic [ref=e83]:
+      - generic [ref=e84]: STG
+      - generic [ref=e85]: Skill Tree Generator
+      - generic [ref=e86]: v1
+    - navigation "Primary" [ref=e87]:
+      - link "Skill Tree" [ref=e88] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e89] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e90]:
+      - button "Sign In" [ref=e91] [cursor=pointer]
+      - button "Sign Up" [ref=e92] [cursor=pointer]
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - button "← Back" [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: ←
+        - generic [ref=e97]: Back
+      - generic [ref=e98]:
+        - generic [ref=e99]: TOPIC
+        - heading "git basics" [level=2] [ref=e100]
+      - generic [ref=e102]: 00/10 · 0%
+      - button "⤤" [ref=e105] [cursor=pointer]
+    - generic [ref=e106]:
+      - generic [ref=e107]:
+        - img [ref=e108]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - generic: C
+              - generic: Command…
+              - generic: Command Line Fundamentals
+            - generic [ref=e114]:
+              - generic: B
+              - generic: Basic F…
+              - generic: Basic File System Operations
+            - generic [ref=e116]:
+              - generic: T
+              - generic: Text Ed…
+              - generic: Text Editor Proficiency
+            - generic [ref=e118]:
+              - generic: V
+              - generic: Version…
+              - generic: Version Control Concepts
+            - generic [ref=e120]:
+              - generic: U
+              - generic: Underst…
+              - generic: Understanding File Changes
+            - generic [ref=e122]:
+              - generic: G
+              - generic: Git Rep…
+              - generic: Git Repository Initialization
+            - generic [ref=e124]:
+              - generic: S
+              - generic: Staging…
+              - generic: Staging and Committing Changes
+            - generic [ref=e126]:
+              - generic: V
+              - generic: Viewing…
+              - generic: Viewing Repository History
+            - generic [ref=e128]:
+              - generic: B
+              - generic: Basic B…
+              - generic: Basic Branching and Merging
+            - generic [ref=e130]:
+              - generic: W
+              - generic: Working…
+              - generic: Working with Remote Repositories
+        - generic:
+          - generic: Text Editor Proficiency
+          - generic: LVL 1
+          - generic: Become comfortable using a text editor to create, open, edit, and save plain text files, which is crucial for writing co...
+      - complementary [ref=e133]:
+        - generic [ref=e134]:
+          - heading "Text Editor Proficiency" [level=3] [ref=e202]
+          - button "Close details" [ref=e136] [cursor=pointer]
+        - generic [ref=e139]: LVL 1
+        - generic [ref=e140]:
+          - button "Overview" [ref=e141] [cursor=pointer]
+          - button "Learn" [ref=e142] [cursor=pointer]
+          - button "Resources" [ref=e143] [cursor=pointer]
+        - generic [ref=e203]:
+          - paragraph [ref=e204]: How to develop
+          - paragraph [ref=e205]: Become comfortable using a text editor to create, open, edit, and save plain text files, which is crucial for writing code, configuration, and commit messages.
+          - paragraph [ref=e206]: Practice tips
+          - list [ref=e207]:
+            - listitem [ref=e208]: • Choose a popular editor (VS Code, Sublime Text, Vim, Nano) and learn its basic shortcuts for saving, opening, and navigating.
+            - listitem [ref=e209]: • Practice editing various types of plain text files, including code and simple notes.
+            - listitem [ref=e210]: • Learn how to configure your chosen editor to highlight syntax and show line numbers.
+          - generic [ref=e211]:
+            - paragraph [ref=e212]: What you'll be able to do
+            - list [ref=e213]:
+              - listitem [ref=e214]: ✓ Create and modify plain text files effectively.
+              - listitem [ref=e215]: ✓ Navigate and search within documents using editor shortcuts.
+              - listitem [ref=e216]: ✓ Configure basic editor settings for a better coding experience.
+        - button "MARK COMPLETE" [ref=e158] [cursor=pointer]
+  - button "?" [ref=e132] [cursor=pointer]

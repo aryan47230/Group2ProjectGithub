@@ -1,0 +1,188 @@
+- generic [ref=e5]:
+  - banner [ref=e250]:
+    - generic [ref=e251]:
+      - generic [ref=e252]: STG
+      - generic [ref=e253]: Skill Tree Generator
+      - generic [ref=e254]: v1
+    - navigation "Primary" [ref=e255]:
+      - link "Skill Tree" [ref=e256] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e257] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e258]:
+      - button "Sign In" [ref=e259] [cursor=pointer]
+      - button "Sign Up" [ref=e260] [cursor=pointer]
+  - generic [ref=e261]:
+    - generic [ref=e263]:
+      - generic [ref=e264]: /
+      - textbox "explore a concept..." [ref=e265]
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - generic [ref=e268]: "1"
+        - generic [ref=e269]: hops
+      - button "RANDOM" [ref=e270] [cursor=pointer]
+      - button "TRAIL" [ref=e271] [cursor=pointer]
+      - button "MAP" [ref=e272] [cursor=pointer]
+  - generic [ref=e274]:
+    - generic [ref=e277]:
+      - generic [ref=e278]:
+        - button "← Back" [disabled] [ref=e279]
+        - generic [ref=e282]: Quantum mechanics
+      - generic [ref=e283]:
+        - img "Quantum mechanics" [ref=e285]
+        - generic [ref=e287]:
+          - generic [ref=e288]: 1920s introductions
+          - heading "Quantum mechanics" [level=1] [ref=e289]
+          - paragraph [ref=e290]: Quantum mechanics is the fundamental physical theory that describes the behavior of matter and of light; its unusual characteristics typically occur at and below the scale of atoms. It is the foundation of all quantum physics, which includes quantum chemistry, quantum biology, quantum field theory, quantum technology, and quantum information science. Quantum mechanics can describe many systems that classical physics cannot.
+          - generic [ref=e291]:
+            - generic [ref=e292]:
+              - generic [ref=e293]: Category
+              - generic [ref=e294]: 1920s introductions
+            - generic [ref=e295]:
+              - generic [ref=e296]: Also known as
+              - generic [ref=e297]: Quantum mechanics
+            - generic [ref=e298]:
+              - generic [ref=e299]: Related topics
+              - generic [ref=e300]: 50 connected articles
+            - generic [ref=e301]:
+              - generic [ref=e302]: Sections
+              - generic [ref=e303]: 24 Wikipedia sections
+      - button "Enrich with AI" [ref=e304] [cursor=pointer]
+      - link "⟡ Generate Skill Tree" [ref=e305] [cursor=pointer]:
+        - /url: /?generate=Quantum%20mechanics
+        - generic [ref=e306]: ⟡
+        - text: Generate Skill Tree
+      - generic [ref=e308] [cursor=pointer]:
+        - generic [ref=e309]:
+          - heading "Deep Dive" [level=3] [ref=e310]
+          - generic [ref=e311]: Full Wikipedia sections
+        - generic [ref=e312]: +
+      - generic [ref=e313]:
+        - generic [ref=e314]:
+          - generic [ref=e315]: On the Graph
+          - generic [ref=e316]: 8 directly connected
+        - generic [ref=e317]:
+          - generic [ref=e318] [cursor=pointer]:
+            - generic [ref=e323]: Related
+            - heading "A. Douglas Stone" [level=4] [ref=e324]
+            - paragraph [ref=e325]: "A. Douglas Stone is the Carl Morse Professor of Applied Physics and Physics at Yale University. He was the 2014 recipient of the Phi Beta Kappa Award in Science for his book Einstein and the Quantum: The Quest of the Valiant Swabian."
+            - generic [ref=e326]:
+              - generic [ref=e327]: Jump
+              - generic [ref=e328]: Preview
+          - generic [ref=e329] [cursor=pointer]:
+            - generic [ref=e334]: Related
+            - heading "Abdus Salam" [level=4] [ref=e335]
+            - paragraph [ref=e336]: Mohammad Abdus Salam (; 29 January 1926 – 21 November 1996) was a Pakistani theoretical physicist and Nobel laureate. He shared the 1979 Nobel Prize in Physics with Steven Weinberg and Sheldon Glashow "for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current".
+            - generic [ref=e337]:
+              - generic [ref=e338]: Jump
+              - generic [ref=e339]: Preview
+          - generic [ref=e340] [cursor=pointer]:
+            - generic [ref=e345]: Related
+            - heading "Abraham Pais" [level=4] [ref=e346]
+            - paragraph [ref=e347]: Abraham Pais (; May 19, 1918 – July 28, 2000) was a Dutch-American physicist and science historian. Pais earned his Ph.D. from University of Utrecht just prior to a Nazi ban on Jewish participation in Dutch universities during World War II. When the Nazis began the forced relocation of Dutch Jews, he went into hiding, but was later arrested and saved only by the end of the war.
+            - generic [ref=e348]:
+              - generic [ref=e349]: Jump
+              - generic [ref=e350]: Preview
+          - generic [ref=e351] [cursor=pointer]:
+            - generic [ref=e356]: Related
+            - heading "Absolute zero" [level=4] [ref=e357]
+            - paragraph [ref=e358]: Absolute zero is the lowest theoretically possible temperature, a state at which a system's internal energy, and in ideal cases entropy, reach their minimum values. The Kelvin scale is defined so that absolute zero is 0 K, equivalent to −273.15 °C on the Celsius scale, and −459.67 °F on the Fahrenheit scale.
+            - generic [ref=e359]:
+              - generic [ref=e360]: Jump
+              - generic [ref=e361]: Preview
+          - generic [ref=e362] [cursor=pointer]:
+            - generic [ref=e367]: Related
+            - heading "Accuracy" [level=4] [ref=e368]
+            - paragraph [ref=e369]: A topic related to Quantum mechanics.
+            - generic [ref=e370]:
+              - generic [ref=e371]: Jump
+              - generic [ref=e372]: Preview
+          - generic [ref=e373] [cursor=pointer]:
+            - generic [ref=e378]: Related
+            - heading "Acoustics" [level=4] [ref=e379]
+            - paragraph [ref=e380]: Acoustics is a branch of continuum mechanics that deals with the study of mechanical waves in gases, liquids, and solids including topics such as vibration, sound, ultrasound and infrasound. A scientist who works in the field of acoustics is an acoustician while someone working in the field of acoustics technology may be called an acoustical engineer.
+            - generic [ref=e381]:
+              - generic [ref=e382]: Jump
+              - generic [ref=e383]: Preview
+          - generic [ref=e384] [cursor=pointer]:
+            - generic [ref=e389]: Related
+            - heading "Acta Physica Polonica B" [level=4] [ref=e390]
+            - paragraph [ref=e391]: A topic related to Quantum mechanics.
+            - generic [ref=e392]:
+              - generic [ref=e393]: Jump
+              - generic [ref=e394]: Preview
+          - generic [ref=e395] [cursor=pointer]:
+            - generic [ref=e400]: Related
+            - heading "Action at a distance" [level=4] [ref=e401]
+            - paragraph [ref=e402]: Action at a distance is the concept in physics that an object's motion can be affected by another object without the two being in physical contact; that is, it is the concept of the non-local interaction of objects that are separated in space. Coulomb's law and Newton's law of universal gravitation are based on action at a distance.
+            - generic [ref=e403]:
+              - generic [ref=e404]: Jump
+              - generic [ref=e405]: Preview
+    - generic [ref=e408]:
+      - generic: KNOWLEDGE GRAPH
+      - button "FOCUS" [ref=e409] [cursor=pointer]
+      - generic: TAB cycle · ENTER preview · DBL-CLICK jump · ESC close · drag to pan
+      - generic [ref=e410]:
+        - img
+        - generic [ref=e453] [cursor=pointer]:
+          - generic [ref=e455]: Quant mecha
+          - generic: Quantum mechanics
+        - generic [ref=e456] [cursor=pointer]:
+          - generic [ref=e457]:
+            - generic: A
+            - generic [ref=e458]: A. Doug
+          - generic: A. Douglas Stone
+        - generic [ref=e459] [cursor=pointer]:
+          - generic [ref=e460]:
+            - generic: A
+            - generic [ref=e461]: Abdus Salam
+          - generic: Abdus Salam
+        - generic [ref=e462] [cursor=pointer]:
+          - generic [ref=e463]:
+            - generic: A
+            - generic [ref=e464]: Abrah Pais
+          - generic: Abraham Pais
+        - generic [ref=e465] [cursor=pointer]:
+          - generic [ref=e466]:
+            - generic: A
+            - generic [ref=e467]: Absol zero
+          - generic: Absolute zero
+        - generic [ref=e468] [cursor=pointer]:
+          - generic [ref=e469]:
+            - generic: A
+            - generic [ref=e470]: Accuracy
+          - generic: Accuracy
+        - generic [ref=e471] [cursor=pointer]:
+          - generic [ref=e472]:
+            - generic: A
+            - generic [ref=e473]: Acoustics
+          - generic: Acoustics
+        - generic [ref=e474] [cursor=pointer]:
+          - generic [ref=e475]:
+            - generic: A
+            - generic [ref=e476]: Acta Phys
+          - generic: Acta Physica Polonica B
+        - generic [ref=e477] [cursor=pointer]:
+          - generic [ref=e478]:
+            - generic: A
+            - generic [ref=e479]: Acti at
+          - generic: Action at a distance
+        - generic [ref=e480] [cursor=pointer]:
+          - generic [ref=e482]: Alfr P.
+          - generic: Alfred P. Sloan Fellowship
+        - generic [ref=e483] [cursor=pointer]:
+          - generic [ref=e485]: Amer Phys
+          - generic: American Physical Society
+        - generic [ref=e486] [cursor=pointer]:
+          - generic [ref=e488]: Harva Unive
+          - generic: Harvard University
+        - generic [ref=e489] [cursor=pointer]:
+          - generic [ref=e491]: Mass Inst
+          - generic: Massachusetts Institute of Technology
+        - generic [ref=e492] [cursor=pointer]:
+          - generic [ref=e494]: Oxfor Unive
+          - generic: Oxford University
+        - generic [ref=e495] [cursor=pointer]:
+          - generic [ref=e497]: Phi Beta
+          - generic: Phi Beta Kappa Award in Science
+  - button "?" [ref=e498] [cursor=pointer]

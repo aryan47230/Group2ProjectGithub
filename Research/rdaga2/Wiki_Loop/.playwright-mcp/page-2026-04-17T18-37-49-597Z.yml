@@ -1,0 +1,122 @@
+- generic [ref=e5]:
+  - banner [ref=e82]:
+    - generic [ref=e83]:
+      - generic [ref=e84]: STG
+      - generic [ref=e85]: Skill Tree Generator
+      - generic [ref=e86]: v1
+    - navigation "Primary" [ref=e87]:
+      - link "Skill Tree" [ref=e88] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e89] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e90]:
+      - button "Sign In" [ref=e91] [cursor=pointer]
+      - button "Sign Up" [ref=e92] [cursor=pointer]
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - button "← Back" [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: ←
+        - generic [ref=e97]: Back
+      - generic [ref=e98]:
+        - generic [ref=e99]: TOPIC
+        - heading "git basics" [level=2] [ref=e100]
+      - generic [ref=e102]: 00/10 · 0%
+      - button "⤤" [ref=e105] [cursor=pointer]
+    - generic [ref=e106]:
+      - generic [ref=e107]:
+        - img [ref=e108]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - generic: C
+              - generic: Command…
+              - generic: Command Line Fundamentals
+            - generic [ref=e114]:
+              - generic: B
+              - generic: Basic F…
+              - generic: Basic File System Operations
+            - generic [ref=e116]:
+              - generic: T
+              - generic: Text Ed…
+              - generic: Text Editor Proficiency
+            - generic [ref=e118]:
+              - generic: V
+              - generic: Version…
+              - generic: Version Control Concepts
+            - generic [ref=e120]:
+              - generic: U
+              - generic: Underst…
+              - generic: Understanding File Changes
+            - generic [ref=e122]:
+              - generic: G
+              - generic: Git Rep…
+              - generic: Git Repository Initialization
+            - generic [ref=e124]:
+              - generic: S
+              - generic: Staging…
+              - generic: Staging and Committing Changes
+            - generic [ref=e126]:
+              - generic: V
+              - generic: Viewing…
+              - generic: Viewing Repository History
+            - generic [ref=e128]:
+              - generic: B
+              - generic: Basic B…
+              - generic: Basic Branching and Merging
+            - generic [ref=e130]:
+              - generic: W
+              - generic: Working…
+              - generic: Working with Remote Repositories
+        - generic:
+          - generic: Command Line Fundamentals
+          - generic: LVL 1
+          - generic: Learn to navigate directories, execute commands, and manage files using a command-line interface, which is the primary w...
+      - complementary [ref=e133]:
+        - generic [ref=e134]:
+          - heading "Command Line Fundamentals" [level=3] [ref=e135]
+          - button "Close details" [ref=e136] [cursor=pointer]
+        - generic [ref=e139]: LVL 1
+        - generic [ref=e140]:
+          - button "Overview" [ref=e141] [cursor=pointer]
+          - button "Learn" [ref=e142] [cursor=pointer]
+          - button "Resources" [active] [ref=e143] [cursor=pointer]
+        - generic [ref=e176]:
+          - paragraph [ref=e177]: Resources
+          - list [ref=e178]:
+            - listitem [ref=e179]:
+              - text: ↗
+              - 'link "Codecademy: Learn the Command Line" [ref=e180] [cursor=pointer]':
+                - /url: https://www.codecademy.com/learn/learn-the-command-line
+              - generic [ref=e181]: "[course]"
+              - paragraph [ref=e182]: An interactive course covering fundamental command-line concepts and basic Linux commands.
+            - listitem [ref=e183]:
+              - text: ↗
+              - 'link "The Linux Command Line: A Complete Introduction (Book)" [ref=e184] [cursor=pointer]':
+                - /url: https://www.google.com/search?q=The+Linux+Command+Line+book
+              - generic [ref=e185]: "[book]"
+              - paragraph [ref=e186]: A comprehensive guide to the Linux command line, suitable for beginners and advanced users.
+            - listitem [ref=e187]:
+              - text: ↗
+              - 'link "SS64: Command Line Reference" [ref=e188] [cursor=pointer]':
+                - /url: https://ss64.com/
+              - generic [ref=e189]: "[docs]"
+              - paragraph [ref=e190]: A quick reference for command-line syntax and examples for various operating systems.
+            - listitem [ref=e191]:
+              - text: ↗
+              - 'link "freeCodeCamp: Linux Commands Tutorial - Learn the Basics in 15 Minutes" [ref=e192] [cursor=pointer]':
+                - /url: https://www.youtube.com/watch?v=sWbFm_c2y8Q
+              - generic [ref=e193]: "[video]"
+              - paragraph [ref=e194]: A concise video tutorial introducing essential Linux commands for beginners.
+            - listitem [ref=e195]:
+              - text: ↗
+              - 'link "Learn Shell: Basic Commands" [ref=e196] [cursor=pointer]':
+                - /url: https://www.learnshell.org/
+              - generic [ref=e197]: "[article]"
+              - paragraph [ref=e198]: Interactive online exercises to practice fundamental shell commands directly in your browser.
+            - listitem [ref=e199]:
+              - text: ↗
+              - link "Explore \"Command Line Fundamentals\" on Wikipedia" [ref=e200] [cursor=pointer]:
+                - /url: /explore?q=Command%20Line%20Fundamentals
+              - text: "[wiki]"
+              - paragraph [ref=e201]: Dive deeper with the interactive knowledge graph explorer.
+        - button "MARK COMPLETE" [ref=e158] [cursor=pointer]
+  - button "?" [ref=e132] [cursor=pointer]

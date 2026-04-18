@@ -1,0 +1,50 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img
+    - button "Begin" [disabled]:
+      - generic: BRANCHER
+    - button "Skill Tree mode":
+      - generic:
+        - text: SKILL
+        - text: TREE
+    - button "Wiki Hopper mode":
+      - generic:
+        - text: WIKI
+        - text: HOPPER
+    - generic [ref=e43]:
+      - generic [ref=e44]: SKILL TREE MODE
+      - generic [ref=e45]: Enter a topic or skill to map — e.g. Machine Learning, Music Theory, Photography
+      - textbox "Type a topic..." [active] [ref=e46]: git basics
+      - button "GENERATE" [ref=e47] [cursor=pointer]: GENERATE
+    - generic:
+      - generic: Growing skill tree
+      - generic: git basics
+  - generic [ref=e5]:
+    - banner [ref=e49]:
+      - generic [ref=e50]:
+        - generic [ref=e51]: STG
+        - generic [ref=e52]: Skill Tree Generator
+        - generic [ref=e53]: v1
+      - navigation "Primary" [ref=e54]:
+        - link "Skill Tree" [ref=e55] [cursor=pointer]:
+          - /url: /skill-tree
+        - link "Explore" [ref=e56] [cursor=pointer]:
+          - /url: /explore
+      - generic [ref=e57]:
+        - button "Sign In" [ref=e58] [cursor=pointer]
+        - button "Sign Up" [ref=e59] [cursor=pointer]
+    - main [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]: SKILL TREE GENERATOR · v1
+        - heading "What do you want to learn?" [level=1] [ref=e63]
+        - paragraph [ref=e64]: Type anything — a hobby, a language, a field. We'll chart a layered skill tree.
+      - generic [ref=e66]:
+        - generic [ref=e67]: ▸
+        - textbox "e.g. cooking, archery, guitar..." [ref=e68]
+        - button "Generate" [ref=e69] [cursor=pointer]
+      - generic [ref=e70]: "Error: Gemini API error 503: { \"error\": { \"code\": 503, \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\", \"status\": \"UNAVAILABLE\" } }"
+      - generic [ref=e73]: OR EXPLORE A WIKIPEDIA CONCEPT
+      - generic [ref=e75]:
+        - textbox "e.g. quantum mechanics, stoicism..." [ref=e76]
+        - button "Explore →" [ref=e77] [cursor=pointer]
+    - button "?" [ref=e78] [cursor=pointer]

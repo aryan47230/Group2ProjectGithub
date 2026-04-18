@@ -1,0 +1,48 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img
+    - button "Begin" [disabled] [ref=e4]:
+      - generic: BRANCHER
+    - button "Skill Tree mode" [ref=e35] [cursor=pointer]:
+      - generic:
+        - text: SKILL
+        - text: TREE
+    - button "Wiki Hopper mode" [ref=e36] [cursor=pointer]:
+      - generic:
+        - text: WIKI
+        - text: HOPPER
+    - generic:
+      - generic: WIKI HOPPER MODE
+      - generic: Enter a concept to explore — e.g. Quantum mechanics, Jazz, Byzantine Empire
+      - textbox "Type a topic..."
+      - button "GENERATE" [disabled]: GENERATE
+    - generic:
+      - generic: Loading concept
+  - generic [ref=e5]:
+    - banner [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: STG
+        - generic [ref=e9]: Skill Tree Generator
+        - generic [ref=e10]: v1
+      - navigation "Primary" [ref=e11]:
+        - link "Skill Tree" [ref=e12] [cursor=pointer]:
+          - /url: /skill-tree
+        - link "Explore" [ref=e13] [cursor=pointer]:
+          - /url: /explore
+      - generic [ref=e14]:
+        - button "Sign In" [ref=e15] [cursor=pointer]
+        - button "Sign Up" [ref=e16] [cursor=pointer]
+    - main [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: SKILL TREE GENERATOR · v1
+        - heading "What do you want to learn?" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Type anything — a hobby, a language, a field. We'll chart a layered skill tree.
+      - generic [ref=e23]:
+        - generic [ref=e24]: ▸
+        - textbox "e.g. cooking, archery, guitar..." [ref=e25]
+        - button "Generate" [ref=e26] [cursor=pointer]
+      - generic [ref=e29]: OR EXPLORE A WIKIPEDIA CONCEPT
+      - generic [ref=e31]:
+        - textbox "e.g. quantum mechanics, stoicism..." [ref=e32]
+        - button "Explore →" [ref=e33] [cursor=pointer]
+    - button "?" [ref=e34] [cursor=pointer]

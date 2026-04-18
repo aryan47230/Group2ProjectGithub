@@ -1,0 +1,16 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img
+    - button "Begin" [disabled] [ref=e4] [cursor=pointer]
+    - button "Skill Tree mode" [disabled]:
+      - generic:
+        - text: SKILL
+        - text: TREE
+    - button "Wiki Hopper mode" [disabled]:
+      - generic:
+        - text: WIKI
+        - text: HOPPER
+    - generic:
+      - generic: Growing skill tree
+      - generic: git basics
+  - generic [ref=e81]: Growing skill tree

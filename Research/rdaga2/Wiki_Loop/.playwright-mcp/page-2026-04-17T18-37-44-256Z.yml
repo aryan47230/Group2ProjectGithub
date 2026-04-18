@@ -1,0 +1,105 @@
+- generic [ref=e5]:
+  - banner [ref=e82]:
+    - generic [ref=e83]:
+      - generic [ref=e84]: STG
+      - generic [ref=e85]: Skill Tree Generator
+      - generic [ref=e86]: v1
+    - navigation "Primary" [ref=e87]:
+      - link "Skill Tree" [ref=e88] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e89] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e90]:
+      - button "Sign In" [ref=e91] [cursor=pointer]
+      - button "Sign Up" [ref=e92] [cursor=pointer]
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - button "← Back" [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: ←
+        - generic [ref=e97]: Back
+      - generic [ref=e98]:
+        - generic [ref=e99]: TOPIC
+        - heading "git basics" [level=2] [ref=e100]
+      - generic [ref=e102]: 00/10 · 0%
+      - button "⤤" [ref=e105] [cursor=pointer]
+    - generic [ref=e106]:
+      - generic [ref=e107]:
+        - img [ref=e108]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - generic: C
+              - generic: Command…
+              - generic: Command Line Fundamentals
+            - generic [ref=e114]:
+              - generic: B
+              - generic: Basic F…
+              - generic: Basic File System Operations
+            - generic [ref=e116]:
+              - generic: T
+              - generic: Text Ed…
+              - generic: Text Editor Proficiency
+            - generic [ref=e118]:
+              - generic: V
+              - generic: Version…
+              - generic: Version Control Concepts
+            - generic [ref=e120]:
+              - generic: U
+              - generic: Underst…
+              - generic: Understanding File Changes
+            - generic [ref=e122]:
+              - generic: G
+              - generic: Git Rep…
+              - generic: Git Repository Initialization
+            - generic [ref=e124]:
+              - generic: S
+              - generic: Staging…
+              - generic: Staging and Committing Changes
+            - generic [ref=e126]:
+              - generic: V
+              - generic: Viewing…
+              - generic: Viewing Repository History
+            - generic [ref=e128]:
+              - generic: B
+              - generic: Basic B…
+              - generic: Basic Branching and Merging
+            - generic [ref=e130]:
+              - generic: W
+              - generic: Working…
+              - generic: Working with Remote Repositories
+        - generic:
+          - generic: Command Line Fundamentals
+          - generic: LVL 1
+          - generic: Learn to navigate directories, execute commands, and manage files using a command-line interface, which is the primary w...
+      - complementary [ref=e133]:
+        - generic [ref=e134]:
+          - heading "Command Line Fundamentals" [level=3] [ref=e135]
+          - button "Close details" [ref=e136] [cursor=pointer]
+        - generic [ref=e139]: LVL 1
+        - generic [ref=e140]:
+          - button "Overview" [ref=e141] [cursor=pointer]
+          - button "Learn" [active] [ref=e142] [cursor=pointer]
+          - button "Resources" [ref=e143] [cursor=pointer]
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - paragraph [ref=e161]: Key concepts
+            - list [ref=e162]:
+              - listitem [ref=e163]:
+                - text: ◆
+                - strong [ref=e164]: Shell
+                - text: — The program that interprets commands typed into the terminal, allowing interaction with the operating system.
+              - listitem [ref=e165]:
+                - text: ◆
+                - strong [ref=e166]: Directory (Folder)
+                - text: — A container in the file system that holds files and other directories, organizing data hierarchically.
+              - listitem [ref=e167]:
+                - text: ◆
+                - strong [ref=e168]: Command
+                - text: — An instruction given to the computer via the command line to perform a specific task.
+          - generic [ref=e169]:
+            - paragraph [ref=e170]: Common mistakes
+            - list [ref=e171]:
+              - listitem [ref=e172]: "× Forgetting current directory context, leading to files not being found; always check `pwd`."
+              - listitem [ref=e173]: "× Misunderstanding command arguments, causing unexpected behavior; read the `man` page or `--help`."
+              - listitem [ref=e174]: × Using incorrect paths, resulting in errors; differentiate between absolute and relative paths.
+        - button "MARK COMPLETE" [ref=e158] [cursor=pointer]
+  - button "?" [ref=e132] [cursor=pointer]

@@ -1,0 +1,24 @@
+- generic [ref=e5]:
+  - banner [ref=e227]:
+    - generic [ref=e228]:
+      - generic [ref=e229]: STG
+      - generic [ref=e230]: Skill Tree Generator
+      - generic [ref=e231]: v1
+    - navigation "Primary" [ref=e232]:
+      - link "Skill Tree" [ref=e233] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e234] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e235]:
+      - button "Sign In" [ref=e236] [cursor=pointer]
+      - button "Sign Up" [ref=e237] [cursor=pointer]
+  - generic [ref=e238]:
+    - generic [ref=e240]:
+      - generic [ref=e241]: /
+      - textbox "explore a concept..." [ref=e242]
+    - generic [ref=e243]:
+      - button "TRAIL" [ref=e244] [cursor=pointer]
+      - button "MAP" [ref=e245] [cursor=pointer]
+  - generic [ref=e246]:
+    - generic [ref=e248]: Wiki Hopper
+    - generic [ref=e249]: Use the search bar above to explore any Wikipedia concept

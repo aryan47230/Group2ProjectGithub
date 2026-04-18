@@ -48,12 +48,6 @@ The full token table lives in [01-design-tokens-and-fonts.md](01-design-tokens-a
 
 ## Reference project
 
-The visual target is Wiki Loop's "Refined Neon" system at:
-
-```
-Group2ProjectGithub/Research/rdaga2/Wiki_Loop/
-```
-
-Its original implementation plan is at
-`Research/rdaga2/Wiki_Loop/docs/superpowers/plans/2026-04-09-refined-neon-ui-overhaul.md`
-and should be consulted when a detail is ambiguous.
+The visual target is the "Refined Neon" system. The original Wiki Loop research implementation
+(`Research/rdaga2/Wiki_Loop/`) has since been consolidated into this `Project/` folder and is no
+longer a separate reference. Treat the current `client/` UI as the canonical implementation.

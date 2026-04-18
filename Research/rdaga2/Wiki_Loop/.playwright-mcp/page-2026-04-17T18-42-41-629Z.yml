@@ -1,0 +1,310 @@
+- generic [ref=e5]:
+  - banner [ref=e250]:
+    - generic [ref=e251]:
+      - generic [ref=e252]: STG
+      - generic [ref=e253]: Skill Tree Generator
+      - generic [ref=e254]: v1
+    - navigation "Primary" [ref=e255]:
+      - link "Skill Tree" [ref=e256] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e257] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e258]:
+      - button "Sign In" [ref=e259] [cursor=pointer]
+      - button "Sign Up" [ref=e260] [cursor=pointer]
+  - generic [ref=e261]:
+    - generic [ref=e263]:
+      - generic [ref=e264]: /
+      - textbox "explore a concept..." [ref=e265]
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - generic [ref=e268]: "3"
+        - generic [ref=e269]: hops
+      - button "RANDOM" [active] [ref=e270] [cursor=pointer]
+      - button "TRAIL" [ref=e271] [cursor=pointer]
+      - button "MAP" [ref=e272] [cursor=pointer]
+  - generic [ref=e528]:
+    - generic [ref=e530] [cursor=pointer]: Quantum mechanics
+    - generic [ref=e531]:
+      - generic [ref=e532]: ">"
+      - generic [ref=e533] [cursor=pointer]: Action at a distance
+    - generic [ref=e825]:
+      - generic [ref=e826]: ">"
+      - generic [ref=e827]: Absolute zero
+  - generic [ref=e274]:
+    - generic [ref=e828]:
+      - generic [ref=e829]:
+        - button "← Back" [ref=e830] [cursor=pointer]
+        - generic [ref=e831]:
+          - generic [ref=e833] [cursor=pointer]: Quantum mechanics
+          - generic [ref=e834]:
+            - generic [ref=e835]: ›
+            - generic [ref=e836] [cursor=pointer]: Action at a distance
+          - generic [ref=e837]:
+            - generic [ref=e838]: ›
+            - generic [ref=e839]: Absolute zero
+      - generic [ref=e840]:
+        - img "Absolute zero" [ref=e842]
+        - generic [ref=e844]:
+          - generic [ref=e845]: Cold
+          - heading "Absolute zero" [level=1] [ref=e846]
+          - paragraph [ref=e847]: Absolute zero is the lowest theoretically possible temperature, a state at which a system's internal energy, and in ideal cases entropy, reach their minimum values. The Kelvin scale is defined so that absolute zero is 0 K, equivalent to −273.15 °C on the Celsius scale, and −459.67 °F on the Fahrenheit scale.
+          - generic [ref=e848]:
+            - generic [ref=e849]:
+              - generic [ref=e850]: Category
+              - generic [ref=e851]: Cold
+            - generic [ref=e852]:
+              - generic [ref=e853]: Also known as
+              - generic [ref=e854]: Cryogenics
+            - generic [ref=e855]:
+              - generic [ref=e856]: Related topics
+              - generic [ref=e857]: 50 connected articles
+            - generic [ref=e858]:
+              - generic [ref=e859]: Sections
+              - generic [ref=e860]: 17 Wikipedia sections
+      - button "Enrich with AI" [ref=e861] [cursor=pointer]
+      - link "⟡ Generate Skill Tree" [ref=e862] [cursor=pointer]:
+        - /url: /?generate=Absolute%20zero
+        - generic [ref=e863]: ⟡
+        - text: Generate Skill Tree
+      - generic [ref=e865] [cursor=pointer]:
+        - generic [ref=e866]:
+          - heading "Deep Dive" [level=3] [ref=e867]
+          - generic [ref=e868]: Full Wikipedia sections
+        - generic [ref=e869]: +
+      - generic [ref=e870]:
+        - generic [ref=e871]:
+          - generic [ref=e872]: On the Graph
+          - generic [ref=e873]: 8 directly connected
+        - generic [ref=e874]:
+          - generic [ref=e875] [cursor=pointer]:
+            - generic [ref=e880]: Related
+            - heading "0K (disambiguation)" [level=4] [ref=e881]
+            - paragraph [ref=e882]: A topic related to Absolute zero.
+            - generic [ref=e883]:
+              - generic [ref=e884]: Jump
+              - generic [ref=e885]: Preview
+          - generic [ref=e886] [cursor=pointer]:
+            - generic [ref=e891]: Related
+            - heading "90377 Sedna" [level=4] [ref=e892]
+            - paragraph [ref=e893]: A topic related to Absolute zero.
+            - generic [ref=e894]:
+              - generic [ref=e895]: Jump
+              - generic [ref=e896]: Preview
+          - generic [ref=e897] [cursor=pointer]:
+            - generic [ref=e902]: Related
+            - heading "Absolute Zero (disambiguation)" [level=4] [ref=e903]
+            - paragraph [ref=e904]: Absolute zero is the temperature at which entropy reaches its minimum value.
+            - generic [ref=e905]:
+              - generic [ref=e906]: Jump
+              - generic [ref=e907]: Preview
+          - generic [ref=e908] [cursor=pointer]:
+            - generic [ref=e913]: Related
+            - heading "Absolute temperature" [level=4] [ref=e914]
+            - paragraph [ref=e915]: A topic related to Absolute zero.
+            - generic [ref=e916]:
+              - generic [ref=e917]: Jump
+              - generic [ref=e918]: Preview
+          - generic [ref=e919] [cursor=pointer]:
+            - generic [ref=e924]: Related
+            - heading "Adiabatic expansion" [level=4] [ref=e925]
+            - paragraph [ref=e926]: A topic related to Absolute zero.
+            - generic [ref=e927]:
+              - generic [ref=e928]: Jump
+              - generic [ref=e929]: Preview
+          - generic [ref=e930] [cursor=pointer]:
+            - generic [ref=e935]: Related
+            - heading "Antoine Lavoisier" [level=4] [ref=e936]
+            - paragraph [ref=e937]: "Antoine-Laurent de Lavoisier ( lə-VWAH-zee-ay; French: [ɑ̃twan lɔʁɑ̃ də lavwazje]; 26 August 1743 – 8 May 1794), also Antoine Lavoisier after the French Revolution, was a French nobleman and chemist who was central to the 18th-century chemical revolution and who had a large influence on both the history of chemistry and the history of biology. It is generally accepted that Lavoisier's great accomplishments in chemistry stem largely from his changing the science from a qualitative to a quantitative one."
+            - generic [ref=e938]:
+              - generic [ref=e939]: Jump
+              - generic [ref=e940]: Preview
+          - generic [ref=e941] [cursor=pointer]:
+            - generic [ref=e946]: Related
+            - heading "ArXiv (identifier)" [level=4] [ref=e947]
+            - paragraph [ref=e948]: A topic related to Absolute zero.
+            - generic [ref=e949]:
+              - generic [ref=e950]: Jump
+              - generic [ref=e951]: Preview
+          - generic [ref=e952] [cursor=pointer]:
+            - generic [ref=e957]: Related
+            - heading "Astronomical unit" [level=4] [ref=e958]
+            - paragraph [ref=e959]: "The astronomical unit (symbol: au or AU) is a unit of length defined to be exactly equal to 149597870700 m. Historically, the astronomical unit was conceived as the average Earth-Sun distance (the average of Earth's aphelion and perihelion), before its modern redefinition in 2012."
+            - generic [ref=e960]:
+              - generic [ref=e961]: Jump
+              - generic [ref=e962]: Preview
+    - generic [ref=e408]:
+      - generic: KNOWLEDGE GRAPH
+      - button "FOCUS" [ref=e409] [cursor=pointer]
+      - generic: TAB cycle · ENTER preview · DBL-CLICK jump · ESC close · drag to pan
+      - generic [ref=e410]:
+        - img:
+          - generic:
+            - generic: SCIENCE
+        - generic [ref=e453] [cursor=pointer]:
+          - generic [ref=e733]:
+            - generic: Q
+            - generic [ref=e734]: Quant mecha
+          - generic: Quantum mechanics
+        - generic [ref=e456] [cursor=pointer]:
+          - generic [ref=e457]:
+            - generic: A
+            - generic [ref=e458]: A. Doug
+          - generic: A. Douglas Stone
+        - generic [ref=e459] [cursor=pointer]:
+          - generic [ref=e460]:
+            - generic: A
+            - generic [ref=e461]: Abdus Salam
+          - generic: Abdus Salam
+        - generic [ref=e462] [cursor=pointer]:
+          - generic [ref=e463]:
+            - generic: A
+            - generic [ref=e464]: Abrah Pais
+          - generic: Abraham Pais
+        - generic [ref=e465] [cursor=pointer]:
+          - generic [ref=e1091]: Absol zero
+          - generic: Absolute zero
+        - generic [ref=e468] [cursor=pointer]:
+          - generic [ref=e469]:
+            - generic: A
+            - generic [ref=e470]: Accuracy
+          - generic: Accuracy
+        - generic [ref=e471] [cursor=pointer]:
+          - generic [ref=e472]:
+            - generic: A
+            - generic [ref=e473]: Acoustics
+          - generic: Acoustics
+        - generic [ref=e474] [cursor=pointer]:
+          - generic [ref=e475]:
+            - generic: A
+            - generic [ref=e476]: Acta Phys
+          - generic: Acta Physica Polonica B
+        - generic [ref=e477] [cursor=pointer]:
+          - generic [ref=e478]:
+            - generic: A
+            - generic [ref=e1092]: Acti at
+          - generic: Action at a distance
+        - generic [ref=e480] [cursor=pointer]:
+          - generic [ref=e482]: Alfr P.
+          - generic: Alfred P. Sloan Fellowship
+        - generic [ref=e483] [cursor=pointer]:
+          - generic [ref=e485]: Amer Phys
+          - generic: American Physical Society
+        - generic [ref=e486] [cursor=pointer]:
+          - generic [ref=e488]: Harva Unive
+          - generic: Harvard University
+        - generic [ref=e489] [cursor=pointer]:
+          - generic [ref=e491]: Mass Inst
+          - generic: Massachusetts Institute of Technology
+        - generic [ref=e492] [cursor=pointer]:
+          - generic [ref=e494]: Oxfor Unive
+          - generic: Oxford University
+        - generic [ref=e495] [cursor=pointer]:
+          - generic [ref=e497]: Phi Beta
+          - generic: Phi Beta Kappa Award in Science
+        - generic [ref=e737] [cursor=pointer]:
+          - generic [ref=e738]:
+            - generic: A
+            - generic [ref=e739]: A Hist
+          - generic: A History of the Theories of Aether and Electricity
+        - generic [ref=e740] [cursor=pointer]:
+          - generic [ref=e741]:
+            - generic: A
+            - generic [ref=e742]: Abrah force
+          - generic: Abraham–Lorentz force
+        - generic [ref=e743] [cursor=pointer]:
+          - generic [ref=e744]:
+            - generic: A
+            - generic [ref=e745]: Actio (phys
+          - generic: Action (physics)
+        - generic [ref=e746] [cursor=pointer]:
+          - generic [ref=e747]:
+            - generic: A
+            - generic [ref=e748]: Acti at
+          - generic: Action at a distance (computer programming)
+        - generic [ref=e749] [cursor=pointer]:
+          - generic [ref=e750]:
+            - generic: A
+            - generic [ref=e751]: Adria Fokke
+          - generic: Adriaan Fokker
+        - generic [ref=e752] [cursor=pointer]:
+          - generic [ref=e753]:
+            - generic: A
+            - generic [ref=e754]: Aethe theor
+          - generic: Aether theories
+        - generic [ref=e755] [cursor=pointer]:
+          - generic [ref=e756]:
+            - generic: A
+            - generic [ref=e757]: Alber Einst
+          - generic: Albert Einstein
+        - generic [ref=e758] [cursor=pointer]:
+          - generic [ref=e760]: A Cour
+          - generic: A Course in Modern Analysis
+        - generic [ref=e761] [cursor=pointer]:
+          - generic [ref=e763]: A Cour
+          - generic: A Course of Modern Analysis
+        - generic [ref=e764] [cursor=pointer]:
+          - generic [ref=e766]: A Trea
+          - generic: A Treatise on Electricity and Magnetism
+        - generic [ref=e767] [cursor=pointer]:
+          - generic [ref=e769]: A Trea
+          - generic: A Treatise on the Analytical Dynamics of Particles and Rigid Bodies
+        - generic [ref=e770] [cursor=pointer]:
+          - generic [ref=e772]: Addison-W…
+          - generic: Addison-Wesley
+        - generic [ref=e1093] [cursor=pointer]:
+          - generic [ref=e1094]:
+            - generic: "0"
+            - generic [ref=e1095]: 0K (disa
+          - generic: 0K (disambiguation)
+        - generic [ref=e1096] [cursor=pointer]:
+          - generic [ref=e1097]:
+            - generic: "9"
+            - generic [ref=e1098]: 90377 Sedna
+          - generic: 90377 Sedna
+        - generic [ref=e1099] [cursor=pointer]:
+          - generic [ref=e1100]:
+            - generic: A
+            - generic [ref=e1101]: Abso Zero
+          - generic: Absolute Zero (disambiguation)
+        - generic [ref=e1102] [cursor=pointer]:
+          - generic [ref=e1103]:
+            - generic: A
+            - generic [ref=e1104]: Absol tempe
+          - generic: Absolute temperature
+        - generic [ref=e1105] [cursor=pointer]:
+          - generic [ref=e1106]:
+            - generic: A
+            - generic [ref=e1107]: Adiab expan
+          - generic: Adiabatic expansion
+        - generic [ref=e1108] [cursor=pointer]:
+          - generic [ref=e1109]:
+            - generic: A
+            - generic [ref=e1110]: Antoi Lavoi
+          - generic: Antoine Lavoisier
+        - generic [ref=e1111] [cursor=pointer]:
+          - generic [ref=e1112]:
+            - generic: A
+            - generic [ref=e1113]: ArXiv (iden
+          - generic: ArXiv (identifier)
+        - generic [ref=e1114] [cursor=pointer]:
+          - generic [ref=e1115]:
+            - generic: A
+            - generic [ref=e1116]: Astro unit
+          - generic: Astronomical unit
+        - generic [ref=e1117] [cursor=pointer]:
+          - generic [ref=e1119]: K0 (disa
+          - generic: K0 (disambiguation)
+        - generic [ref=e1120] [cursor=pointer]:
+          - generic [ref=e1122]: Non- zero
+          - generic: Non-interactive zero-knowledge proof
+        - generic [ref=e1123] [cursor=pointer]:
+          - generic [ref=e1125]: OK (disa
+          - generic: OK (disambiguation)
+        - generic [ref=e1126] [cursor=pointer]:
+          - generic [ref=e1128]: Suspe keel
+          - generic: Suspension keel
+        - generic [ref=e1129] [cursor=pointer]:
+          - generic [ref=e1131]: Worl War
+          - generic: World War II
+  - button "?" [ref=e498] [cursor=pointer]

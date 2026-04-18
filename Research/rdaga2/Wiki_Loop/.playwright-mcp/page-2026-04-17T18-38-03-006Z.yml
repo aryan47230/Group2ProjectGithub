@@ -1,0 +1,89 @@
+- generic [ref=e5]:
+  - banner [ref=e82]:
+    - generic [ref=e83]:
+      - generic [ref=e84]: STG
+      - generic [ref=e85]: Skill Tree Generator
+      - generic [ref=e86]: v1
+    - navigation "Primary" [ref=e87]:
+      - link "Skill Tree" [ref=e88] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e89] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e90]:
+      - button "Sign In" [ref=e91] [cursor=pointer]
+      - button "Sign Up" [ref=e92] [cursor=pointer]
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - button "← Back" [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: ←
+        - generic [ref=e97]: Back
+      - generic [ref=e98]:
+        - generic [ref=e99]: TOPIC
+        - heading "git basics" [level=2] [ref=e100]
+      - generic [ref=e102]: 00/10 · 0%
+      - button "⤤" [ref=e105] [cursor=pointer]
+    - generic [ref=e106]:
+      - generic [ref=e107]:
+        - img [ref=e108]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - generic: C
+              - generic: Command…
+              - generic: Command Line Fundamentals
+            - generic [ref=e114]:
+              - generic: B
+              - generic: Basic F…
+              - generic: Basic File System Operations
+            - generic [ref=e116]:
+              - generic: T
+              - generic: Text Ed…
+              - generic: Text Editor Proficiency
+            - generic [ref=e118]:
+              - generic: V
+              - generic: Version…
+              - generic: Version Control Concepts
+            - generic [ref=e120]:
+              - generic: U
+              - generic: Underst…
+              - generic: Understanding File Changes
+            - generic [ref=e122]:
+              - generic: G
+              - generic: Git Rep…
+              - generic: Git Repository Initialization
+            - generic [ref=e124]:
+              - generic: S
+              - generic: Staging…
+              - generic: Staging and Committing Changes
+            - generic [ref=e126]:
+              - generic: V
+              - generic: Viewing…
+              - generic: Viewing Repository History
+            - generic [ref=e128]:
+              - generic: B
+              - generic: Basic B…
+              - generic: Basic Branching and Merging
+            - generic [ref=e130]:
+              - generic: W
+              - generic: Working…
+              - generic: Working with Remote Repositories
+        - generic:
+          - generic: Staging and Committing Changes
+          - generic: LVL 3
+          - generic: Master the core workflow of selecting specific file changes to be saved (staging) and then permanently recording them in...
+          - generic: "Requires: Git Repository Initialization, Understanding File Changes, Text Editor Proficiency"
+      - complementary [ref=e133]:
+        - generic [ref=e134]:
+          - heading "Staging and Committing Changes" [level=3] [ref=e217]
+          - button "Close details" [ref=e136] [cursor=pointer]
+        - generic [ref=e138]:
+          - generic [ref=e139]: LVL 3
+          - generic [ref=e218]: LOCKED
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - paragraph [ref=e221]: Requires
+            - list [ref=e222]:
+              - listitem [ref=e223]: → Git Repository Initialization
+              - listitem [ref=e224]: → Understanding File Changes
+              - listitem [ref=e225]: → Text Editor Proficiency
+          - paragraph [ref=e226]: Complete Git Repository Initialization and Understanding File Changes and Text Editor Proficiency to unlock this skill.
+  - button "?" [ref=e132] [cursor=pointer]

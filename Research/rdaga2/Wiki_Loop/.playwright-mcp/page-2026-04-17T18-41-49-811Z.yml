@@ -1,0 +1,247 @@
+- generic [ref=e5]:
+  - banner [ref=e250]:
+    - generic [ref=e251]:
+      - generic [ref=e252]: STG
+      - generic [ref=e253]: Skill Tree Generator
+      - generic [ref=e254]: v1
+    - navigation "Primary" [ref=e255]:
+      - link "Skill Tree" [ref=e256] [cursor=pointer]:
+        - /url: /skill-tree
+      - link "Explore" [ref=e257] [cursor=pointer]:
+        - /url: /explore
+    - generic [ref=e258]:
+      - button "Sign In" [ref=e259] [cursor=pointer]
+      - button "Sign Up" [ref=e260] [cursor=pointer]
+  - generic [ref=e261]:
+    - generic [ref=e263]:
+      - generic [ref=e264]: /
+      - textbox "explore a concept..." [ref=e265]
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - generic [ref=e268]: "2"
+        - generic [ref=e269]: hops
+      - button "RANDOM" [ref=e270] [cursor=pointer]
+      - button "TRAIL" [ref=e271] [cursor=pointer]
+      - button "MAP" [ref=e272] [cursor=pointer]
+  - generic [ref=e528]:
+    - generic [ref=e530] [cursor=pointer]: Quantum mechanics
+    - generic [ref=e531]:
+      - generic [ref=e532]: ">"
+      - generic [ref=e533]: Action at a distance
+  - generic [ref=e274]:
+    - generic [ref=e534]:
+      - generic [ref=e535]:
+        - button "← Back" [ref=e536] [cursor=pointer]
+        - generic [ref=e537]:
+          - generic [ref=e539] [cursor=pointer]: Quantum mechanics
+          - generic [ref=e540]:
+            - generic [ref=e541]: ›
+            - generic [ref=e542]: Action at a distance
+      - generic [ref=e543]:
+        - generic [ref=e545]: No image available
+        - generic [ref=e547]:
+          - generic [ref=e548]: Concepts in physics
+          - heading "Action at a distance" [level=1] [ref=e549]
+          - paragraph [ref=e550]: Action at a distance is the concept in physics that an object's motion can be affected by another object without the two being in physical contact; that is, it is the concept of the non-local interaction of objects that are separated in space. Coulomb's law and Newton's law of universal gravitation are based on action at a distance. Historically, action at a distance was the earliest scientific model for gravity and electricity and it continues to be useful in many practical cases.
+          - generic [ref=e551]:
+            - generic [ref=e552]:
+              - generic [ref=e553]: Category
+              - generic [ref=e554]: Concepts in physics
+            - generic [ref=e555]:
+              - generic [ref=e556]: Also known as
+              - generic [ref=e557]: Force
+            - generic [ref=e558]:
+              - generic [ref=e559]: Related topics
+              - generic [ref=e560]: 50 connected articles
+            - generic [ref=e561]:
+              - generic [ref=e562]: Sections
+              - generic [ref=e563]: 14 Wikipedia sections
+      - button "Enrich with AI" [ref=e564] [cursor=pointer]
+      - link "⟡ Generate Skill Tree" [ref=e565] [cursor=pointer]:
+        - /url: /?generate=Action%20at%20a%20distance
+        - generic [ref=e566]: ⟡
+        - text: Generate Skill Tree
+      - generic [ref=e568] [cursor=pointer]:
+        - generic [ref=e569]:
+          - heading "Deep Dive" [level=3] [ref=e570]
+          - generic [ref=e571]: Full Wikipedia sections
+        - generic [ref=e572]: +
+      - generic [ref=e573]:
+        - generic [ref=e574]:
+          - generic [ref=e575]: On the Graph
+          - generic [ref=e576]: 8 directly connected
+        - generic [ref=e577]:
+          - generic [ref=e578] [cursor=pointer]:
+            - generic [ref=e583]: Related
+            - heading "A History of the Theories of Aether and Electricity" [level=4] [ref=e584]
+            - paragraph [ref=e585]: A History of the Theories of Aether and Electricity is any of three books written by British mathematician Sir Edmund Taylor Whittaker FRS FRSE on the history of electromagnetic theory, covering the development of classical electromagnetism, optics, and aether theories. The book's first edition, subtitled from the Age of Descartes to the Close of the Nineteenth Century, was published in 1910 by Longmans, Green.
+            - generic [ref=e586]:
+              - generic [ref=e587]: Jump
+              - generic [ref=e588]: Preview
+          - generic [ref=e589] [cursor=pointer]:
+            - generic [ref=e594]: Related
+            - heading "Abraham Pais" [level=4] [ref=e595]
+            - paragraph [ref=e596]: Abraham Pais (; May 19, 1918 – July 28, 2000) was a Dutch-American physicist and science historian. Pais earned his Ph.D. from University of Utrecht just prior to a Nazi ban on Jewish participation in Dutch universities during World War II. When the Nazis began the forced relocation of Dutch Jews, he went into hiding, but was later arrested and saved only by the end of the war.
+            - generic [ref=e597]:
+              - generic [ref=e598]: Jump
+              - generic [ref=e599]: Preview
+          - generic [ref=e600] [cursor=pointer]:
+            - generic [ref=e605]: Related
+            - heading "Abraham–Lorentz force" [level=4] [ref=e606]
+            - paragraph [ref=e607]: In the physics of electromagnetism, the Abraham–Lorentz force (also known as the Lorentz–Abraham force) is the reaction force on an accelerating charged particle caused by the particle emitting electromagnetic radiation by self-interaction. It is also called the radiation reaction force, the radiation damping force, or the self-force.
+            - generic [ref=e608]:
+              - generic [ref=e609]: Jump
+              - generic [ref=e610]: Preview
+          - generic [ref=e611] [cursor=pointer]:
+            - generic [ref=e616]: Related
+            - heading "Action (physics)" [level=4] [ref=e617]
+            - paragraph [ref=e618]: In physics, action is a scalar quantity that describes how the balance of kinetic versus potential energy of a physical system changes with trajectory. Action is significant because it is an input to the principle of stationary action, an approach to classical mechanics that is simpler for multiple objects.
+            - generic [ref=e619]:
+              - generic [ref=e620]: Jump
+              - generic [ref=e621]: Preview
+          - generic [ref=e622] [cursor=pointer]:
+            - generic [ref=e627]: Related
+            - heading "Action at a distance (computer programming)" [level=4] [ref=e628]
+            - paragraph [ref=e629]: Action at a distance is an anti-pattern in computer science in which behavior in one part of a program varies wildly based on difficult or impossible to identify operations in another part of the program. The way to avoid the problems associated with action at a distance is a proper design, which avoids global variables and alters data only in a controlled and local manner, or usage of a pure functional programming style with referential transparency.
+            - generic [ref=e630]:
+              - generic [ref=e631]: Jump
+              - generic [ref=e632]: Preview
+          - generic [ref=e633] [cursor=pointer]:
+            - generic [ref=e638]: Related
+            - heading "Adriaan Fokker" [level=4] [ref=e639]
+            - paragraph [ref=e640]: "Adriaan Daniël Fokker (Dutch: [ˈaːdrijaːn ˈdaːnijɛl ˈfɔkər]; 17 August 1887 – 24 September 1972) was a Dutch physicist and musicologist who worked in the fields of special relativity and statistical mechanics. He is the inventor of the Fokker organ, a 31-tone equal-tempered (31-TET) organ."
+            - generic [ref=e641]:
+              - generic [ref=e642]: Jump
+              - generic [ref=e643]: Preview
+          - generic [ref=e644] [cursor=pointer]:
+            - generic [ref=e649]: Related
+            - heading "Aether theories" [level=4] [ref=e650]
+            - paragraph [ref=e651]: In the history of physics, aether theories (or ether theories) proposed the existence of a medium, a space-filling substance or field as a transmission medium for the propagation of electromagnetic or gravitational forces. Using a substantial aether fell out of use in modern physics after experiments like the Michelson–Morley experiment of July 1887 which failed to detect an aether.
+            - generic [ref=e652]:
+              - generic [ref=e653]: Jump
+              - generic [ref=e654]: Preview
+          - generic [ref=e655] [cursor=pointer]:
+            - generic [ref=e660]: Related
+            - heading "Albert Einstein" [level=4] [ref=e661]
+            - paragraph [ref=e662]: Albert Einstein (14 March 1879 – 18 April 1955) was a German-born theoretical physicist best known for developing the theory of relativity. Einstein also made important contributions to quantum theory.
+            - generic [ref=e663]:
+              - generic [ref=e664]: Jump
+              - generic [ref=e665]: Preview
+    - generic [active] [ref=e408]:
+      - generic: KNOWLEDGE GRAPH
+      - button "FOCUS" [ref=e409] [cursor=pointer]
+      - generic: TAB cycle · ENTER preview · DBL-CLICK jump · ESC close · drag to pan
+      - generic [ref=e410]:
+        - img
+        - generic [ref=e453] [cursor=pointer]:
+          - generic [ref=e733]:
+            - generic: Q
+            - generic [ref=e734]: Quant mecha
+          - generic: Quantum mechanics
+        - generic [ref=e456] [cursor=pointer]:
+          - generic [ref=e457]:
+            - generic: A
+            - generic [ref=e458]: A. Doug
+          - generic: A. Douglas Stone
+        - generic [ref=e459] [cursor=pointer]:
+          - generic [ref=e460]:
+            - generic: A
+            - generic [ref=e461]: Abdus Salam
+          - generic: Abdus Salam
+        - generic [ref=e462] [cursor=pointer]:
+          - generic [ref=e463]:
+            - generic: A
+            - generic [ref=e464]: Abrah Pais
+          - generic: Abraham Pais
+        - generic [ref=e465] [cursor=pointer]:
+          - generic [ref=e466]:
+            - generic: A
+            - generic [ref=e467]: Absol zero
+          - generic: Absolute zero
+        - generic [ref=e468] [cursor=pointer]:
+          - generic [ref=e469]:
+            - generic: A
+            - generic [ref=e470]: Accuracy
+          - generic: Accuracy
+        - generic [ref=e471] [cursor=pointer]:
+          - generic [ref=e472]:
+            - generic: A
+            - generic [ref=e473]: Acoustics
+          - generic: Acoustics
+        - generic [ref=e474] [cursor=pointer]:
+          - generic [ref=e475]:
+            - generic: A
+            - generic [ref=e476]: Acta Phys
+          - generic: Acta Physica Polonica B
+        - generic [ref=e477] [cursor=pointer]:
+          - generic [ref=e736]: Acti at
+          - generic: Action at a distance
+        - generic [ref=e480] [cursor=pointer]:
+          - generic [ref=e482]: Alfr P.
+          - generic: Alfred P. Sloan Fellowship
+        - generic [ref=e483] [cursor=pointer]:
+          - generic [ref=e485]: Amer Phys
+          - generic: American Physical Society
+        - generic [ref=e486] [cursor=pointer]:
+          - generic [ref=e488]: Harva Unive
+          - generic: Harvard University
+        - generic [ref=e489] [cursor=pointer]:
+          - generic [ref=e491]: Mass Inst
+          - generic: Massachusetts Institute of Technology
+        - generic [ref=e492] [cursor=pointer]:
+          - generic [ref=e494]: Oxfor Unive
+          - generic: Oxford University
+        - generic [ref=e495] [cursor=pointer]:
+          - generic [ref=e497]: Phi Beta
+          - generic: Phi Beta Kappa Award in Science
+        - generic [ref=e737] [cursor=pointer]:
+          - generic [ref=e738]:
+            - generic: A
+            - generic [ref=e739]: A Hist
+          - generic: A History of the Theories of Aether and Electricity
+        - generic [ref=e740] [cursor=pointer]:
+          - generic [ref=e741]:
+            - generic: A
+            - generic [ref=e742]: Abrah force
+          - generic: Abraham–Lorentz force
+        - generic [ref=e743] [cursor=pointer]:
+          - generic [ref=e744]:
+            - generic: A
+            - generic [ref=e745]: Actio (phys
+          - generic: Action (physics)
+        - generic [ref=e746] [cursor=pointer]:
+          - generic [ref=e747]:
+            - generic: A
+            - generic [ref=e748]: Acti at
+          - generic: Action at a distance (computer programming)
+        - generic [ref=e749] [cursor=pointer]:
+          - generic [ref=e750]:
+            - generic: A
+            - generic [ref=e751]: Adria Fokke
+          - generic: Adriaan Fokker
+        - generic [ref=e752] [cursor=pointer]:
+          - generic [ref=e753]:
+            - generic: A
+            - generic [ref=e754]: Aethe theor
+          - generic: Aether theories
+        - generic [ref=e755] [cursor=pointer]:
+          - generic [ref=e756]:
+            - generic: A
+            - generic [ref=e757]: Alber Einst
+          - generic: Albert Einstein
+        - generic [ref=e758] [cursor=pointer]:
+          - generic [ref=e760]: A Cour
+          - generic: A Course in Modern Analysis
+        - generic [ref=e761] [cursor=pointer]:
+          - generic [ref=e763]: A Cour
+          - generic: A Course of Modern Analysis
+        - generic [ref=e764] [cursor=pointer]:
+          - generic [ref=e766]: A Trea
+          - generic: A Treatise on Electricity and Magnetism
+        - generic [ref=e767] [cursor=pointer]:
+          - generic [ref=e769]: A Trea
+          - generic: A Treatise on the Analytical Dynamics of Particles and Rigid Bodies
+        - generic [ref=e770] [cursor=pointer]:
+          - generic [ref=e772]: Addison-W…
+          - generic: Addison-Wesley
+  - button "?" [ref=e498] [cursor=pointer]
