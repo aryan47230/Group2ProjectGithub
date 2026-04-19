@@ -4,6 +4,56 @@ import { useSkillTree } from '../../context/SkillTreeContext';
 import SavedTreesList from './SavedTreesList';
 import styles from './SkillTree.module.css';
 
+const MODES = [
+  { value: 'standard', label: 'STANDARD GENERATOR' },
+  { value: 'advanced', label: 'ADVANCED GENERATOR' },
+];
+
+function ModeDropdown({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const current = MODES.find((m) => m.value === value);
+
+  useEffect(() => {
+    function handleOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
+
+  return (
+    <div className={styles.modeDropdown} ref={ref}>
+      <button
+        type="button"
+        className={`${styles.eyebrow} ${styles.modeDropdownTrigger}`}
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        {current?.label}
+        <span className={`${styles.modeDropdownCaret} ${open ? styles.modeDropdownCaretOpen : ''}`} aria-hidden="true">▾</span>
+      </button>
+      {open && (
+        <ul className={styles.modeDropdownMenu} role="listbox">
+          {MODES.map((m) => (
+            <li
+              key={m.value}
+              role="option"
+              aria-selected={m.value === value}
+              className={`${styles.modeDropdownItem} ${m.value === value ? styles.modeDropdownItemActive : ''}`}
+              onClick={() => { onChange(m.value); setOpen(false); }}
+            >
+              {m.label}
+              {m.value === value && <span className={styles.modeDropdownCheck}>✓</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 const SUGGESTIONS = [
   { category: 'Creative', topics: ['Guitar', 'Digital Art', 'Photography', 'Creative Writing', 'Music Production'] },
   { category: 'Tech', topics: ['Python', 'Machine Learning', 'Web Development', 'React', 'Data Science'] },
@@ -19,6 +69,7 @@ export default function PromptView({ hideExplore = false }) {
   const [exploreTopic, setExploreTopic] = useState('');
   const [status, setStatus] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [mode, setMode] = useState('standard');
   const suggestionsRef = useRef(null);
   const navigate = useNavigate();
   const autoRan = useRef(false);
@@ -33,7 +84,11 @@ export default function PromptView({ hideExplore = false }) {
   function selectSuggestion(t) {
     setTopic(t);
     setShowSuggestions(false);
-    submitGenerate(t);
+    if (mode === 'advanced') {
+      navigate(`/skill-tree/advanced?topic=${encodeURIComponent(t)}`);
+    } else {
+      submitGenerate(t);
+    }
   }
 
   useEffect(() => {
@@ -60,7 +115,13 @@ export default function PromptView({ hideExplore = false }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    submitGenerate(topic);
+    const t = topic.trim();
+    if (!t) return;
+    if (mode === 'advanced') {
+      navigate(`/skill-tree/advanced?topic=${encodeURIComponent(t)}`);
+    } else {
+      submitGenerate(t);
+    }
   }
 
   function handleExplore(e) {
@@ -90,7 +151,7 @@ export default function PromptView({ hideExplore = false }) {
       <div className={styles.dotGrid} aria-hidden="true" />
 
       <header className={styles.hero}>
-        <span className={styles.eyebrow}>SKILL TREE GENERATOR · v1</span>
+        <ModeDropdown value={mode} onChange={setMode} />
         <h1 className={styles.heading}>
           What do you want <span className={styles.headingItalic}>to learn</span>?
         </h1>
@@ -112,7 +173,7 @@ export default function PromptView({ hideExplore = false }) {
             onFocus={() => setShowSuggestions(true)}
           />
           <button type="submit" className={styles.generateBtn} disabled={generating}>
-            {generating ? 'Generating…' : 'Generate'}
+            {generating ? 'Generating…' : mode === 'advanced' ? 'Next' : 'Generate'}
           </button>
         </form>
         {showSuggestions && filteredSuggestions.length > 0 && (

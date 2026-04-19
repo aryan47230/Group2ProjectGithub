@@ -80,13 +80,22 @@ export default function ConceptPanel() {
         </button>
 
         {/* Cross-link: generate a skill tree for this concept */}
-        <a
-          href={`/?generate=${encodeURIComponent(c.title)}`}
-          className={styles.skillTreeLink}
-        >
-          <span className={styles.skillTreeLinkIcon}>⟡</span>
-          Generate Skill Tree
-        </a>
+        <div className={styles.skillTreeLinkGroup}>
+          <a
+            href={`/?generate=${encodeURIComponent(c.title)}`}
+            className={styles.skillTreeLink}
+          >
+            <span className={styles.skillTreeLinkIcon}>⟡</span>
+            Generate Skill Tree
+          </a>
+          <a
+            href={`/skill-tree/advanced?topic=${encodeURIComponent(c.title)}`}
+            className={styles.skillTreeLink}
+          >
+            <span className={styles.skillTreeLinkIcon}>✦</span>
+            Advanced Skill Tree
+          </a>
+        </div>
 
         {c.sections?.length > 0 && (
           <Layer title="Deep Dive" hint="Full Wikipedia sections">

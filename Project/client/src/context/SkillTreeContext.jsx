@@ -128,11 +128,11 @@ export function SkillTreeProvider({ children }) {
   );
 
   const generateTree = useCallback(
-    async (topic) => {
+    async (topic, context) => {
       setGenerating(true);
       setGenerateError('');
       try {
-        const nodes = await apiGenerateSkillTree(topic);
+        const nodes = await apiGenerateSkillTree(topic, context);
         setCurrentTopic(topic);
         setCurrentNodes(nodes);
         setCompletedNodes(new Set());

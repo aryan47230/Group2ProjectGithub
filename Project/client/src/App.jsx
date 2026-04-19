@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { SkillTreeProvider } from './context/SkillTreeContext';
 import SkillTreeRoute from './routes/SkillTreeRoute';
 import ExploreRoute from './routes/ExploreRoute';
+import AdvancedSkillTreeRoute from './routes/AdvancedSkillTreeRoute';
 import LauncherScreen from './components/LauncherScreen/LauncherScreen';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<SkillTreeRoute hideExplore />} />
             <Route path="/skill-tree" element={<SkillTreeRoute hideExplore />} />
+            <Route path="/skill-tree/advanced" element={<AdvancedSkillTreeRoute />} />
             <Route path="/explore" element={<ExploreRoute />} />
             <Route path="/explore/*" element={<ExploreRoute />} />
             <Route path="*" element={<SkillTreeRoute hideExplore />} />

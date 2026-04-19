@@ -2,3 +2,4 @@
 **/.env
 **/node_modules
 Project/data.json
+.playwright-mcp/

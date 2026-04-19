@@ -90,8 +90,25 @@ export async function apiDeleteTree(topic) {
   await fetch(`${API_BASE}/trees/${encodeURIComponent(topic)}`, { method: 'DELETE' });
 }
 
-export async function apiGenerateSkillTree(topic) {
+export async function apiGenerateSkillTree(topic, context) {
+  const body = { topic };
+  if (Array.isArray(context) && context.length) body.context = context;
   const res = await fetch(`${API_BASE}/skill-tree`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+    throw new Error(err.error || res.status);
+  }
+  const data = await res.json();
+  if (!data.nodes || !Array.isArray(data.nodes)) throw new Error('Unexpected response format');
+  return data.nodes;
+}
+
+export async function apiGetSkillTreeQuestions(topic) {
+  const res = await fetch(`${API_BASE}/skill-tree/questions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ topic }),
@@ -101,6 +118,6 @@ export async function apiGenerateSkillTree(topic) {
     throw new Error(err.error || res.status);
   }
   const data = await res.json();
-  if (!data.nodes || !Array.isArray(data.nodes)) throw new Error('Unexpected response format');
-  return data.nodes;
+  if (!Array.isArray(data.questions)) throw new Error('Unexpected response format');
+  return data.questions;
 }

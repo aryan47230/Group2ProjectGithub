@@ -124,7 +124,7 @@ app.post("/api/trees/:topic/send", requireAuth, async (req, res) => {
 
 // ── Gemini ─────────────────────────────────────────────────────────────────────
 
-app.post("/api/skill-tree", async (req, res) => {
+app.post("/api/skill-tree/questions", async (req, res) => {
   const { topic } = req.body;
   if (!topic) return res.status(400).json({ error: "Missing topic" });
 
@@ -138,7 +138,61 @@ app.post("/api/skill-tree", async (req, res) => {
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".
+            text: `You are helping tailor a learning skill tree for "${topic}". Return 3-5 short follow-up questions the learner should answer so the tree matches their goals, background, and constraints.
+
+Rules:
+- Each question must be answerable in one or two sentences.
+- Mix these angles: (a) what they hope to be able to do after, (b) current experience with "${topic}" or adjacent topics, (c) time, depth, or resource constraints.
+- Questions must be specific to "${topic}" — do not return generic boilerplate.
+- placeholder must be a concrete, realistic example answer for that question (not a restatement of the question).
+- id is kebab-case and unique.
+
+Respond with ONLY valid JSON in this exact shape:
+{"questions":[{"id":"kebab-case-id","prompt":"Question text?","placeholder":"short example answer"}]}`
+          }]
+        }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Gemini questions error:", response.status, errText);
+      return res.status(500).json({ error: `Gemini API error ${response.status}: ${errText}` });
+    }
+
+    const data = await response.json();
+    const rawText = data.candidates[0].content.parts[0].text;
+    const parsed = JSON.parse(rawText);
+    res.json(parsed);
+  } catch (err) {
+    console.error("Questions handler error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/skill-tree", async (req, res) => {
+  const { topic, context } = req.body;
+  if (!topic) return res.status(400).json({ error: "Missing topic" });
+
+  const contextBlock = Array.isArray(context) && context.length
+    ? `\n\nLearner context (use this to tailor node choice, depth, and resources — do not ignore it):\n${context
+        .filter(c => c && c.question && c.answer && String(c.answer).trim())
+        .map(c => `- ${c.question} → ${String(c.answer).trim()}`)
+        .join("\n")}\n`
+    : "";
+
+  try {
+    const response = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: {
+        "x-goog-api-key": process.env.GEMINI_API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".${contextBlock}
 
 First, classify "${topic}" as exactly one of these scales, then follow the counts strictly:
   - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3 levels
