@@ -1,19 +1,31 @@
 import "dotenv/config";
 import express from "express";
 import session from "express-session";
+import cors from "cors";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { db } from "./db.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 
+const isProd = process.env.NODE_ENV === "production";
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const app = express();
+if (isProd) app.set("trust proxy", 1);
+if (FRONTEND_URL) {
+  app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+}
 app.use(express.json());
 app.use(express.static("public"));
 app.use(session({
   secret: process.env.SESSION_SECRET || "dev-secret-change-in-prod",
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 7 days
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+  }
 }));
 
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
