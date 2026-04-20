@@ -78,7 +78,10 @@ export async function getArticleSections(title) {
     }));
 }
 
-export async function getArticleLinks(title, limit = 50) {
+// Wikipedia returns links alphabetically. With a small pllimit you only get
+// titles starting with "A". Use the API max (500) so we have a real spread
+// to sample from in the ranker.
+export async function getArticleLinks(title, limit = 500) {
   const url = buildUrl({
     action: 'query',
     titles: title,
@@ -94,8 +97,9 @@ export async function getArticleLinks(title, limit = 50) {
   return (page.links || []).map((l) => l.title);
 }
 
-// Lightweight link fetch for second-layer nodes — no backlink scoring, just titles
-export async function getArticleLinksLight(title, limit = 6) {
+// Lightweight link fetch for second-layer nodes — no backlink scoring, just titles.
+// Always fetch a wide sample so the caller can shuffle past Wikipedia's A-bias.
+export async function getArticleLinksLight(title, limit = 50) {
   const url = buildUrl({
     action: 'query',
     titles: title,

@@ -37,7 +37,7 @@ function hashString(s) {
   return h >>> 0;
 }
 
-function seededShuffle(arr, seed) {
+export function seededShuffle(arr, seed) {
   // Fisher-Yates with an LCG seeded from the title hash.
   const a = [...arr];
   let state = hashString(seed) || 1;
@@ -50,10 +50,11 @@ function seededShuffle(arr, seed) {
 }
 
 export async function rankConnections(title, linkedTitles, categories) {
-  // Wikipedia returns links in alphabetical order, so the first 15 always start
-  // with "A" titles. Shuffle deterministically by the seed title so we sample
-  // across the full article without losing per-article reproducibility.
-  const sample = seededShuffle(linkedTitles, title).slice(0, 15);
+  // Wikipedia returns links in alphabetical order. Shuffle deterministically by
+  // the seed title so we sample across the full article. We do NOT use the
+  // alphabetical position as a score input — that bakes the bias right back in.
+  const shuffled = seededShuffle(linkedTitles, title);
+  const sample = shuffled.slice(0, 15);
 
   const backlinkResults = await Promise.all(
     sample.map((linked) => getBacklinks(linked, title))
@@ -61,17 +62,11 @@ export async function rankConnections(title, linkedTitles, categories) {
 
   const scored = sample.map((linked, i) => {
     let score = 1;
+    if (backlinkResults[i]) score += 2;     // bidirectional link bonus
 
-    // Bidirectional link = stronger connection
-    if (backlinkResults[i]) {
-      score += 2;
-    }
-
-    // Original position in article (earlier = more important — preserved from
-    // the unshuffled list so important early-article links still win ties).
-    const originalIdx = linkedTitles.indexOf(linked);
-    const positionScore = 1 - (originalIdx / linkedTitles.length);
-    score += positionScore;
+    // Tiebreaker uses the SHUFFLED index, not the alphabetical one. Earlier
+    // shuffled position = stable preference per seed, no A-bias.
+    score += (1 - i / sample.length) * 0.5;
 
     return {
       title: linked,
@@ -82,8 +77,6 @@ export async function rankConnections(title, linkedTitles, categories) {
     };
   });
 
-  // Sort by raw score; tiebreak with the deterministic shuffle position so
-  // alphabetical order never re-emerges as the silent tiebreaker.
   scored.sort((a, b) => b._score - a._score);
   return scored.slice(0, 8).map(({ _score, ...c }) => c);
 }

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { searchWikipedia, getArticle, getArticleSections, getArticleLinks, getArticleImage, getArticleLinksLight, getShortExtracts } from '../services/wikipedia.js';
 import { enrichConcept } from '../services/wikiGemini.js';
-import { rankConnections } from '../services/algorithmic.js';
+import { rankConnections, seededShuffle } from '../services/algorithmic.js';
 
 // BUG-05 fix: filter out Wikipedia maintenance/hidden categories
 const MAINTENANCE_PREFIXES = [
@@ -128,12 +128,15 @@ export function createConceptsRouter() {
     }
   });
 
-  // Lightweight links for second-layer nodes
+  // Lightweight links for second-layer nodes. Fetch a wide pool from Wikipedia
+  // (which is alphabetical) and seed-shuffle so the secondary tier doesn't
+  // collapse to "1901 Nobel, 1953 Lahore, 1964 PRL..." for every article.
   router.get('/:title/links', async (req, res) => {
     try {
       const { title } = req.params;
       const decodedTitle = decodeURIComponent(title);
-      const links = await getArticleLinksLight(decodedTitle, 6);
+      const all = await getArticleLinksLight(decodedTitle, 50);
+      const links = seededShuffle(all, decodedTitle).slice(0, 6);
       res.json({ links });
     } catch (err) {
       res.status(500).json({ error: 'Failed to fetch links' });
