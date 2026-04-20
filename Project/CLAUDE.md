@@ -40,6 +40,18 @@ npm start                    # serves API + SPA at http://localhost:3000
 
 The server serves `public/` as the SPA and falls back to `public/index.html` for any unmatched route so React Router handles client-side routing.
 
+## Deployment
+
+**Backend → Railway** (project `brancher`, service URL `https://brancher-production.up.railway.app`).
+
+Railway is **not** wired up to GitHub auto-deploy yet (the repo lives under `aryan47230` and would need that account to install Railway's GitHub App). Until that's set up:
+
+> **After every `git push` to master, run `cd Project && railway up` to redeploy the backend.** Skipping this means production runs stale code while GitHub looks current.
+
+The Railway service expects these env vars (set in dashboard → Variables): `GEMINI_API_KEY`, `SESSION_SECRET`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NODE_ENV=production`, `FRONTEND_URL=<vercel-url>`. `PORT` is provided by Railway automatically — `server.js` reads it.
+
+**Frontend → Vercel** (auto-deploys from GitHub on every push to master). Vercel project root is `Project/client`, framework Vite. It needs `VITE_API_BASE` set to the Railway URL above.
+
 ## Environment
 
 Create `Project/.env`:

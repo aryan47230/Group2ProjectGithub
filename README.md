@@ -1,3 +1,9 @@
+# ⚠️ AFTER EVERY `git push`, RUN `railway up` FROM `Project/` TO REDEPLOY THE BACKEND. ⚠️
+
+> Railway is **not** auto-deploying from GitHub yet (the repo isn't connected to Railway's GitHub App). Until that's set up, every push to `master` requires a manual `cd Project && railway up` to ship the backend changes. The Vercel frontend redeploys automatically on push.
+
+---
+
 # Group 2
 
 Group Name: Group 10
