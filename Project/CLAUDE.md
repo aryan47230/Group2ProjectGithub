@@ -31,14 +31,9 @@ cd client && npm install && cd ..
 # Dev — run server and client separately
 npm start                    # server on http://localhost:3000
 cd client && npm run dev     # Vite dev server on http://localhost:5173
-
-# Production — build client then run server (single port)
-cd client && npm run build && cd ..
-# (The Vite build output should be copied/served from Project/public)
-npm start                    # serves API + SPA at http://localhost:3000
 ```
 
-The server serves `public/` as the SPA and falls back to `public/index.html` for any unmatched route so React Router handles client-side routing.
+In dev, Vite proxies `/api` → `http://localhost:3000` (`vite.config.js`). Production is a **split deploy** — see Deployment below. There is no longer a single-port prod build target; the server is API-only in production.
 
 ## Deployment
 
