@@ -198,6 +198,17 @@ export default function LauncherScreen() {
         <div className={styles.loadingLabel}>{loadingLabel}</div>
         {topic && <div className={styles.loadingTopic}>{topic}</div>}
       </div>
+
+      {!generating && (
+        <button
+          type="button"
+          className={styles.skipBtn}
+          onClick={dismiss}
+          aria-label="Skip intro"
+        >
+          Skip ↗
+        </button>
+      )}
     </div>
   );
 }

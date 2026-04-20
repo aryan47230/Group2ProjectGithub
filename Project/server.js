@@ -16,7 +16,16 @@ if (FRONTEND_URL) {
   app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 }
 app.use(express.json());
-app.use(express.static("public"));
+
+// Status route — Railway hosts the API only; the SPA lives on Vercel.
+app.get("/", (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "brancher-api",
+    frontend: FRONTEND_URL || null,
+    docs: "API only. Visit the frontend for the app.",
+  });
+});
 app.use(session({
   secret: process.env.SESSION_SECRET || "dev-secret-change-in-prod",
   resave: false,
@@ -47,11 +56,17 @@ app.post("/api/register", async (req, res) => {
   if (password.length < 6) return res.status(400).json({ error: "Password must be at least 6 characters" });
 
   const hash = await bcrypt.hash(password, 10);
-  const user = await db.createUser(username, hash);
-  if (!user) return res.status(409).json({ error: "Username already taken" });
+  let result;
+  try {
+    result = await db.createUser(username, hash);
+  } catch (err) {
+    return res.status(503).json({ error: "Authentication service unavailable. Try again in a moment." });
+  }
+  if (result?.taken) return res.status(409).json({ error: "Username already taken" });
+  if (!result?.user) return res.status(503).json({ error: "Authentication service unavailable. Try again in a moment." });
 
-  req.session.userId = user.id;
-  res.json({ user: { id: user.id, username: user.username } });
+  req.session.userId = result.user.id;
+  res.json({ user: { id: result.user.id, username: result.user.username } });
 });
 
 app.post("/api/login", async (req, res) => {
@@ -170,7 +185,10 @@ Respond with ONLY valid JSON in this exact shape:
     if (!response.ok) {
       const errText = await response.text();
       console.error("Gemini questions error:", response.status, errText);
-      return res.status(500).json({ error: `Gemini API error ${response.status}: ${errText}` });
+      if (response.status === 429 || response.status === 503) {
+        return res.status(503).json({ error: "AI generator is temporarily unavailable. Please try again in a moment." });
+      }
+      return res.status(502).json({ error: "AI generator failed. Please try again." });
     }
 
     const data = await response.json();
@@ -179,7 +197,7 @@ Respond with ONLY valid JSON in this exact shape:
     res.json(parsed);
   } catch (err) {
     console.error("Questions handler error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(502).json({ error: "AI generator failed. Please try again." });
   }
 });
 
@@ -206,12 +224,14 @@ app.post("/api/skill-tree", async (req, res) => {
           parts: [{
             text: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".${contextBlock}
 
-First, classify "${topic}" as exactly one of these scales, then follow the counts strictly:
-  - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3 levels
-  - small   (focused skill, e.g. "React Hooks")        → 8-12 nodes, 4 levels
-  - medium  (library/tool, e.g. "React", "Docker")     → 13-18 nodes, 6 levels
-  - large   (broad subject, e.g. "Calculus 3")          → 19-26 nodes, 8 levels
-  - massive (full discipline, e.g. "Machine Learning")  → 27-36 nodes, 10 levels
+First, classify "${topic}" as exactly one of these scales, then choose the total node count and level count from within the listed range:
+  - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3-4 levels
+  - small   (focused skill, e.g. "React Hooks")        → 8-12 nodes, 3-5 levels
+  - medium  (library/tool, e.g. "React", "Docker")     → 13-18 nodes, 4-6 levels
+  - large   (broad subject, e.g. "Calculus 3")          → 19-26 nodes, 5-8 levels
+  - massive (full discipline, e.g. "Machine Learning")  → 27-36 nodes, 6-10 levels
+
+The number of nodes per level should be ASYMMETRIC and reflect the topic's real prerequisite structure — do NOT split nodes evenly across levels. For most topics, expect a wide foundation layer (3-5 nodes), one or two narrow "convergence" layers (1-2 nodes) where many sub-skills feed into a unifying concept, and a single apex. Vary the shape so different topics produce visibly different trees.
 
 Rules:
 - level 1 = most basic foundation skills with no requirements
@@ -243,8 +263,11 @@ Respond with ONLY valid JSON in this exact shape:
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error("Gemini error:", response.status, errText);
-      return res.status(500).json({ error: `Gemini API error ${response.status}: ${errText}` });
+      console.error("Gemini skill-tree error:", response.status, errText);
+      if (response.status === 429 || response.status === 503) {
+        return res.status(503).json({ error: "AI generator is temporarily unavailable. Please try again in a moment." });
+      }
+      return res.status(502).json({ error: "AI generator failed. Please try again." });
     }
 
     const data = await response.json();
@@ -252,23 +275,14 @@ Respond with ONLY valid JSON in this exact shape:
     const skillTree = JSON.parse(rawText);
     res.json(skillTree);
   } catch (err) {
-    console.error("Handler error:", err);
-    res.status(500).json({ error: err.message });
+    console.error("Skill-tree handler error:", err);
+    res.status(502).json({ error: "AI generator failed. Please try again." });
   }
 });
 
 // ── Wiki Loop (concept explorer) ──────────────────────────────────────────────
 
 app.use("/api/concepts", createConceptsRouter());
-
-// SPA fallback — the unified React app handles client-side routing for / and /explore
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-app.get("*", (req, res) => {
-  res.sendFile(join(__dirname, "public", "index.html"));
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

@@ -25,18 +25,41 @@ async function getBacklinks(targetTitle, sourceTitle) {
   }
 }
 
-export async function rankConnections(title, linkedTitles, categories) {
-  const scored = [];
+// Deterministic FNV-1a hash → stable shuffle order seeded by the seed title.
+// This way the same article always gets the same connections (good UX),
+// but two different articles never share an alphabetical bias.
+function hashString(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h = (h ^ s.charCodeAt(i)) >>> 0;
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
 
-  // Only check backlinks for first 15 to stay within rate limits
-  const toCheck = linkedTitles.slice(0, 15);
+function seededShuffle(arr, seed) {
+  // Fisher-Yates with an LCG seeded from the title hash.
+  const a = [...arr];
+  let state = hashString(seed) || 1;
+  for (let i = a.length - 1; i > 0; i--) {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    const j = state % (i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export async function rankConnections(title, linkedTitles, categories) {
+  // Wikipedia returns links in alphabetical order, so the first 15 always start
+  // with "A" titles. Shuffle deterministically by the seed title so we sample
+  // across the full article without losing per-article reproducibility.
+  const sample = seededShuffle(linkedTitles, title).slice(0, 15);
 
   const backlinkResults = await Promise.all(
-    toCheck.map((linked) => getBacklinks(linked, title))
+    sample.map((linked) => getBacklinks(linked, title))
   );
 
-  for (let i = 0; i < toCheck.length; i++) {
-    const linked = toCheck[i];
+  const scored = sample.map((linked, i) => {
     let score = 1;
 
     // Bidirectional link = stronger connection
@@ -44,19 +67,23 @@ export async function rankConnections(title, linkedTitles, categories) {
       score += 2;
     }
 
-    // Position in article (earlier = more important)
-    const positionScore = 1 - (linkedTitles.indexOf(linked) / linkedTitles.length);
+    // Original position in article (earlier = more important — preserved from
+    // the unshuffled list so important early-article links still win ties).
+    const originalIdx = linkedTitles.indexOf(linked);
+    const positionScore = 1 - (originalIdx / linkedTitles.length);
     score += positionScore;
 
-    scored.push({
+    return {
       title: linked,
       strength: Math.min(3, Math.round(score)),
       relation: 'related',
       description: `A topic related to ${title}.`,
-    });
-  }
+      _score: score,
+    };
+  });
 
-  // Sort by score descending, take top 8
-  scored.sort((a, b) => b.strength - a.strength);
-  return scored.slice(0, 8);
+  // Sort by raw score; tiebreak with the deterministic shuffle position so
+  // alphabetical order never re-emerges as the silent tiebreaker.
+  scored.sort((a, b) => b._score - a._score);
+  return scored.slice(0, 8).map(({ _score, ...c }) => c);
 }

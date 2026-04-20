@@ -47,13 +47,22 @@ function useTypingAnimation(label, active) {
   return { displayed, isTyping };
 }
 
-function abbreviate(label) {
+// Word-aware truncation: never crop mid-word. Pick the longest space-separated
+// prefix that fits within `maxChars`. Single very-long words ellipsize at the
+// limit. Full label is always available via the parent's `title` attribute.
+function abbreviate(label, maxChars = 12) {
   if (!label) return '';
-  if (label.length <= 10) return label;
-  const words = label.split(' ');
-  if (words.length >= 3) return words.slice(0, 2).map((w) => w.slice(0, 4)).join(' ');
-  if (words.length === 2) return words.map((w) => w.slice(0, 5)).join(' ');
-  return label.slice(0, 9) + '…';
+  if (label.length <= maxChars) return label;
+  const words = label.split(/\s+/);
+  let acc = '';
+  for (const w of words) {
+    const candidate = acc ? `${acc} ${w}` : w;
+    if (candidate.length > maxChars) break;
+    acc = candidate;
+  }
+  if (acc) return acc;
+  // Single word longer than the limit: ellipsize.
+  return label.slice(0, Math.max(1, maxChars - 1)) + '…';
 }
 
 function getNodeSize(type, hopDistance, visited) {
@@ -95,6 +104,7 @@ function GraphNode({ node, x, y, onClick, focused, highlighted }) {
         style={{ left: x - half, top: y - half, width: size, height: size }}
         onClick={() => onClick?.(node)}
         data-node-id={node.id}
+        title={node.label}
       >
         <div className={styles.centerGlow} />
         <div className={styles.radarRing + ' ' + styles.radarRing1} />
@@ -140,6 +150,7 @@ function GraphNode({ node, x, y, onClick, focused, highlighted }) {
         }}
         onClick={handleClick}
         data-node-id={node.id}
+        title={node.label}
       >
         <div className={styles.constellationDot} />
         <div className={`${styles.nodeLabel} ${styles.labelSmall}`}>{node.label}</div>
@@ -163,6 +174,7 @@ function GraphNode({ node, x, y, onClick, focused, highlighted }) {
       }}
       onClick={handleClick}
       data-node-id={node.id}
+      title={node.label}
     >
       <div className={shapeClass}>
         {!isSecondary && (

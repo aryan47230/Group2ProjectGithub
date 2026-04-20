@@ -30,8 +30,15 @@ export const db = {
       .insert({ username, password_hash: passwordHash })
       .select()
       .single();
-    if (error) return null; // unique constraint violation = username taken
-    return { id: data.id, username: data.username, passwordHash: data.password_hash, createdAt: data.created_at };
+    if (error) {
+      // Postgres 23505 = unique_violation. Anything else is an infrastructure error.
+      const msg = (error.message || "").toLowerCase();
+      const isTaken = error.code === "23505" || msg.includes("duplicate") || msg.includes("unique");
+      if (isTaken) return { taken: true };
+      console.error("createUser supabase error:", error);
+      throw error;
+    }
+    return { user: { id: data.id, username: data.username, passwordHash: data.password_hash, createdAt: data.created_at } };
   },
 
   async getTreesByUserId(userId) {

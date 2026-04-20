@@ -134,13 +134,24 @@ export default function SkillGraph({ nodes, completedNodes, justCompleted, onNod
     const SVG_H     = (maxPerCol - 1) * NODE_GAP + PAD_V * 2;
     const SVG_W     = PAD_L + (maxLevel - 1) * COL_GAP + PAD_R;
 
+    // Per-node positional jitter — keeps the layout deterministic per name so
+    // the same tree never reshuffles, but breaks the rigid grid feel by giving
+    // each node a stable random offset around its column slot.
+    // Apex (highest level) and level-1 foundations stay aligned for readability.
+    const X_JITTER = 18; // px around the column x
+    const Y_JITTER = 22; // px around the row y
     const pos = {};
     for (let lv = 1; lv <= maxLevel; lv++) {
       const col    = byLevel[lv] || [];
       const x      = PAD_L + (lv - 1) * COL_GAP;
       const colH   = (col.length - 1) * NODE_GAP;
       const startY = SVG_H / 2 - colH / 2;
-      col.forEach((n, i) => { pos[n.name] = { x, y: startY + i * NODE_GAP }; });
+      const isAnchor = lv === 1 || lv === maxLevel;
+      col.forEach((n, i) => {
+        const jx = isAnchor ? 0 : edgeJitter(n.name, 'x', X_JITTER);
+        const jy = isAnchor ? 0 : edgeJitter(n.name, 'y', Y_JITTER);
+        pos[n.name] = { x: x + jx, y: startY + i * NODE_GAP + jy };
+      });
     }
 
     svg.setAttribute('width',   SVG_W);

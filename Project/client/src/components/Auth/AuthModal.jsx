@@ -7,6 +7,7 @@ export default function AuthModal({ initialMode = 'login', onClose }) {
   const [mode, setMode] = useState(initialMode);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const usernameRef = useRef(null);
@@ -15,9 +16,22 @@ export default function AuthModal({ initialMode = 'login', onClose }) {
     usernameRef.current?.focus();
   }, []);
 
+  // Reset confirm when switching modes so a stale value never blocks sign-in.
+  useEffect(() => {
+    setConfirmPassword('');
+  }, [mode]);
+
+  const isRegister = mode === 'register';
+  const passwordsMatch = !isRegister || password === confirmPassword;
+  const canSubmit = username.trim() && password && passwordsMatch && !submitting;
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (isRegister && !passwordsMatch) {
+      setError("Passwords don't match.");
+      return;
+    }
     setSubmitting(true);
     try {
       if (mode === 'login') await login(username.trim(), password);
@@ -78,8 +92,24 @@ export default function AuthModal({ initialMode = 'login', onClose }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error && <p className={styles.error}>{error}</p>}
-          <button type="submit" className={styles.submit} disabled={submitting}>
+          {isRegister && (
+            <>
+              <label htmlFor="auth-confirm">Confirm password</label>
+              <input
+                id="auth-confirm"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </>
+          )}
+          {error && <p className={styles.error} role="alert">{error}</p>}
+          {isRegister && confirmPassword && !passwordsMatch && !error && (
+            <p className={styles.error} role="alert">Passwords don't match.</p>
+          )}
+          <button type="submit" className={styles.submit} disabled={!canSubmit}>
             {mode === 'login' ? 'Sign In' : 'Sign Up'}
           </button>
         </form>
