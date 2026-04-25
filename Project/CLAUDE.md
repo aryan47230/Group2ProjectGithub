@@ -37,15 +37,17 @@ In dev, Vite proxies `/api` → `http://localhost:3000` (`vite.config.js`). Prod
 
 ## Deployment
 
-**Backend → Railway** (project `brancher`, service URL `https://brancher-production.up.railway.app`).
+**Both ends require a manual deploy after every push to master.** Neither Railway nor Vercel is wired up to GitHub auto-deploy (the repo lives under `aryan47230` and would need that account to install the platform GitHub Apps).
 
-Railway is **not** wired up to GitHub auto-deploy yet (the repo lives under `aryan47230` and would need that account to install Railway's GitHub App). Until that's set up:
+> **After every `git push` to master, run BOTH commands or production runs stale code:**
+> ```bash
+> cd Project && railway up                          # backend
+> cd Project/client && vercel deploy --prod --yes   # frontend
+> ```
 
-> **After every `git push` to master, run `cd Project && railway up` to redeploy the backend.** Skipping this means production runs stale code while GitHub looks current.
+**Backend → Railway** (project `brancher`, service `brancher`, URL `https://brancher-production.up.railway.app`). Env vars set in dashboard → Variables: `GEMINI_API_KEY`, `SESSION_SECRET`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NODE_ENV=production`, `FRONTEND_URL=<vercel-url>`. `PORT` is provided by Railway automatically.
 
-The Railway service expects these env vars (set in dashboard → Variables): `GEMINI_API_KEY`, `SESSION_SECRET`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NODE_ENV=production`, `FRONTEND_URL=<vercel-url>`. `PORT` is provided by Railway automatically — `server.js` reads it.
-
-**Frontend → Vercel** (auto-deploys from GitHub on every push to master). Vercel project root is `Project/client`, framework Vite. It needs `VITE_API_BASE` set to the Railway URL above.
+**Frontend → Vercel** (project `brancher` under `darshpodgmailcoms-projects`, aliased to `https://brancher-beryl.vercel.app`). Vercel project root is `Project/client`, framework Vite. It needs `VITE_API_BASE` set to the Railway URL above.
 
 ## Environment
 
