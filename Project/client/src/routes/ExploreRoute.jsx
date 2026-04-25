@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import ConceptSuggestions from '../components/ConceptSuggestions/ConceptSuggestions';
 import { useSearchParams } from 'react-router-dom';
 import { ExplorerProvider, useExplorer } from '../context/ExplorerContext';
 import AppHeader from '../components/AppHeader/AppHeader';
@@ -10,6 +11,7 @@ import TrailSidebar from '../components/TrailSidebar/TrailSidebar';
 import ErrorBoundary from '../components/ErrorBoundary';
 import KeyboardHelp from '../components/KeyboardHelp/KeyboardHelp';
 import styles from './ExploreRoute.module.css';
+import skillStyles from '../components/SkillTree/SkillTree.module.css';
 
 function AutoJump() {
   const { jumpTo } = useExplorer();
@@ -37,44 +39,27 @@ function ExploreLoader({ topic }) {
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'radial-gradient(ellipse at 50% 45%, rgba(255,170,64,0.06) 0%, rgba(0,255,242,0.02) 30%, #000000 65%)',
+        background: '#000000',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 18,
         zIndex: 900,
-        pointerEvents: 'none',
         fontFamily: "var(--font-display, 'Outfit'), sans-serif",
       }}
     >
-      {/* Outer ring */}
-      <div style={{ position: 'relative', width: 36, height: 36 }}>
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '50%',
-            border: '1px solid rgba(255,170,64,0.15)',
-            animation: 'loaderRing 2s ease-in-out infinite',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 16,
-            height: 16,
-            borderRadius: '50%',
-            background: '#ffd27a',
-            boxShadow:
-              '0 0 14px rgba(255,200,90,0.9), 0 0 32px rgba(255,170,64,0.55), 0 0 60px rgba(255,170,64,0.3)',
-            animation: 'branchPulse 1.6s ease-in-out infinite',
-          }}
-        />
-      </div>
+      <div
+        style={{
+          width: 14,
+          height: 14,
+          borderRadius: '50%',
+          background: '#ffd27a',
+          boxShadow:
+            '0 0 12px rgba(255,200,90,0.9), 0 0 28px rgba(255,170,64,0.55), 0 0 60px rgba(255,170,64,0.3)',
+          animation: 'branchPulse 1.6s ease-in-out infinite',
+        }}
+      />
       <div
         style={{
           color: 'rgba(255,200,90,0.85)',
@@ -99,15 +84,110 @@ function ExploreLoader({ topic }) {
       )}
       <style>{`
         @keyframes branchPulse {
-          0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.9; }
-          50% { transform: translate(-50%,-50%) scale(1.3); opacity: 1; }
-        }
-        @keyframes loaderRing {
-          0%, 100% { transform: scale(1); opacity: 0.4; }
-          50% { transform: scale(1.25); opacity: 0.8; }
+          0%, 100% { transform: scale(1); opacity: 0.9; }
+          50% { transform: scale(1.5); opacity: 1; }
         }
       `}</style>
     </div>
+  );
+}
+
+function WikiHopperLanding() {
+  const { jumpTo } = useExplorer();
+  const [topic, setTopic] = useState('');
+  const formWrapRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const t = topic.trim();
+    if (!t) return;
+    jumpTo(t);
+  }
+
+  function handlePick(title) {
+    setTopic(title);
+    jumpTo(title);
+  }
+
+  return (
+    <main className={skillStyles.promptView} style={{ minHeight: '100vh' }}>
+      <div className={skillStyles.dotGrid} aria-hidden="true" />
+
+      <header className={skillStyles.hero}>
+        <span
+          className={skillStyles.eyebrow}
+          style={{
+            color: 'var(--rn-cyan)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            borderColor: 'rgba(0,255,242,0.25)',
+            textShadow: '0 0 10px rgba(0,255,242,0.35)',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: 'var(--rn-cyan)',
+              boxShadow: '0 0 8px var(--rn-cyan-glow)',
+              display: 'inline-block',
+            }}
+          />
+          WIKI HOPPER
+        </span>
+        <h1 className={skillStyles.heading}>
+          Where do you want{' '}
+          <span
+            className={skillStyles.headingItalic}
+            style={{ color: 'var(--rn-cyan)', textShadow: '0 0 30px rgba(0,255,242,0.25)' }}
+          >
+            to wander
+          </span>
+          ?
+        </h1>
+        <p className={skillStyles.subtitle}>
+          Type any concept — a person, a place, an idea. We'll pull the Wikipedia article and show you where to hop next.
+        </p>
+      </header>
+
+      <div
+        ref={formWrapRef}
+        style={{ position: 'relative', width: '100%', maxWidth: 620 }}
+      >
+        <form
+          className={skillStyles.form}
+          onSubmit={handleSubmit}
+          style={{
+            maxWidth: 'none',
+            width: '100%',
+            borderColor: 'rgba(0,255,242,0.18)',
+            boxShadow: '0 0 20px rgba(0,255,242,0.05)',
+          }}
+        >
+          <span className={skillStyles.formIcon} style={{ color: 'var(--rn-cyan)' }}>▸</span>
+          <input
+            className={skillStyles.topicInput}
+            type="text"
+            placeholder="e.g. black holes, the Renaissance, Euler..."
+            required
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            autoFocus
+          />
+          <button type="submit" className={styles.hopInBtn}>
+            HOP IN
+          </button>
+        </form>
+        <ConceptSuggestions
+          query={topic}
+          onSelect={handlePick}
+          containerRef={formWrapRef}
+        />
+      </div>
+    </main>
   );
 }
 
@@ -139,62 +219,10 @@ function ExploreShell({ onSignIn, onSignUp, pendingTopic }) {
     <>
       {showLoader && <ExploreLoader topic={pendingTopic || '...'} />}
       {(ready || showEmptyState) && (
-        <>
-          <AppHeader onSignIn={onSignIn} onSignUp={onSignUp} />
-          <Topbar />
-        </>
+        <AppHeader onSignIn={onSignIn} onSignUp={onSignUp} />
       )}
-      {showEmptyState && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'radial-gradient(ellipse at 50% 40%, rgba(255,170,64,0.03) 0%, transparent 60%), #000000',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 16,
-            zIndex: 50,
-            fontFamily: "var(--font-display, 'Outfit'), sans-serif",
-            paddingTop: 120,
-          }}
-        >
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: '50%',
-              background: '#ffd27a',
-              boxShadow: '0 0 12px rgba(255,200,90,0.6), 0 0 28px rgba(255,170,64,0.3)',
-              opacity: 0.7,
-            }}
-          />
-          <div
-            style={{
-              color: 'rgba(255,200,90,0.85)',
-              fontSize: 12,
-              letterSpacing: 4,
-              textTransform: 'uppercase',
-              textShadow: '0 0 10px rgba(255,170,64,0.5)',
-            }}
-          >
-            Wiki Hopper
-          </div>
-          <div
-            style={{
-              color: 'rgba(255,255,255,0.45)',
-              fontSize: 14,
-              letterSpacing: 1,
-              maxWidth: 400,
-              textAlign: 'center',
-              lineHeight: 1.6,
-            }}
-          >
-            Use the search bar above to explore any Wikipedia concept
-          </div>
-        </div>
-      )}
+      {ready && <Topbar />}
+      {showEmptyState && <WikiHopperLanding />}
       <div
         className={styles.app}
         style={{

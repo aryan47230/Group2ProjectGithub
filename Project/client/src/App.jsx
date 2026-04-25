@@ -5,7 +5,6 @@ import { SkillTreeProvider } from './context/SkillTreeContext';
 import SkillTreeRoute from './routes/SkillTreeRoute';
 import ExploreRoute from './routes/ExploreRoute';
 import AdvancedSkillTreeRoute from './routes/AdvancedSkillTreeRoute';
-import LauncherScreen from './components/LauncherScreen/LauncherScreen';
 
 export default function App() {
   const location = useLocation();
@@ -20,7 +19,6 @@ export default function App() {
   return (
     <AuthProvider>
       <SkillTreeProvider>
-        <LauncherScreen />
         <div className={`route-container ${transitioning ? 'route-entering' : 'route-visible'}`}>
           <Routes>
             <Route path="/" element={<SkillTreeRoute hideExplore />} />

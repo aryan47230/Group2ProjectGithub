@@ -28,3 +28,31 @@
   min-width: 0;
   background: var(--rn-void);
 }
+
+/* Wiki Hopper landing — HOP IN button (mirrors Skill Tree's Generate button, cyan theme) */
+.hopInBtn {
+  height: 100%;
+  padding: 0 26px;
+  border-radius: var(--rn-radius-pill);
+  border: 1px solid var(--rn-cyan);
+  background: var(--rn-cyan-glow);
+  color: var(--rn-cyan);
+  font-family: var(--rn-font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: var(--rn-tracked-2);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.hopInBtn:hover:not(:disabled) {
+  background: var(--rn-cyan);
+  color: var(--rn-void);
+  box-shadow: 0 0 24px -4px var(--rn-cyan-glow);
+}
+
+.hopInBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

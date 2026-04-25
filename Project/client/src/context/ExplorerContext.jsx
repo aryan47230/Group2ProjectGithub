@@ -149,7 +149,26 @@ function reducer(state, action) {
         return { ...n, hopDistance: Math.min((n.hopDistance || 0), 4) };
       });
 
-      const existingIds = new Set(existingNodes.map((n) => n.id));
+      // If the new concept's title was not already in the graph, the map above
+      // produced no center node. Append a fresh center so the graph has a hub
+      // and trail/connection edges referencing it survive the dangling-edge filter.
+      const hasCenter = existingNodes.some((n) => n.type === 'center');
+      const centerEnsuredNodes = hasCenter
+        ? existingNodes
+        : [
+            ...existingNodes,
+            {
+              id: canonicalTitle,
+              label: canonicalTitle,
+              type: 'center',
+              color: 'gold',
+              hopDistance: 0,
+              cluster: null,
+              categories: concept.categories || [],
+            },
+          ];
+
+      const existingIds = new Set(centerEnsuredNodes.map((n) => n.id));
       const { nodes: newPrimary, edges: newEdges } = buildPrimaryNodesAndEdges(concept, existingIds);
 
       const trailEdges = [];
@@ -166,7 +185,7 @@ function reducer(state, action) {
         });
       }
 
-      const allNodes = [...existingNodes, ...newPrimary].map((n) => ({
+      const allNodes = [...centerEnsuredNodes, ...newPrimary].map((n) => ({
         ...n, visited: visitedTitles.has(n.id),
         categories: n.categories || (n.id === canonicalTitle ? concept.categories : []),
       }));
