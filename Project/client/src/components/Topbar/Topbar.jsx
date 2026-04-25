@@ -4,7 +4,7 @@ import { searchConcepts } from '../../utils/api';
 import styles from './Topbar.module.css';
 
 export default function Topbar() {
-  const { trail, trailIndex, toggleTrail, toggleJourney, trailOpen, pickCuriosity, currentConcept, goToIndex } = useExplorer();
+  const { trail, trailIndex, toggleTrail, trailOpen, pickCuriosity, currentConcept, goToIndex } = useExplorer();
   const { jumpTo } = useExplorer();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -108,9 +108,6 @@ export default function Topbar() {
           )}
           <button className={`${styles.btn} ${styles.btnTrail} ${trailOpen ? styles.active : ''}`} onClick={toggleTrail}>
             TRAIL
-          </button>
-          <button className={`${styles.btn} ${styles.btnJourney}`} onClick={toggleJourney}>
-            MAP
           </button>
         </div>
       </div>

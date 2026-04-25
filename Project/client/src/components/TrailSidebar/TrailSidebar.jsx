@@ -25,9 +25,12 @@ export default function TrailSidebar() {
       <div className={styles.trail}>
         {trail.map((entry, i) => {
           const isCurrent = i === trailIndex;
+          const isFirst = i === 0;
+          const isLast = i === trail.length - 1;
+          const positionClass = isFirst ? styles.dotStart : isLast ? styles.dotEnd : styles.dotMid;
           return (
             <div key={`${entry.title}-${i}`} className={styles.item}>
-              <div className={`${styles.dot} ${isCurrent ? styles.dotCurrent : styles.dotVisited}`}>{i + 1}</div>
+              <div className={`${styles.dot} ${positionClass} ${isCurrent ? styles.dotCurrent : ''}`}>{i + 1}</div>
               <div>
                 <h4 className={styles.itemTitle}>{entry.title}</h4>
                 <div className={styles.meta}>{isCurrent ? 'Currently exploring' : `${Math.round((Date.now() - entry.timestamp) / 60000)}m ago`}</div>

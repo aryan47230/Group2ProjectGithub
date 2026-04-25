@@ -35,7 +35,7 @@ function getBoundingEllipse(points) {
 }
 
 export default function KnowledgeGraph() {
-  const { graphData, setPreview, clearPreview, previewNode, currentConcept, expandNode, clusterColors, prevCenterTitle, focusMode, toggleFocus, highlightedNodeId, setHighlight, clearHighlight, jumpTo } = useExplorer();
+  const { graphData, setPreview, clearPreview, previewNode, currentConcept, expandNode, clusterColors, prevCenterTitle, highlightedNodeId, setHighlight, clearHighlight, jumpTo } = useExplorer();
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -181,7 +181,67 @@ export default function KnowledgeGraph() {
     });
   }, [currentConcept?.title]);
 
-  // Manual pan disabled — users should not be able to drag-pan the graph
+  // Manual click-and-drag panning
+  const dragStateRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const [grabbing, setGrabbing] = useState(false);
+
+  const handlePointerDown = useCallback((e) => {
+    // Ignore drags that start on a node or interactive element
+    if (e.target.closest('[data-node]') || e.target.closest('button')) return;
+    if (e.button !== undefined && e.button !== 0) return;
+    dragStateRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      panX: panRef.current.x,
+      panY: panRef.current.y,
+      moved: false,
+      pointerId: e.pointerId,
+    };
+    if (e.currentTarget.setPointerCapture && e.pointerId !== undefined) {
+      try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    }
+    setIsAutoPanning(false);
+  }, []);
+
+  const handlePointerMove = useCallback((e) => {
+    const ds = dragStateRef.current;
+    if (!ds) return;
+    const dx = e.clientX - ds.startX;
+    const dy = e.clientY - ds.startY;
+    if (!ds.moved && Math.hypot(dx, dy) < 4) return;
+    if (!ds.moved) {
+      ds.moved = true;
+      isDraggingRef.current = true;
+      setGrabbing(true);
+    }
+    const newX = ds.panX + dx;
+    const newY = ds.panY + dy;
+    panRef.current = { x: newX, y: newY };
+    if (canvasRef.current) {
+      canvasRef.current.style.transition = 'none';
+      canvasRef.current.style.transform =
+        `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+    }
+  }, []);
+
+  const handlePointerUp = useCallback((e) => {
+    const ds = dragStateRef.current;
+    if (!ds) return;
+    dragStateRef.current = null;
+    if (e.currentTarget.releasePointerCapture && ds.pointerId !== undefined) {
+      try { e.currentTarget.releasePointerCapture(ds.pointerId); } catch {}
+    }
+    if (ds.moved) {
+      // Sync React state with the panRef we've been mutating during drag
+      setPan({ x: panRef.current.x, y: panRef.current.y });
+      setGrabbing(false);
+      // Swallow the trailing click that follows a drag
+      setTimeout(() => { isDraggingRef.current = false; }, 0);
+    } else {
+      isDraggingRef.current = false;
+    }
+  }, []);
 
   // Keyboard nav
   const navigableNodes = useMemo(() => {
@@ -215,6 +275,7 @@ export default function KnowledgeGraph() {
   }, [graphData, focusedIdx, navigableNodes, setPreview]);
 
   function handleNodeClick(node) {
+    if (isDraggingRef.current) return;
     clearTimeout(hoverTimerRef.current);
     setHoverTooltip(null);
     if (node.type === 'center') return;
@@ -273,13 +334,6 @@ export default function KnowledgeGraph() {
       const source = positions[edge.source];
       const target = positions[edge.target];
       if (!source || !target) return null;
-
-      // Focus mode: hide edges to distant nodes
-      if (focusMode) {
-        const sn = nodeMap[edge.source];
-        const tn = nodeMap[edge.target];
-        if ((sn?.hopDistance || 0) >= 3 || (tn?.hopDistance || 0) >= 3) return null;
-      }
 
       // Compute max hop of the two endpoints
       const sourceNode = nodeMap[edge.source];
@@ -350,7 +404,7 @@ export default function KnowledgeGraph() {
         </g>
       );
     });
-  }, [graphData, positions, nodeMap, centerNodeId, focusMode]);
+  }, [graphData, positions, nodeMap, centerNodeId]);
 
   if (!graphData || !currentConcept) {
     return (
@@ -372,7 +426,11 @@ export default function KnowledgeGraph() {
       className={styles.container}
       ref={containerRef}
       tabIndex={0}
-      style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{ userSelect: 'none', WebkitUserSelect: 'none', cursor: grabbing ? 'grabbing' : 'grab' }}
     >
       {/* Vignette for depth */}
       <div className={styles.vignette} />
@@ -418,10 +476,7 @@ export default function KnowledgeGraph() {
       </div>
 
       <div className={styles.label}>KNOWLEDGE GRAPH</div>
-      <button className={styles.focusBtn} onClick={toggleFocus}>
-        {focusMode ? 'SHOW ALL' : 'FOCUS'}
-      </button>
-      <div className={styles.hint}>TAB cycle &middot; ENTER preview &middot; DBL-CLICK jump &middot; ESC close</div>
+      <div className={styles.hint}>DRAG to pan &middot; TAB cycle &middot; ENTER preview &middot; DBL-CLICK jump &middot; ESC close</div>
 
       <div
         ref={canvasRef}
@@ -482,8 +537,6 @@ export default function KnowledgeGraph() {
           if (!pos) return null;
           // Viewport culling for nodes
           if (!isVisible(pos.x, pos.y)) return null;
-          // Focus mode: hide distant nodes
-          if (focusMode && (node.hopDistance || 0) >= 3 && node.type !== 'center') return null;
           const navIdx = navigableNodeIndexMap.get(node.id) ?? -1;
           return (
             <div

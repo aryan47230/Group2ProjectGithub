@@ -95,14 +95,16 @@
 .topbar {
   height: var(--topbar-height);
   padding: 0 24px;
-  margin-top: var(--rn-topbar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--rn-paper);
   border-bottom: 1px solid var(--rn-hair-2);
   z-index: 100;
-  position: relative;
+  position: fixed;
+  top: var(--rn-topbar-height);
+  left: 0;
+  right: 0;
   backdrop-filter: blur(12px);
 }
 
@@ -276,18 +278,6 @@
   color: rgba(0, 212, 255, 0.85);
   background: rgba(0, 212, 255, 0.04);
   box-shadow: 0 0 12px rgba(0, 212, 255, 0.12);
-}
-
-.btnJourney {
-  border-color: rgba(160, 124, 255, 0.12);
-  color: rgba(160, 124, 255, 0.4);
-}
-
-.btnJourney:hover {
-  border-color: rgba(160, 124, 255, 0.3);
-  color: rgba(160, 124, 255, 0.75);
-  background: rgba(160, 124, 255, 0.04);
-  box-shadow: 0 0 12px rgba(160, 124, 255, 0.12);
 }
 
 /* ── Breadcrumb trail ── */

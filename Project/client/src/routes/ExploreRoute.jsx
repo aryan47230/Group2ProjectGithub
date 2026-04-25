@@ -7,7 +7,6 @@ import Topbar from '../components/Topbar/Topbar';
 import ConceptPanel from '../components/ConceptPanel/ConceptPanel';
 import KnowledgeGraph from '../components/KnowledgeGraph/KnowledgeGraph';
 import TrailSidebar from '../components/TrailSidebar/TrailSidebar';
-import JourneyOverlay from '../components/JourneyOverlay/JourneyOverlay';
 import ErrorBoundary from '../components/ErrorBoundary';
 import KeyboardHelp from '../components/KeyboardHelp/KeyboardHelp';
 import styles from './ExploreRoute.module.css';
@@ -124,6 +123,18 @@ function ExploreShell({ onSignIn, onSignUp, pendingTopic }) {
     }
   }, [ready]);
 
+  // Lock page scroll while on the Wiki Hopper — the graph is the only viewport
+  useEffect(() => {
+    const prevHtml = document.documentElement.style.overflow;
+    const prevBody = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, []);
+
   return (
     <>
       {showLoader && <ExploreLoader topic={pendingTopic || '...'} />}
@@ -201,7 +212,6 @@ function ExploreShell({ onSignIn, onSignUp, pendingTopic }) {
           </div>
         </div>
       </div>
-      <JourneyOverlay />
       {ready && <KeyboardHelp page="explore" />}
     </>
   );

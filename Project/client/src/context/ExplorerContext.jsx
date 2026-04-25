@@ -40,12 +40,10 @@ const initialState = {
   enriched: false, // Whether current concept's connections have been replaced by Gemini
   error: null,
   trailOpen: false,
-  journeyOpen: false,
   previewNode: null,
   expandedNode: null,
   detailLoading: false, // loading indicator for node detail fetch
   prevCenterTitle: null, // title of previous center node for directional spawning
-  focusMode: false,
   highlightedNodeId: null,
 };
 
@@ -358,12 +356,6 @@ function reducer(state, action) {
     case 'TOGGLE_TRAIL':
       return { ...state, trailOpen: !state.trailOpen };
 
-    case 'TOGGLE_JOURNEY':
-      return { ...state, journeyOpen: !state.journeyOpen };
-
-    case 'TOGGLE_FOCUS':
-      return { ...state, focusMode: !state.focusMode };
-
     case 'SET_HIGHLIGHT':
       return { ...state, highlightedNodeId: action.payload };
 
@@ -522,8 +514,6 @@ export function ExplorerProvider({ children }) {
   const setPreview = useCallback((node) => dispatch({ type: 'SET_PREVIEW', payload: node }), []);
   const clearPreview = useCallback(() => dispatch({ type: 'CLEAR_PREVIEW' }), []);
   const toggleTrail = useCallback(() => dispatch({ type: 'TOGGLE_TRAIL' }), []);
-  const toggleJourney = useCallback(() => dispatch({ type: 'TOGGLE_JOURNEY' }), []);
-  const toggleFocus = useCallback(() => dispatch({ type: 'TOGGLE_FOCUS' }), []);
   const setHighlight = useCallback((nodeId) => dispatch({ type: 'SET_HIGHLIGHT', payload: nodeId }), []);
   const clearHighlight = useCallback(() => dispatch({ type: 'CLEAR_HIGHLIGHT' }), []);
 
@@ -531,7 +521,7 @@ export function ExplorerProvider({ children }) {
     ...state,
     jumpTo, goBack, goForward, goToIndex, enrich, pickCuriosity, expandNode,
     showNodeDetail, clearExpanded,
-    setPreview, clearPreview, toggleTrail, toggleJourney, toggleFocus,
+    setPreview, clearPreview, toggleTrail,
     setHighlight, clearHighlight,
     clusterColors: CLUSTER_COLORS,
   };

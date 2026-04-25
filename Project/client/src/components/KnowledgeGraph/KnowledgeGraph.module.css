@@ -246,31 +246,6 @@
   100% { width: 500px; height: 500px; opacity: 0; border-width: 1px; box-shadow: 0 0 0 rgba(0, 255, 242, 0); }
 }
 
-/* ─── Focus mode toggle ─── */
-.focusBtn {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 30;
-  padding: 6px 14px;
-  font-size: 10px;
-  font-weight: 700;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  letter-spacing: 0.12em;
-  color: rgba(0, 255, 242, 0.5);
-  background: rgba(0, 255, 242, 0.03);
-  border: 1px solid rgba(0, 255, 242, 0.12);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.focusBtn:hover {
-  background: rgba(0, 255, 242, 0.08);
-  border-color: rgba(0, 255, 242, 0.3);
-  color: rgba(0, 255, 242, 0.9);
-  box-shadow: 0 0 12px rgba(0, 255, 242, 0.08);
-}
-
 /* ─── Hover tooltip ─── */
 .hoverTooltip {
   position: absolute;
