@@ -1,0 +1,53 @@
+.overlay {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 950;
+  pointer-events: none;
+}
+
+.card {
+  min-width: 240px;
+  max-width: 360px;
+  padding: 12px 14px;
+  background: var(--rn-paper, #111);
+  border: 1px solid var(--rn-hair-3, #333);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+.label {
+  font-family: var(--rn-font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rn-gold, #ffd27a);
+  margin-bottom: 6px;
+}
+
+.text {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--rn-txt-1, #ccc);
+  line-height: 1.4;
+}
+
+.track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--rn-gold, #ffd27a);
+  transition: width 0.2s ease;
+}
+
+.pct {
+  margin-top: 6px;
+  font-family: var(--rn-font-mono, monospace);
+  font-size: 10px;
+  color: var(--rn-txt-2, #888);
+}

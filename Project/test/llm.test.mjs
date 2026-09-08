@@ -3,18 +3,35 @@ import assert from "node:assert/strict";
 import {
   generateText,
   resolveProvider,
+  resolveProviderAsync,
   stripJsonFences,
   LlmError,
   _setLlmTestHooks,
   _resetLlmTestHooks,
 } from "../services/llm.js";
+import {
+  validateQuestions,
+  validateSkillTree,
+  validateEnrich,
+} from "../prompts/skillTree.js";
 
 const ENV_KEYS = [
   "LLM_PROVIDER",
   "ANTHROPIC_API_KEY",
   "GEMINI_API_KEY",
   "ANTHROPIC_MODEL",
+  "LLM_LOCAL_URL",
+  "LLM_LOCAL_MODEL",
 ];
+
+function jsonResponse(obj, { ok = true, status = 200 } = {}) {
+  return {
+    ok,
+    status,
+    json: async () => obj,
+    text: async () => JSON.stringify(obj),
+  };
+}
 
 describe("llm provider", () => {
   let saved;
@@ -40,11 +57,47 @@ describe("llm provider", () => {
     assert.equal(resolveProvider(), "anthropic");
   });
 
-  it("auto uses gemini when no Anthropic key is set", () => {
+  it("auto uses local when reachable and no Anthropic key", async () => {
     process.env.LLM_PROVIDER = "auto";
     delete process.env.ANTHROPIC_API_KEY;
     process.env.GEMINI_API_KEY = "gemini-test";
-    assert.equal(resolveProvider(), "gemini");
+    process.env.LLM_LOCAL_URL = "http://brancher-llm:8081/v1";
+
+    _setLlmTestHooks({
+      localFetch: async (url) => {
+        if (String(url).includes("/health")) return jsonResponse({ status: "ok" });
+        return jsonResponse({
+          choices: [{ message: { content: "from-local" } }],
+        });
+      },
+      geminiFetch: async () => {
+        throw new Error("gemini should not be called");
+      },
+    });
+
+    assert.equal(await resolveProviderAsync(), "local");
+    const text = await generateText({ prompt: "hi" });
+    assert.equal(text, "from-local");
+  });
+
+  it("auto uses gemini when local is unreachable and no Anthropic key", async () => {
+    process.env.LLM_PROVIDER = "auto";
+    delete process.env.ANTHROPIC_API_KEY;
+    process.env.GEMINI_API_KEY = "gemini-test";
+
+    _setLlmTestHooks({
+      localFetch: async () => {
+        throw new Error("connection refused");
+      },
+      geminiFetch: async () =>
+        jsonResponse({
+          candidates: [{ content: { parts: [{ text: "from-gemini" }] } }],
+        }),
+    });
+
+    assert.equal(await resolveProviderAsync(), "gemini");
+    const text = await generateText({ prompt: "hi" });
+    assert.equal(text, "from-gemini");
   });
 
   it("LLM_PROVIDER=gemini uses Gemini even if an Anthropic key exists", async () => {
@@ -65,12 +118,9 @@ describe("llm provider", () => {
       },
       geminiFetch: async () => {
         geminiCalled = true;
-        return {
-          ok: true,
-          json: async () => ({
-            candidates: [{ content: { parts: [{ text: "from-gemini" }] } }],
-          }),
-        };
+        return jsonResponse({
+          candidates: [{ content: { parts: [{ text: "from-gemini" }] } }],
+        });
       },
     });
 
@@ -110,6 +160,51 @@ describe("llm provider", () => {
     assert.equal("thinking" in params, false);
     assert.equal("temperature" in params, false);
     assert.ok(params.max_tokens > 0);
+  });
+
+  it("LLM_PROVIDER=local posts OpenAI chat completions with json_schema", async () => {
+    process.env.LLM_PROVIDER = "local";
+    process.env.LLM_LOCAL_URL = "http://brancher-llm:8081/v1";
+    process.env.LLM_LOCAL_MODEL = "qwen-test";
+    delete process.env.ANTHROPIC_API_KEY;
+
+    let captured;
+    _setLlmTestHooks({
+      localFetch: async (url, init) => {
+        captured = { url, init };
+        return jsonResponse({
+          choices: [
+            {
+              message: {
+                content: '{"questions":[{"id":"a","prompt":"Q?","placeholder":"ex"}]}',
+              },
+            },
+          ],
+        });
+      },
+    });
+
+    const schema = {
+      type: "object",
+      properties: { questions: { type: "array" } },
+      required: ["questions"],
+    };
+    const parsed = await generateText({
+      prompt: "give json",
+      json: true,
+      schema,
+      system: "sys",
+    });
+    assert.deepEqual(parsed, {
+      questions: [{ id: "a", prompt: "Q?", placeholder: "ex" }],
+    });
+    assert.equal(captured.url, "http://brancher-llm:8081/v1/chat/completions");
+    const body = JSON.parse(captured.init.body);
+    assert.equal(body.model, "qwen-test");
+    assert.equal(body.response_format.type, "json_schema");
+    assert.deepEqual(body.response_format.json_schema.schema, schema);
+    assert.equal(body.messages[0].role, "system");
+    assert.equal(body.messages[1].role, "user");
   });
 
   it("falls back to Anthropic on Gemini location 400 when an Anthropic key exists", async () => {
@@ -202,5 +297,23 @@ describe("llm provider", () => {
   it("stripJsonFences matches the Gemini path", () => {
     const cleaned = stripJsonFences("```json\n{\"ok\":true}\n```");
     assert.equal(cleaned, '{"ok":true}');
+  });
+
+  it("validateQuestions / validateSkillTree / validateEnrich", () => {
+    assert.equal(
+      validateQuestions({ questions: [{ id: "a", prompt: "Q?" }] }).ok,
+      true
+    );
+    assert.equal(validateQuestions({ questions: [] }).ok, false);
+    assert.equal(
+      validateSkillTree({ nodes: [{ name: "Git", level: 1, requires: [] }] }).ok,
+      true
+    );
+    assert.equal(validateSkillTree({ nodes: [] }).ok, false);
+    assert.equal(
+      validateEnrich({ connections: [{ title: "Git" }] }).ok,
+      true
+    );
+    assert.equal(validateEnrich({ connections: [] }).ok, false);
   });
 });

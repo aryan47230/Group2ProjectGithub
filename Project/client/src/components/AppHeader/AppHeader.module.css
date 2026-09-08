@@ -121,6 +121,27 @@
   justify-self: end;
 }
 
+.gpuToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--rn-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--rn-txt-2);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.gpuToggle input {
+  accent-color: var(--rn-gold);
+}
+
+.gpuToggle input:disabled + span {
+  opacity: 0.5;
+}
+
 .greeting {
   font-family: var(--rn-font-mono);
   font-size: 12px;

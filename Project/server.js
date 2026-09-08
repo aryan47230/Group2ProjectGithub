@@ -5,8 +5,18 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { db } from "./db.js";
+import { runMigrations } from "./db/migrate.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 import { generateText, llmErrorPayload } from "./services/llm.js";
+import {
+  questionsPrompt,
+  QUESTIONS_SYSTEM,
+  QUESTIONS_SCHEMA,
+  treePrompt,
+  TREE_SYSTEM,
+  TREE_SCHEMA,
+  contextBlockFrom,
+} from "./prompts/skillTree.js";
 
 const isProd = process.env.NODE_ENV === "production";
 const FRONTEND_URLS = (process.env.FRONTEND_URL || "")
@@ -42,7 +52,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    secure: isProd,
+    // auto: Secure on HTTPS (public sslip / Vercel cross-site), unset on HTTP Caddy
+    secure: isProd ? "auto" : false,
     sameSite: isProd ? "none" : "lax",
   }
 }));
@@ -166,17 +177,10 @@ app.post("/api/skill-tree/questions", async (req, res) => {
   try {
     const parsed = await generateText({
       json: true,
-      prompt: `You are helping tailor a learning skill tree for "${topic}". Return 3-5 short follow-up questions the learner should answer so the tree matches their goals, background, and constraints.
-
-Rules:
-- Each question must be answerable in one or two sentences.
-- Mix these angles: (a) what they hope to be able to do after, (b) current experience with "${topic}" or adjacent topics, (c) time, depth, or resource constraints.
-- Questions must be specific to "${topic}" — do not return generic boilerplate.
-- placeholder must be a concrete, realistic example answer for that question (not a restatement of the question).
-- id is kebab-case and unique.
-
-Respond with ONLY valid JSON in this exact shape:
-{"questions":[{"id":"kebab-case-id","prompt":"Question text?","placeholder":"short example answer"}]}`
+      system: QUESTIONS_SYSTEM,
+      schema: QUESTIONS_SCHEMA,
+      maxTokens: 1024,
+      prompt: questionsPrompt(topic),
     });
     res.json(parsed);
   } catch (err) {
@@ -189,49 +193,15 @@ app.post("/api/skill-tree", async (req, res) => {
   const { topic, context } = req.body;
   if (!topic) return res.status(400).json({ error: "Missing topic" });
 
-  const contextBlock = Array.isArray(context) && context.length
-    ? `\n\nLearner context (use this to tailor node choice, depth, and resources — do not ignore it):\n${context
-        .filter(c => c && c.question && c.answer && String(c.answer).trim())
-        .map(c => `- ${c.question} → ${String(c.answer).trim()}`)
-        .join("\n")}\n`
-    : "";
+  const contextBlock = contextBlockFrom(context);
 
   try {
     const skillTree = await generateText({
       json: true,
-      prompt: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".${contextBlock}
-
-First, classify "${topic}" as exactly one of these scales, then choose the total node count and level count from within the listed range:
-  - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3-4 levels
-  - small   (focused skill, e.g. "React Hooks")        → 8-12 nodes, 3-5 levels
-  - medium  (library/tool, e.g. "React", "Docker")     → 13-18 nodes, 4-6 levels
-  - large   (broad subject, e.g. "Calculus 3")          → 19-26 nodes, 5-8 levels
-  - massive (full discipline, e.g. "Machine Learning")  → 27-36 nodes, 6-10 levels
-
-The number of nodes per level should be ASYMMETRIC and reflect the topic's real prerequisite structure — do NOT split nodes evenly across levels. For most topics, expect a wide foundation layer (3-5 nodes), one or two narrow "convergence" layers (1-2 nodes) where many sub-skills feed into a unifying concept, and a single apex. Vary the shape so different topics produce visibly different trees.
-
-Rules:
-- level 1 = most basic foundation skills with no requirements
-- Higher levels = more advanced; "${topic}" itself should be the highest-level node
-- requires = array of skill names from lower levels that must be learned first
-- Every node except level-1 nodes MUST have at least one prerequisite
-- Nodes at the same level should be independent of each other
-- description = practical 1-2 sentence advice on developing this specific skill
-- tips = exactly 3 short actionable practice tips
-- emoji = a single emoji that best represents this specific skill
-- keyConcepts = 3-5 objects, each with:
-    - term: the concept name (short phrase)
-    - explanation: 1-sentence plain-English definition of what the term means and why it matters
-- outcomes = 2-3 strings describing concrete things the learner will be able to do after mastering this skill (start each with a verb)
-- commonMistakes = 2-3 strings describing typical errors beginners make on this skill and why they happen
-- resources = 4-5 real, well-known learning resources for this skill. Each resource has:
-    - name: descriptive title including creator/site (e.g. "NUSensei: Bow Grip Explained", "MDN: CSS Flexbox")
-    - type: one of "video", "article", "course", "book", "docs", "tool"
-    - url: use the real URL if it is a stable, well-known page (official docs, MDN, etc.); otherwise use a Google search URL like "https://www.google.com/search?q=..."
-    - description: 1 sentence explaining what this resource covers and who it is best for
-
-Respond with ONLY valid JSON in this exact shape:
-{"nodes": [{"name": "skill name", "emoji": "🎯", "level": 1, "requires": [], "description": "...", "tips": ["tip 1", "tip 2", "tip 3"], "keyConcepts": [{"term": "term name", "explanation": "what it means"}], "outcomes": ["outcome 1", "outcome 2"], "commonMistakes": ["mistake 1", "mistake 2"], "resources": [{"name": "Resource Title", "type": "video", "url": "https://...", "description": "What this covers."}]}]}`
+      system: TREE_SYSTEM,
+      schema: TREE_SCHEMA,
+      maxTokens: 2048,
+      prompt: treePrompt(topic, contextBlock),
     });
     res.json(skillTree);
   } catch (err) {
@@ -245,4 +215,11 @@ Respond with ONLY valid JSON in this exact shape:
 app.use("/api/concepts", createConceptsRouter());
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+runMigrations()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+  })
+  .catch((err) => {
+    console.error("Migration failed:", err);
+    process.exit(1);
+  });

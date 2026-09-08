@@ -4,7 +4,10 @@ const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 const DEFAULT_ANTHROPIC_MODEL = "claude-opus-5";
 const DEFAULT_MAX_TOKENS = 16384;
+const LOCAL_MAX_TOKENS = 2048;
+const DEFAULT_LOCAL_URL = "http://brancher-llm:8081/v1";
 const LOCATION_SNIPPET = "location is not supported";
+const LOCAL_PROBE_TTL_MS = 5000;
 
 export class LlmError extends Error {
   constructor(provider, detail, status = 502) {
@@ -27,20 +30,66 @@ function stringifyDetail(detail) {
   }
 }
 
-let testHooks = { anthropicClient: null, geminiFetch: null };
+let testHooks = { anthropicClient: null, geminiFetch: null, localFetch: null };
+let localProbe = { at: 0, ok: false };
 
 export function _setLlmTestHooks(hooks = {}) {
   testHooks = { ...testHooks, ...hooks };
 }
 
 export function _resetLlmTestHooks() {
-  testHooks = { anthropicClient: null, geminiFetch: null };
+  testHooks = { anthropicClient: null, geminiFetch: null, localFetch: null };
+  localProbe = { at: 0, ok: false };
 }
 
+export function getLocalUrl() {
+  const raw = (process.env.LLM_LOCAL_URL || DEFAULT_LOCAL_URL).trim();
+  return raw.replace(/\/+$/, "");
+}
+
+function localBaseUrl() {
+  return getLocalUrl().replace(/\/v1$/i, "");
+}
+
+function getGeminiFetch() {
+  return testHooks.geminiFetch || fetch;
+}
+
+function getLocalFetch() {
+  return testHooks.localFetch || testHooks.geminiFetch || fetch;
+}
+
+export async function isLocalReachable() {
+  const now = Date.now();
+  if (now - localProbe.at < LOCAL_PROBE_TTL_MS) return localProbe.ok;
+  const health = `${localBaseUrl()}/health`;
+  try {
+    const res = await getLocalFetch()(health, { signal: AbortSignal.timeout(1500) });
+    localProbe = { at: now, ok: Boolean(res && res.ok) };
+  } catch {
+    localProbe = { at: now, ok: false };
+  }
+  return localProbe.ok;
+}
+
+/**
+ * Sync resolver for explicit providers and Anthropic-first auto.
+ * Returns "anthropic" | "gemini" | "local" | "auto".
+ * "auto" means: probe local, else gemini (see resolveProviderAsync).
+ */
 export function resolveProvider() {
   const raw = (process.env.LLM_PROVIDER || "auto").trim().toLowerCase();
-  if (raw === "anthropic" || raw === "gemini") return raw;
-  return process.env.ANTHROPIC_API_KEY ? "anthropic" : "gemini";
+  if (raw === "anthropic" || raw === "gemini" || raw === "local") return raw;
+  if (process.env.ANTHROPIC_API_KEY) return "anthropic";
+  return "auto";
+}
+
+export async function resolveProviderAsync() {
+  const p = resolveProvider();
+  if (p !== "auto") return p;
+  if (await isLocalReachable()) return "local";
+  if (process.env.GEMINI_API_KEY) return "gemini";
+  return "local";
 }
 
 export function stripJsonFences(text) {
@@ -62,10 +111,6 @@ function parseMaybeJson(text, json, provider) {
 
 function getAnthropicClient() {
   return testHooks.anthropicClient || new Anthropic();
-}
-
-function getFetch() {
-  return testHooks.geminiFetch || fetch;
 }
 
 function isLocationUnsupported(status, body) {
@@ -121,7 +166,7 @@ async function generateGemini({ system, prompt, json, maxTokens }) {
 
   let response;
   try {
-    response = await getFetch()(GEMINI_URL, {
+    response = await getGeminiFetch()(GEMINI_URL, {
       method: "POST",
       headers: {
         "x-goog-api-key": process.env.GEMINI_API_KEY,
@@ -151,15 +196,75 @@ async function generateGemini({ system, prompt, json, maxTokens }) {
   return rawText;
 }
 
-export async function generateText({ system, prompt, json = false, maxTokens } = {}) {
-  const provider = resolveProvider();
+function openaiJsonSchema(schema) {
+  if (!schema) return { type: "json_object" };
+  return {
+    type: "json_schema",
+    json_schema: {
+      name: "response",
+      strict: true,
+      schema,
+    },
+  };
+}
+
+async function generateLocal({ system, prompt, json, schema, maxTokens }) {
+  const url = `${getLocalUrl()}/chat/completions`;
+  const model = process.env.LLM_LOCAL_MODEL || "local";
+  const messages = [];
+  if (system) messages.push({ role: "system", content: system });
+  messages.push({ role: "user", content: prompt });
+
+  const body = {
+    model,
+    messages,
+    temperature: 0.3,
+    max_tokens: maxTokens || LOCAL_MAX_TOKENS,
+  };
+  if (json) body.response_format = openaiJsonSchema(schema);
+
+  let response;
+  try {
+    response = await getLocalFetch()(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (err) {
+    throw new LlmError("local", err?.message || String(err), 502);
+  }
+
+  if (!response.ok) {
+    let errText = "";
+    try {
+      errText = await response.text();
+    } catch {
+      errText = `Local LLM HTTP ${response.status}`;
+    }
+    throw new LlmError("local", errText || `Local LLM HTTP ${response.status}`, response.status);
+  }
+
+  const data = await response.json();
+  const rawText = data?.choices?.[0]?.message?.content;
+  if (typeof rawText !== "string") {
+    throw new LlmError("local", "Empty local LLM response", 502);
+  }
+  return rawText;
+}
+
+async function runProvider(p, args) {
+  if (p === "anthropic") return generateAnthropic(args);
+  if (p === "local") return generateLocal(args);
+  return generateGemini(args);
+}
+
+export async function generateText({ system, prompt, json = false, schema, maxTokens } = {}) {
+  const provider = await resolveProviderAsync();
   if (!prompt) throw new LlmError(provider, "Missing prompt", 400);
 
+  const args = { system, prompt, json, schema, maxTokens };
   const run = async (p) => {
-    const text =
-      p === "anthropic"
-        ? await generateAnthropic({ system, prompt, json, maxTokens })
-        : await generateGemini({ system, prompt, json, maxTokens });
+    const text = await runProvider(p, args);
     return parseMaybeJson(text, json, p);
   };
 

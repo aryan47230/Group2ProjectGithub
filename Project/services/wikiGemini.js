@@ -1,4 +1,5 @@
 import { generateText, resolveProvider } from './llm.js';
+import { enrichPrompt, ENRICH_SYSTEM, ENRICH_SCHEMA } from '../prompts/skillTree.js';
 
 const cache = new Map();
 let disabled = false;
@@ -6,6 +7,7 @@ let disabled = false;
 function isEnabled() {
   if (disabled) return false;
   const provider = resolveProvider();
+  if (provider === 'local' || provider === 'auto') return true;
   if (provider === 'anthropic') {
     if (!process.env.ANTHROPIC_API_KEY) {
       disabled = true;
@@ -35,31 +37,16 @@ export async function enrichConcept(title, extract) {
   const cacheKey = title;
   if (cache.has(cacheKey)) return cache.get(cacheKey);
 
-  const prompt = `You are a knowledge curator. Given a Wikipedia article, identify the 8 most important and interesting related Wikipedia articles that someone exploring this topic should know about.
-
-Article: "${title}"
-Intro: "${(extract || '').slice(0, 800)}"
-
-Return this JSON:
-{
-  "connections": [
-    {
-      "title": "Exact Wikipedia article title",
-      "relation": "core|related|application|foundation",
-      "description": "One sentence on why this connects to ${title}"
-    }
-  ]
-}
-
-Rules:
-- Return EXACTLY 8 connections.
-- Each "title" MUST be the exact title of a real Wikipedia article. Do not invent titles.
-- Use "core" for fundamental subtopics, "related" for closely related concepts, "application" for practical uses, "foundation" for prerequisite knowledge.
-- Pick topics that are genuinely insightful and would help someone understand ${title} deeply — not generic or tangential links.
-- Pure JSON only.`;
+  const prompt = enrichPrompt(title, extract);
 
   try {
-    const parsed = await generateText({ prompt, json: true });
+    const parsed = await generateText({
+      prompt,
+      system: ENRICH_SYSTEM,
+      json: true,
+      schema: ENRICH_SCHEMA,
+      maxTokens: 1024,
+    });
     cache.set(cacheKey, parsed);
     return parsed;
   } catch (err) {
