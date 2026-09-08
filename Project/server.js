@@ -200,7 +200,7 @@ app.post("/api/skill-tree", async (req, res) => {
       json: true,
       system: TREE_SYSTEM,
       schema: TREE_SCHEMA,
-      maxTokens: 2048,
+      maxTokens: 3500,
       prompt: treePrompt(topic, contextBlock),
     });
     res.json(skillTree);
