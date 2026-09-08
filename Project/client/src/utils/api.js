@@ -1,3 +1,6 @@
+import { shouldUseBrowserLlm } from './llmSettings';
+import { tryBrowserThenServer } from './llmFallback';
+
 const NEW_API = 'https://brancher-api.40-160-241-64.sslip.io';
 const rawBase = import.meta.env.VITE_API_BASE ?? '';
 const API_ORIGIN = (!rawBase || String(rawBase).includes('railway.app')) ? NEW_API : rawBase.replace(/\/$/, '');
@@ -20,7 +23,7 @@ export async function searchConcepts(query) {
   return data.results;
 }
 
-export async function enrichConceptApi(title, extract) {
+async function enrichConceptOnServer(title, extract) {
   const res = await fetch(`${API_BASE}/concepts/${encodeURIComponent(title)}/enrich`, withCreds({
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -28,6 +31,17 @@ export async function enrichConceptApi(title, extract) {
   }));
   if (!res.ok) throw new Error(`Enrich failed: ${res.statusText}`);
   return res.json();
+}
+
+export async function enrichConceptApi(title, extract) {
+  if (!shouldUseBrowserLlm()) return enrichConceptOnServer(title, extract);
+  const { browserEnrichConcept } = await import('./browserLlm');
+  const { result } = await tryBrowserThenServer(
+    true,
+    () => browserEnrichConcept(title, extract),
+    () => enrichConceptOnServer(title, extract),
+  );
+  return result;
 }
 
 export async function fetchSecondLayerLinks(title) {
@@ -97,7 +111,7 @@ export async function apiDeleteTree(topic) {
   await fetch(`${API_BASE}/trees/${encodeURIComponent(topic)}`, withCreds({ method: 'DELETE' }));
 }
 
-export async function apiGenerateSkillTree(topic, context) {
+async function generateSkillTreeOnServer(topic, context) {
   const body = { topic };
   if (Array.isArray(context) && context.length) body.context = context;
   const res = await fetch(`${API_BASE}/skill-tree`, withCreds({
@@ -114,7 +128,18 @@ export async function apiGenerateSkillTree(topic, context) {
   return data.nodes;
 }
 
-export async function apiGetSkillTreeQuestions(topic) {
+export async function apiGenerateSkillTree(topic, context) {
+  if (!shouldUseBrowserLlm()) return generateSkillTreeOnServer(topic, context);
+  const { browserGenerateSkillTree } = await import('./browserLlm');
+  const { result } = await tryBrowserThenServer(
+    true,
+    () => browserGenerateSkillTree(topic, context),
+    () => generateSkillTreeOnServer(topic, context),
+  );
+  return result;
+}
+
+async function getSkillTreeQuestionsOnServer(topic) {
   const res = await fetch(`${API_BASE}/skill-tree/questions`, withCreds({
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -127,4 +152,15 @@ export async function apiGetSkillTreeQuestions(topic) {
   const data = await res.json();
   if (!Array.isArray(data.questions)) throw new Error('Unexpected response format');
   return data.questions;
+}
+
+export async function apiGetSkillTreeQuestions(topic) {
+  if (!shouldUseBrowserLlm()) return getSkillTreeQuestionsOnServer(topic);
+  const { browserGetQuestions } = await import('./browserLlm');
+  const { result } = await tryBrowserThenServer(
+    true,
+    () => browserGetQuestions(topic),
+    () => getSkillTreeQuestionsOnServer(topic),
+  );
+  return result;
 }

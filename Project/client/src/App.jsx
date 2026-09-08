@@ -5,6 +5,7 @@ import { SkillTreeProvider } from './context/SkillTreeContext';
 import SkillTreeRoute from './routes/SkillTreeRoute';
 import ExploreRoute from './routes/ExploreRoute';
 import AdvancedSkillTreeRoute from './routes/AdvancedSkillTreeRoute';
+import LlmProgressOverlay from './components/LlmProgress/LlmProgressOverlay';
 
 export default function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/explore/*" element={<ExploreRoute />} />
             <Route path="*" element={<SkillTreeRoute hideExplore />} />
           </Routes>
+          <LlmProgressOverlay />
         </div>
       </SkillTreeProvider>
     </AuthProvider>
