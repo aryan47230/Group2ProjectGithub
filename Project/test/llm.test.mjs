@@ -162,6 +162,24 @@ describe("llm provider", () => {
     assert.ok(params.max_tokens > 0);
   });
 
+  it("local provider reports truncated output (finish_reason=length) as a clear 502", async () => {
+    process.env.LLM_PROVIDER = "local";
+    process.env.LLM_LOCAL_URL = "http://brancher-llm:8081/v1";
+    delete process.env.ANTHROPIC_API_KEY;
+
+    _setLlmTestHooks({
+      localFetch: async () =>
+        jsonResponse({
+          choices: [{ finish_reason: "length", message: { content: '{"nodes":[{"name":"cut' } }],
+        }),
+    });
+
+    await assert.rejects(
+      generateText({ prompt: "tree", json: true, maxTokens: 100 }),
+      (err) => err.provider === "local" && err.status === 502 && /truncated at max_tokens \(100\)/.test(err.detail),
+    );
+  });
+
   it("LLM_PROVIDER=local posts OpenAI chat completions with json_schema", async () => {
     process.env.LLM_PROVIDER = "local";
     process.env.LLM_LOCAL_URL = "http://brancher-llm:8081/v1";

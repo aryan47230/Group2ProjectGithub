@@ -95,7 +95,7 @@ export async function browserGenerateSkillTree(topic, context) {
   const data = await completeJson({
     system: TREE_SYSTEM,
     prompt: treePrompt(topic, contextBlockFrom(context)),
-    maxTokens: 2048,
+    maxTokens: 3500,
   });
   const v = validateSkillTree(data);
   if (!v.ok) throw new Error(`browser LLM JSON invalid: ${v.error}`);

@@ -245,9 +245,17 @@ async function generateLocal({ system, prompt, json, schema, maxTokens }) {
   }
 
   const data = await response.json();
-  const rawText = data?.choices?.[0]?.message?.content;
+  const choice = data?.choices?.[0];
+  const rawText = choice?.message?.content;
   if (typeof rawText !== "string") {
     throw new LlmError("local", "Empty local LLM response", 502);
+  }
+  if (choice?.finish_reason === "length") {
+    throw new LlmError(
+      "local",
+      `Output truncated at max_tokens (${body.max_tokens}); the JSON is incomplete`,
+      502,
+    );
   }
   return rawText;
 }

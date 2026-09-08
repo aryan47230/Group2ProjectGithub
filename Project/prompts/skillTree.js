@@ -141,16 +141,16 @@ export const TREE_SYSTEM =
 export function treePrompt(topic, contextBlock = "") {
   return `Create a prerequisite skill tree for learning "${topic}".${contextBlock}
 
-Pick a compact tree: 5-8 nodes, 3-4 levels. Level 1 = foundations (requires []). Higher levels depend on named lower-level skills. "${topic}" is the highest-level node. Same-level nodes are independent. Shape should be uneven (wide base, 1 apex).
+Pick a compact tree: 5-7 nodes, 3 levels. Level 1 = foundations (requires []). Higher levels depend on named lower-level skills. "${topic}" is the highest-level node. Same-level nodes are independent. Shape should be uneven (wide base, 1 apex).
 
-Each node fields:
-- name, emoji (one emoji), level (int), requires (string array of names)
-- description: 1 short sentence
-- tips: exactly 3 short practice tips
-- keyConcepts: 2-3 {term, explanation}
-- outcomes: 2 short verb phrases
-- commonMistakes: 2 short beginner errors
-- resources: 2-3 {name, type (video|article|course|book|docs|tool), url, description}
+Be terse: the whole JSON must stay under 1500 words. Each node fields:
+- name (<= 4 words), emoji (one emoji), level (int), requires (string array of names)
+- description: 1 sentence, <= 12 words
+- tips: exactly 3 practice tips, <= 8 words each
+- keyConcepts: exactly 2 {term, explanation (<= 12 words)}
+- outcomes: exactly 2 verb phrases, <= 6 words each
+- commonMistakes: exactly 2 beginner errors, <= 8 words each
+- resources: exactly 2 {name, type (video|article|course|book|docs|tool), url, description (<= 8 words)}
   Use real well-known URLs when sure, else https://www.google.com/search?q=...
 
 JSON shape:
