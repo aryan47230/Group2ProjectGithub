@@ -8,12 +8,21 @@ import { db } from "./db.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 
 const isProd = process.env.NODE_ENV === "production";
-const FRONTEND_URL = process.env.FRONTEND_URL;
+const FRONTEND_URLS = (process.env.FRONTEND_URL || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 const app = express();
 if (isProd) app.set("trust proxy", 1);
-if (FRONTEND_URL) {
-  app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+if (FRONTEND_URLS.length) {
+  app.use(cors({
+    origin(origin, cb) {
+      if (!origin || FRONTEND_URLS.includes(origin)) return cb(null, true);
+      return cb(null, false);
+    },
+    credentials: true,
+  }));
 }
 app.use(express.json());
 
@@ -22,7 +31,7 @@ app.get("/", (_req, res) => {
   res.json({
     status: "ok",
     service: "brancher-api",
-    frontend: FRONTEND_URL || null,
+    frontend: FRONTEND_URLS.length ? FRONTEND_URLS : null,
     docs: "API only. Visit the frontend for the app.",
   });
 });
