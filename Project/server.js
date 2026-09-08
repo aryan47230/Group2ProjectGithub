@@ -5,6 +5,7 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { db } from "./db.js";
+import { runMigrations } from "./db/migrate.js";
 import { createConceptsRouter } from "./routes/concepts.js";
 import { generateText, llmErrorPayload } from "./services/llm.js";
 
@@ -42,7 +43,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    secure: isProd,
+    // auto: Secure on HTTPS (public sslip / Vercel cross-site), unset on HTTP Caddy
+    secure: isProd ? "auto" : false,
     sameSite: isProd ? "none" : "lax",
   }
 }));
@@ -245,4 +247,11 @@ Respond with ONLY valid JSON in this exact shape:
 app.use("/api/concepts", createConceptsRouter());
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+runMigrations()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+  })
+  .catch((err) => {
+    console.error("Migration failed:", err);
+    process.exit(1);
+  });
