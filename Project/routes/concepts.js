@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { searchWikipedia, getArticle, getArticleSections, getArticleLinks, getArticleImage, getArticleLinksLight, getShortExtracts } from '../services/wikipedia.js';
 import { enrichConcept } from '../services/wikiGemini.js';
+import { LlmError, llmErrorPayload } from '../services/llm.js';
 import { rankConnections, seededShuffle } from '../services/algorithmic.js';
 
 // BUG-05 fix: filter out Wikipedia maintenance/hidden categories
@@ -104,7 +105,7 @@ export function createConceptsRouter() {
 
       const enrichment = await enrichConcept(decodedTitle, extract);
       if (!enrichment || !enrichment.connections) {
-        return res.status(503).json({ error: 'Gemini unavailable — no API key or quota exhausted' });
+        return res.status(503).json({ error: 'LLM unavailable — no API key or quota exhausted' });
       }
 
       // Verify Gemini's picks exist on Wikipedia and fetch real descriptions
@@ -124,6 +125,9 @@ export function createConceptsRouter() {
       res.json({ connections: verified });
     } catch (err) {
       console.error('Enrich error:', err);
+      if (err instanceof LlmError) {
+        return res.status(502).json(llmErrorPayload(err));
+      }
       res.status(500).json({ error: 'Failed to enrich concept' });
     }
   });

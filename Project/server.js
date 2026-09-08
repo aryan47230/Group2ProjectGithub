@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { db } from "./db.js";
 import { createConceptsRouter } from "./routes/concepts.js";
+import { generateText, llmErrorPayload } from "./services/llm.js";
 
 const isProd = process.env.NODE_ENV === "production";
 const FRONTEND_URLS = (process.env.FRONTEND_URL || "")
@@ -45,8 +46,6 @@ app.use(session({
     sameSite: isProd ? "none" : "lax",
   }
 }));
-
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 // ── Auth ───────────────────────────────────────────────────────────────────────
 
@@ -158,23 +157,16 @@ app.post("/api/trees/:topic/send", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// ── Gemini ─────────────────────────────────────────────────────────────────────
+// ── Skill-tree generation (Gemini / Anthropic via services/llm.js) ─────────────
 
 app.post("/api/skill-tree/questions", async (req, res) => {
   const { topic } = req.body;
   if (!topic) return res.status(400).json({ error: "Missing topic" });
 
   try {
-    const response = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: {
-        "x-goog-api-key": process.env.GEMINI_API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `You are helping tailor a learning skill tree for "${topic}". Return 3-5 short follow-up questions the learner should answer so the tree matches their goals, background, and constraints.
+    const parsed = await generateText({
+      json: true,
+      prompt: `You are helping tailor a learning skill tree for "${topic}". Return 3-5 short follow-up questions the learner should answer so the tree matches their goals, background, and constraints.
 
 Rules:
 - Each question must be answerable in one or two sentences.
@@ -185,28 +177,11 @@ Rules:
 
 Respond with ONLY valid JSON in this exact shape:
 {"questions":[{"id":"kebab-case-id","prompt":"Question text?","placeholder":"short example answer"}]}`
-          }]
-        }],
-        generationConfig: { responseMimeType: "application/json" }
-      })
     });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Gemini questions error:", response.status, errText);
-      if (response.status === 429 || response.status === 503) {
-        return res.status(503).json({ error: "AI generator is temporarily unavailable. Please try again in a moment." });
-      }
-      return res.status(502).json({ error: "AI generator failed. Please try again." });
-    }
-
-    const data = await response.json();
-    const rawText = data.candidates[0].content.parts[0].text;
-    const parsed = JSON.parse(rawText);
     res.json(parsed);
   } catch (err) {
     console.error("Questions handler error:", err);
-    res.status(502).json({ error: "AI generator failed. Please try again." });
+    res.status(502).json(llmErrorPayload(err));
   }
 });
 
@@ -222,16 +197,9 @@ app.post("/api/skill-tree", async (req, res) => {
     : "";
 
   try {
-    const response = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: {
-        "x-goog-api-key": process.env.GEMINI_API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".${contextBlock}
+    const skillTree = await generateText({
+      json: true,
+      prompt: `You are an expert curriculum designer. Create a prerequisite skill tree for learning "${topic}".${contextBlock}
 
 First, classify "${topic}" as exactly one of these scales, then choose the total node count and level count from within the listed range:
   - micro   (single concept, e.g. "git commit")        → 5-7 nodes, 3-4 levels
@@ -264,28 +232,11 @@ Rules:
 
 Respond with ONLY valid JSON in this exact shape:
 {"nodes": [{"name": "skill name", "emoji": "🎯", "level": 1, "requires": [], "description": "...", "tips": ["tip 1", "tip 2", "tip 3"], "keyConcepts": [{"term": "term name", "explanation": "what it means"}], "outcomes": ["outcome 1", "outcome 2"], "commonMistakes": ["mistake 1", "mistake 2"], "resources": [{"name": "Resource Title", "type": "video", "url": "https://...", "description": "What this covers."}]}]}`
-          }]
-        }],
-        generationConfig: { responseMimeType: "application/json" }
-      })
     });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Gemini skill-tree error:", response.status, errText);
-      if (response.status === 429 || response.status === 503) {
-        return res.status(503).json({ error: "AI generator is temporarily unavailable. Please try again in a moment." });
-      }
-      return res.status(502).json({ error: "AI generator failed. Please try again." });
-    }
-
-    const data = await response.json();
-    const rawText = data.candidates[0].content.parts[0].text;
-    const skillTree = JSON.parse(rawText);
     res.json(skillTree);
   } catch (err) {
     console.error("Skill-tree handler error:", err);
-    res.status(502).json({ error: "AI generator failed. Please try again." });
+    res.status(502).json(llmErrorPayload(err));
   }
 });
 
