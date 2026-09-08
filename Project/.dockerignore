@@ -1,0 +1,14 @@
+node_modules
+client
+docs
+.superpowers
+.env
+.env.*
+*.md
+public
+temp.txt
+ShareButton-full.jsx
+SkillTree-share-css-patch.css
+api-share-patch.js
+PLAYWRIGHT_TEST_PLAN.md
+CLAUDE.md

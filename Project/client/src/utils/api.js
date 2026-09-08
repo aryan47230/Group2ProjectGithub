@@ -1,4 +1,7 @@
-const API_BASE = `${import.meta.env.VITE_API_BASE ?? ''}/api`;
+const NEW_API = 'https://brancher-api.40-160-241-64.sslip.io';
+const rawBase = import.meta.env.VITE_API_BASE ?? '';
+const API_ORIGIN = (!rawBase || String(rawBase).includes('railway.app')) ? NEW_API : rawBase.replace(/\/$/, '');
+const API_BASE = `${API_ORIGIN}/api`;
 
 function withCreds(init = {}) {
   return { credentials: 'include', ...init };
